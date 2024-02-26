@@ -425,8 +425,8 @@ func file_registry_v1_person_proto_init() {
 	file_registry_v1_person_proto_depIdxs = nil
 }
 
-//Person
-//type
-//Person_Admin_
-//Person_Manager_
-//Person_Client_
+var OneofWrappers = []interface{}{
+	(*Person_Admin_)(nil),
+	(*Person_Manager_)(nil),
+	(*Person_Client_)(nil),
+}
