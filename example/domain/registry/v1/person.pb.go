@@ -814,35 +814,46 @@ func file_registry_v1_person_proto_init() {
 	file_registry_v1_person_proto_goTypes = nil
 	file_registry_v1_person_proto_depIdxs = nil
 }
+
+// LoadMap loads map values into given struct.
 func (e *Person) LoadMap(m map[string]interface{}) {
 	e.Name = m["first_name"].(string)
 	e.Address = m["address"].(*Person_Address)
+	// Type is oneof
 }
 
+// LoadMap loads map values into given struct.
 func (e *Person_Admin) LoadMap(m map[string]interface{}) {
 	e.YearsInCharge = m["years_in_charge"].(int64)
 	e.HasHolidays = m["has_holidays"].(bool)
 }
 
+// LoadMap loads map values into given struct.
 func (e *Person_Manager) LoadMap(m map[string]interface{}) {
 	e.ManagesClients = m["manages_clients"].(bool)
 }
 
+// LoadMap loads map values into given struct.
 func (e *Person_Client) LoadMap(m map[string]interface{}) {
+	// Subscription is oneof
 }
 
+// LoadMap loads map values into given struct.
 func (e *Person_Client_Premium) LoadMap(m map[string]interface{}) {
 	e.YearlyLimit = m["yearly_limit"].(int64)
 }
 
+// LoadMap loads map values into given struct.
 func (e *Person_Client_Gold) LoadMap(m map[string]interface{}) {
 	e.MonthlyLimit = m["monthly_limit"].(int64)
 }
 
+// LoadMap loads map values into given struct.
 func (e *Person_Client_Silver) LoadMap(m map[string]interface{}) {
 	e.DailyLimit = m["daily_limit"].(int64)
 }
 
+// LoadMap loads map values into given struct.
 func (e *Person_Address) LoadMap(m map[string]interface{}) {
 	e.Street = m["street"].(string)
 	e.Number = m["number"].(string)
