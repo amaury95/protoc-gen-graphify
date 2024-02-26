@@ -26,11 +26,11 @@ type Person struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Key     string          `protobuf:"bytes,1,opt,name=foo,json=_key,proto3" json:"foo,omitempty"`
-	Name    string          `protobuf:"bytes,2,opt,name=foo,json=name,proto3" json:"foo,omitempty"`
-	Email   string          `protobuf:"bytes,3,opt,name=foo,json=email,proto3" json:"foo,omitempty"`
-	Age     int64           `protobuf:"varint,4,opt,name=foo,json=age,proto3" json:"foo,omitempty"`
-	Address *Person_Address `protobuf:"bytes,5,opt,name=foo,json=address,proto3" json:"foo,omitempty"`
+	Key     string          `protobuf:"bytes,1,opt,name=_key,proto3" json:"_key,omitempty"`
+	Name    string          `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Email   string          `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	Age     int64           `protobuf:"varint,4,opt,name=age,proto3" json:"age,omitempty"`
+	Address *Person_Address `protobuf:"bytes,5,opt,name=address,proto3" json:"address,omitempty"`
 }
 
 func (x *Person) Reset() {
@@ -105,9 +105,9 @@ type Book struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Key    string `protobuf:"bytes,1,opt,name=foo,json=_key,proto3" json:"foo,omitempty"`
-	Title  string `protobuf:"bytes,2,opt,name=foo,json=title,proto3" json:"foo,omitempty"`
-	Author string `protobuf:"bytes,3,opt,name=foo,json=author,proto3" json:"foo,omitempty"`
+	Key    string `protobuf:"bytes,1,opt,name=_key,proto3" json:"_key,omitempty"`
+	Title  string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	Author string `protobuf:"bytes,3,opt,name=author,proto3" json:"author,omitempty"`
 	// Types that are assignable to Type:
 	//
 	//	*Book_Novel_
@@ -244,23 +244,23 @@ type isBook_Type interface {
 }
 
 type Book_Novel_ struct {
-	Novel *Book_Novel `protobuf:"bytes,4,opt,name=foo,json=novel,proto3,oneof"`
+	Novel *Book_Novel `protobuf:"bytes,4,opt,name=novel,proto3,oneof"`
 }
 
 type Book_ShortStory_ struct {
-	ShortStory *Book_ShortStory `protobuf:"bytes,5,opt,name=foo,json=shortStory,proto3,oneof"`
+	ShortStory *Book_ShortStory `protobuf:"bytes,5,opt,name=shortStory,proto3,oneof"`
 }
 
 type Book_Academic_ struct {
-	Academic *Book_Academic `protobuf:"bytes,6,opt,name=foo,json=academic,proto3,oneof"`
+	Academic *Book_Academic `protobuf:"bytes,6,opt,name=academic,proto3,oneof"`
 }
 
 type Book_Poetry_ struct {
-	Poetry *Book_Poetry `protobuf:"bytes,7,opt,name=foo,json=poetry,proto3,oneof"`
+	Poetry *Book_Poetry `protobuf:"bytes,7,opt,name=poetry,proto3,oneof"`
 }
 
 type Book_Biography_ struct {
-	Biography *Book_Biography `protobuf:"bytes,8,opt,name=foo,json=biography,proto3,oneof"`
+	Biography *Book_Biography `protobuf:"bytes,8,opt,name=biography,proto3,oneof"`
 }
 
 func (*Book_Novel_) isBook_Type() {}
@@ -278,11 +278,11 @@ type isBook_Mode interface {
 }
 
 type Book_Allow struct {
-	Allow string `protobuf:"bytes,9,opt,name=foo,json=allow,proto3,oneof"`
+	Allow string `protobuf:"bytes,9,opt,name=allow,proto3,oneof"`
 }
 
 type Book_Disallow struct {
-	Disallow string `protobuf:"bytes,10,opt,name=foo,json=disallow,proto3,oneof"`
+	Disallow string `protobuf:"bytes,10,opt,name=disallow,proto3,oneof"`
 }
 
 func (*Book_Allow) isBook_Mode() {}
@@ -294,10 +294,10 @@ type Borrow struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Key  string                 `protobuf:"bytes,1,opt,name=foo,json=_key,proto3" json:"foo,omitempty"`
-	From string                 `protobuf:"bytes,2,opt,name=foo,json=_from,proto3" json:"foo,omitempty"`
-	To   string                 `protobuf:"bytes,3,opt,name=foo,json=_to,proto3" json:"foo,omitempty"`
-	Date *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=foo,json=date,proto3" json:"foo,omitempty"`
+	Key  string                 `protobuf:"bytes,1,opt,name=_key,proto3" json:"_key,omitempty"`
+	From string                 `protobuf:"bytes,2,opt,name=_from,proto3" json:"_from,omitempty"`
+	To   string                 `protobuf:"bytes,3,opt,name=_to,proto3" json:"_to,omitempty"`
+	Date *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=date,proto3" json:"date,omitempty"`
 }
 
 func (x *Borrow) Reset() {
@@ -365,9 +365,9 @@ type Library struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Key      string `protobuf:"bytes,1,opt,name=foo,json=_key,proto3" json:"foo,omitempty"`
-	Name     string `protobuf:"bytes,2,opt,name=foo,json=name,proto3" json:"foo,omitempty"`
-	Location string `protobuf:"bytes,3,opt,name=foo,json=location,proto3" json:"foo,omitempty"`
+	Key      string `protobuf:"bytes,1,opt,name=_key,proto3" json:"_key,omitempty"`
+	Name     string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Location string `protobuf:"bytes,3,opt,name=location,proto3" json:"location,omitempty"`
 }
 
 func (x *Library) Reset() {
@@ -428,10 +428,10 @@ type Stock struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Key   string `protobuf:"bytes,1,opt,name=foo,json=_key,proto3" json:"foo,omitempty"`
-	From  string `protobuf:"bytes,2,opt,name=foo,json=_from,proto3" json:"foo,omitempty"`
-	To    string `protobuf:"bytes,3,opt,name=foo,json=_to,proto3" json:"foo,omitempty"`
-	Stock int64  `protobuf:"varint,4,opt,name=foo,json=stock,proto3" json:"foo,omitempty"`
+	Key   string `protobuf:"bytes,1,opt,name=_key,proto3" json:"_key,omitempty"`
+	From  string `protobuf:"bytes,2,opt,name=_from,proto3" json:"_from,omitempty"`
+	To    string `protobuf:"bytes,3,opt,name=_to,proto3" json:"_to,omitempty"`
+	Stock int64  `protobuf:"varint,4,opt,name=stock,proto3" json:"stock,omitempty"`
 }
 
 func (x *Stock) Reset() {

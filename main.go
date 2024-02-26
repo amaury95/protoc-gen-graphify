@@ -19,8 +19,6 @@ import (
 	"github.com/amaury95/protoc-gen-go-tag/internal/version"
 	gengo "google.golang.org/protobuf/cmd/protoc-gen-go/internal_gengo"
 	"google.golang.org/protobuf/compiler/protogen"
-
-	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 const genGoDocURL = "https://protobuf.dev/reference/go/go-generated"
@@ -51,13 +49,8 @@ func main() {
 			if f.Generate {
 				for _, message := range f.Messages {
 					for _, field := range message.Fields {
-						if field.Desc.HasJSONName() {
-							field.Desc = namedDesc{name: field.Desc.JSONName(), FieldDescriptor: field.Desc}
-						}
+						field.GoName = removeXPrefix(field.GoName)
 					}
-					// for _, oneof := range message.Oneofs {
-
-					// }
 				}
 				gengo.GenerateFile(gen, f)
 			}
@@ -67,11 +60,13 @@ func main() {
 	})
 }
 
-type namedDesc struct {
-	name string
-	protoreflect.FieldDescriptor
+func removeXPrefix(input string) string {
+	for len(input) > 0 && input[0] == 'X' {
+		input = input[1:]
+	}
+	return input
 }
 
-func (d namedDesc) Name() protoreflect.Name {
-	return protoreflect.Name(d.name)
-}
+// func GenerateOneofsMap(file *protogen.File) *protogen.GeneratedFile {
+
+// }
