@@ -21,11 +21,21 @@ message Person {
     }
   }
 
-  string name = 1 [ json_name = "first_name" ];
+  message Address {
+    string street = 1;
+    string number = 2;
+    optional string additional = 3;
+    string location = 4;
+    string province = 5;
+    string postal_code = 6;
+    string country = 7;
+  }
 
+  string name = 1 [ json_name = "first_name" ];
+  Address address = 2;
   oneof type {
-    Admin admin = 2;
-    Manager manager = 3;
-    Client client = 4;
+    Admin admin = 3;
+    Manager manager = 4;
+    Client client = 5;
   }
 }

@@ -80,6 +80,9 @@ func exposeOneofWrappers(g *protogen.GeneratedFile, messages ...*protogen.Messag
 	for _, message := range messages {
 		for _, oneof := range message.Oneofs {
 			for _, field := range oneof.Fields {
+				if field.Oneof.Desc.IsSynthetic() {
+					continue
+				}
 				g.P("(*", field.GoIdent, ")(nil),")
 			}
 		}
