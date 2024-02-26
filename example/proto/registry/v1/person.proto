@@ -19,12 +19,6 @@ message Person {
       Gold gold = 2;
       Silver silver = 3;
     }
-
-    oneof role {
-      string subsc1 = 4;
-      string subsc2 = 5;
-      string subsc3 = 6;
-    }
   }
 
   message Address {

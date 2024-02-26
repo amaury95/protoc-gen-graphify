@@ -86,7 +86,7 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			}
 
 			if field.Desc.Kind() == protoreflect.MessageKind {
-				g.P("if _val , ok := m[\"", field.GoName, "\"].(map[string]interface{}); ok {")
+				g.P("if _val , ok := m[\"", field.Desc.Name(), "\"].(map[string]interface{}); ok {")
 				g.P("field := new(", field.Message.GoIdent.GoName, ")")
 				g.P("field.LoadMap(_val)")
 				g.P("e.", field.GoName, " = field")
