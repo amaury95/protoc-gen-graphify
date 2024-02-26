@@ -107,7 +107,8 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
 				if field.Desc.HasPresence() {
 					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
-					g.P("e." + field.GoName + " = &(int32(_val))")
+					g.P("_d := int32(_val)")
+					g.P("e." + field.GoName + " = &_d")
 					g.P("}")
 				} else {
 					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
@@ -117,7 +118,8 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
 				if field.Desc.HasPresence() {
 					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
-					g.P("e." + field.GoName + " = &(uint32(_val))")
+					g.P("_d := uint32(_val)")
+					g.P("e." + field.GoName + " = &_d")
 					g.P("}")
 				} else {
 					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
@@ -127,7 +129,8 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
 				if field.Desc.HasPresence() {
 					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
-					g.P("e." + field.GoName + " = &(int64(_val))")
+					g.P("_d := int64(_val)")
+					g.P("e." + field.GoName + " = &_d")
 					g.P("}")
 				} else {
 					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
@@ -137,7 +140,8 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
 				if field.Desc.HasPresence() {
 					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
-					g.P("e." + field.GoName + " = &(uint64(_val))")
+					g.P("_d := uint64(_val)")
+					g.P("e." + field.GoName + " = &_d")
 					g.P("}")
 				} else {
 					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
@@ -147,7 +151,8 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			case protoreflect.FloatKind:
 				if field.Desc.HasPresence() {
 					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
-					g.P("e." + field.GoName + " = &(float32(_val))")
+					g.P("_d := float32(_val)")
+					g.P("e." + field.GoName + " = &_d")
 					g.P("}")
 				} else {
 					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
