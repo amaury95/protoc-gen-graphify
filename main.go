@@ -19,7 +19,7 @@ import (
 	"github.com/amaury95/protoc-gen-go-tag/internal/version"
 	gengo "google.golang.org/protobuf/cmd/protoc-gen-go/internal_gengo"
 	"google.golang.org/protobuf/compiler/protogen"
-	
+
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
@@ -52,8 +52,7 @@ func main() {
 				for _, message := range f.Messages {
 					for _, field := range message.Fields {
 						if field.Desc.HasJSONName() {
-							// field.GoName = "Name_" + field.Desc.JSONName()
-							field.Desc = namedDesc{name: "foo", FieldDescriptor: field.Desc}
+							field.Desc = namedDesc{name: field.Desc.JSONName(), FieldDescriptor: field.Desc}
 						}
 					}
 					// for _, oneof := range message.Oneofs {

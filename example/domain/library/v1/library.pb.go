@@ -26,11 +26,11 @@ type Person struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name__key    string          `protobuf:"bytes,1,opt,name=key,json=_key,proto3" json:"key,omitempty"`
-	Name_name    string          `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Name_email   string          `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
-	Name_age     int64           `protobuf:"varint,4,opt,name=age,proto3" json:"age,omitempty"`
-	Name_address *Person_Address `protobuf:"bytes,5,opt,name=address,proto3" json:"address,omitempty"`
+	Key     string          `protobuf:"bytes,1,opt,name=foo,json=_key,proto3" json:"foo,omitempty"`
+	Name    string          `protobuf:"bytes,2,opt,name=foo,json=name,proto3" json:"foo,omitempty"`
+	Email   string          `protobuf:"bytes,3,opt,name=foo,json=email,proto3" json:"foo,omitempty"`
+	Age     int64           `protobuf:"varint,4,opt,name=foo,json=age,proto3" json:"foo,omitempty"`
+	Address *Person_Address `protobuf:"bytes,5,opt,name=foo,json=address,proto3" json:"foo,omitempty"`
 }
 
 func (x *Person) Reset() {
@@ -65,37 +65,37 @@ func (*Person) Descriptor() ([]byte, []int) {
 	return file_library_v1_library_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Person) GetName__key() string {
+func (x *Person) GetKey() string {
 	if x != nil {
-		return x.Name__key
+		return x.Key
 	}
 	return ""
 }
 
-func (x *Person) GetName_name() string {
+func (x *Person) GetName() string {
 	if x != nil {
-		return x.Name_name
+		return x.Name
 	}
 	return ""
 }
 
-func (x *Person) GetName_email() string {
+func (x *Person) GetEmail() string {
 	if x != nil {
-		return x.Name_email
+		return x.Email
 	}
 	return ""
 }
 
-func (x *Person) GetName_age() int64 {
+func (x *Person) GetAge() int64 {
 	if x != nil {
-		return x.Name_age
+		return x.Age
 	}
 	return 0
 }
 
-func (x *Person) GetName_address() *Person_Address {
+func (x *Person) GetAddress() *Person_Address {
 	if x != nil {
-		return x.Name_address
+		return x.Address
 	}
 	return nil
 }
@@ -105,9 +105,9 @@ type Book struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name__key   string `protobuf:"bytes,1,opt,name=key,json=_key,proto3" json:"key,omitempty"`
-	Name_title  string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Name_author string `protobuf:"bytes,3,opt,name=author,proto3" json:"author,omitempty"`
+	Key    string `protobuf:"bytes,1,opt,name=foo,json=_key,proto3" json:"foo,omitempty"`
+	Title  string `protobuf:"bytes,2,opt,name=foo,json=title,proto3" json:"foo,omitempty"`
+	Author string `protobuf:"bytes,3,opt,name=foo,json=author,proto3" json:"foo,omitempty"`
 	// Types that are assignable to Type:
 	//
 	//	*Book_Novel_
@@ -155,23 +155,23 @@ func (*Book) Descriptor() ([]byte, []int) {
 	return file_library_v1_library_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *Book) GetName__key() string {
+func (x *Book) GetKey() string {
 	if x != nil {
-		return x.Name__key
+		return x.Key
 	}
 	return ""
 }
 
-func (x *Book) GetName_title() string {
+func (x *Book) GetTitle() string {
 	if x != nil {
-		return x.Name_title
+		return x.Title
 	}
 	return ""
 }
 
-func (x *Book) GetName_author() string {
+func (x *Book) GetAuthor() string {
 	if x != nil {
-		return x.Name_author
+		return x.Author
 	}
 	return ""
 }
@@ -183,37 +183,37 @@ func (m *Book) GetType() isBook_Type {
 	return nil
 }
 
-func (x *Book) GetName_novel() *Book_Novel {
+func (x *Book) GetNovel() *Book_Novel {
 	if x, ok := x.GetType().(*Book_Novel_); ok {
-		return x.Name_novel
+		return x.Novel
 	}
 	return nil
 }
 
-func (x *Book) GetName_shortStory() *Book_ShortStory {
+func (x *Book) GetShortStory() *Book_ShortStory {
 	if x, ok := x.GetType().(*Book_ShortStory_); ok {
-		return x.Name_shortStory
+		return x.ShortStory
 	}
 	return nil
 }
 
-func (x *Book) GetName_academic() *Book_Academic {
+func (x *Book) GetAcademic() *Book_Academic {
 	if x, ok := x.GetType().(*Book_Academic_); ok {
-		return x.Name_academic
+		return x.Academic
 	}
 	return nil
 }
 
-func (x *Book) GetName_poetry() *Book_Poetry {
+func (x *Book) GetPoetry() *Book_Poetry {
 	if x, ok := x.GetType().(*Book_Poetry_); ok {
-		return x.Name_poetry
+		return x.Poetry
 	}
 	return nil
 }
 
-func (x *Book) GetName_biography() *Book_Biography {
+func (x *Book) GetBiography() *Book_Biography {
 	if x, ok := x.GetType().(*Book_Biography_); ok {
-		return x.Name_biography
+		return x.Biography
 	}
 	return nil
 }
@@ -225,16 +225,16 @@ func (m *Book) GetMode() isBook_Mode {
 	return nil
 }
 
-func (x *Book) GetName_allow() string {
+func (x *Book) GetAllow() string {
 	if x, ok := x.GetMode().(*Book_Allow); ok {
-		return x.Name_allow
+		return x.Allow
 	}
 	return ""
 }
 
-func (x *Book) GetName_disallow() string {
+func (x *Book) GetDisallow() string {
 	if x, ok := x.GetMode().(*Book_Disallow); ok {
-		return x.Name_disallow
+		return x.Disallow
 	}
 	return ""
 }
@@ -244,23 +244,23 @@ type isBook_Type interface {
 }
 
 type Book_Novel_ struct {
-	Name_novel *Book_Novel `protobuf:"bytes,4,opt,name=novel,proto3,oneof"`
+	Novel *Book_Novel `protobuf:"bytes,4,opt,name=foo,json=novel,proto3,oneof"`
 }
 
 type Book_ShortStory_ struct {
-	Name_shortStory *Book_ShortStory `protobuf:"bytes,5,opt,name=short_story,json=shortStory,proto3,oneof"`
+	ShortStory *Book_ShortStory `protobuf:"bytes,5,opt,name=foo,json=shortStory,proto3,oneof"`
 }
 
 type Book_Academic_ struct {
-	Name_academic *Book_Academic `protobuf:"bytes,6,opt,name=academic,proto3,oneof"`
+	Academic *Book_Academic `protobuf:"bytes,6,opt,name=foo,json=academic,proto3,oneof"`
 }
 
 type Book_Poetry_ struct {
-	Name_poetry *Book_Poetry `protobuf:"bytes,7,opt,name=poetry,proto3,oneof"`
+	Poetry *Book_Poetry `protobuf:"bytes,7,opt,name=foo,json=poetry,proto3,oneof"`
 }
 
 type Book_Biography_ struct {
-	Name_biography *Book_Biography `protobuf:"bytes,8,opt,name=biography,proto3,oneof"`
+	Biography *Book_Biography `protobuf:"bytes,8,opt,name=foo,json=biography,proto3,oneof"`
 }
 
 func (*Book_Novel_) isBook_Type() {}
@@ -278,11 +278,11 @@ type isBook_Mode interface {
 }
 
 type Book_Allow struct {
-	Name_allow string `protobuf:"bytes,9,opt,name=allow,proto3,oneof"`
+	Allow string `protobuf:"bytes,9,opt,name=foo,json=allow,proto3,oneof"`
 }
 
 type Book_Disallow struct {
-	Name_disallow string `protobuf:"bytes,10,opt,name=disallow,proto3,oneof"`
+	Disallow string `protobuf:"bytes,10,opt,name=foo,json=disallow,proto3,oneof"`
 }
 
 func (*Book_Allow) isBook_Mode() {}
@@ -294,10 +294,10 @@ type Borrow struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name__key  string                 `protobuf:"bytes,1,opt,name=key,json=_key,proto3" json:"key,omitempty"`
-	Name__from string                 `protobuf:"bytes,2,opt,name=from,json=_from,proto3" json:"from,omitempty"`
-	Name__to   string                 `protobuf:"bytes,3,opt,name=to,json=_to,proto3" json:"to,omitempty"`
-	Name_date  *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=date,proto3" json:"date,omitempty"`
+	Key  string                 `protobuf:"bytes,1,opt,name=foo,json=_key,proto3" json:"foo,omitempty"`
+	From string                 `protobuf:"bytes,2,opt,name=foo,json=_from,proto3" json:"foo,omitempty"`
+	To   string                 `protobuf:"bytes,3,opt,name=foo,json=_to,proto3" json:"foo,omitempty"`
+	Date *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=foo,json=date,proto3" json:"foo,omitempty"`
 }
 
 func (x *Borrow) Reset() {
@@ -332,30 +332,30 @@ func (*Borrow) Descriptor() ([]byte, []int) {
 	return file_library_v1_library_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *Borrow) GetName__key() string {
+func (x *Borrow) GetKey() string {
 	if x != nil {
-		return x.Name__key
+		return x.Key
 	}
 	return ""
 }
 
-func (x *Borrow) GetName__from() string {
+func (x *Borrow) GetFrom() string {
 	if x != nil {
-		return x.Name__from
+		return x.From
 	}
 	return ""
 }
 
-func (x *Borrow) GetName__to() string {
+func (x *Borrow) GetTo() string {
 	if x != nil {
-		return x.Name__to
+		return x.To
 	}
 	return ""
 }
 
-func (x *Borrow) GetName_date() *timestamppb.Timestamp {
+func (x *Borrow) GetDate() *timestamppb.Timestamp {
 	if x != nil {
-		return x.Name_date
+		return x.Date
 	}
 	return nil
 }
@@ -365,9 +365,9 @@ type Library struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name__key     string `protobuf:"bytes,1,opt,name=key,json=_key,proto3" json:"key,omitempty"`
-	Name_name     string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Name_location string `protobuf:"bytes,3,opt,name=location,proto3" json:"location,omitempty"`
+	Key      string `protobuf:"bytes,1,opt,name=foo,json=_key,proto3" json:"foo,omitempty"`
+	Name     string `protobuf:"bytes,2,opt,name=foo,json=name,proto3" json:"foo,omitempty"`
+	Location string `protobuf:"bytes,3,opt,name=foo,json=location,proto3" json:"foo,omitempty"`
 }
 
 func (x *Library) Reset() {
@@ -402,23 +402,23 @@ func (*Library) Descriptor() ([]byte, []int) {
 	return file_library_v1_library_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *Library) GetName__key() string {
+func (x *Library) GetKey() string {
 	if x != nil {
-		return x.Name__key
+		return x.Key
 	}
 	return ""
 }
 
-func (x *Library) GetName_name() string {
+func (x *Library) GetName() string {
 	if x != nil {
-		return x.Name_name
+		return x.Name
 	}
 	return ""
 }
 
-func (x *Library) GetName_location() string {
+func (x *Library) GetLocation() string {
 	if x != nil {
-		return x.Name_location
+		return x.Location
 	}
 	return ""
 }
@@ -428,10 +428,10 @@ type Stock struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name__key  string `protobuf:"bytes,1,opt,name=key,json=_key,proto3" json:"key,omitempty"`
-	Name__from string `protobuf:"bytes,2,opt,name=from,json=_from,proto3" json:"from,omitempty"`
-	Name__to   string `protobuf:"bytes,3,opt,name=to,json=_to,proto3" json:"to,omitempty"`
-	Name_stock int64  `protobuf:"varint,4,opt,name=stock,proto3" json:"stock,omitempty"`
+	Key   string `protobuf:"bytes,1,opt,name=foo,json=_key,proto3" json:"foo,omitempty"`
+	From  string `protobuf:"bytes,2,opt,name=foo,json=_from,proto3" json:"foo,omitempty"`
+	To    string `protobuf:"bytes,3,opt,name=foo,json=_to,proto3" json:"foo,omitempty"`
+	Stock int64  `protobuf:"varint,4,opt,name=foo,json=stock,proto3" json:"foo,omitempty"`
 }
 
 func (x *Stock) Reset() {
@@ -466,30 +466,30 @@ func (*Stock) Descriptor() ([]byte, []int) {
 	return file_library_v1_library_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *Stock) GetName__key() string {
+func (x *Stock) GetKey() string {
 	if x != nil {
-		return x.Name__key
+		return x.Key
 	}
 	return ""
 }
 
-func (x *Stock) GetName__from() string {
+func (x *Stock) GetFrom() string {
 	if x != nil {
-		return x.Name__from
+		return x.From
 	}
 	return ""
 }
 
-func (x *Stock) GetName__to() string {
+func (x *Stock) GetTo() string {
 	if x != nil {
-		return x.Name__to
+		return x.To
 	}
 	return ""
 }
 
-func (x *Stock) GetName_stock() int64 {
+func (x *Stock) GetStock() int64 {
 	if x != nil {
-		return x.Name_stock
+		return x.Stock
 	}
 	return 0
 }
