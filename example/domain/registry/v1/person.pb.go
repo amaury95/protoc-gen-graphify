@@ -821,21 +821,18 @@ func (e *Person) LoadMap(m map[string]interface{}) {
 	e.Address = m["address"].(*Person_Address)
 	if _opt, ok := m["Type"].(map[string]interface{}); ok {
 		if _val, ok := _opt["Admin"].(map[string]interface{}); ok {
-			field := new(Person_Type)
+			field := new(Person_Admin)
 			field.LoadMap(_val)
-			// GONAMEPerson_Admin
 			e.Type = &Person_Admin_{Admin: field}
 		}
 		if _val, ok := _opt["Manager"].(map[string]interface{}); ok {
-			field := new(Person_Type)
+			field := new(Person_Manager)
 			field.LoadMap(_val)
-			// GONAMEPerson_Manager
 			e.Type = &Person_Manager_{Manager: field}
 		}
 		if _val, ok := _opt["Client"].(map[string]interface{}); ok {
-			field := new(Person_Type)
+			field := new(Person_Client)
 			field.LoadMap(_val)
-			// GONAMEPerson_Client
 			e.Type = &Person_Client_{Client: field}
 		}
 	}
@@ -856,21 +853,18 @@ func (e *Person_Manager) LoadMap(m map[string]interface{}) {
 func (e *Person_Client) LoadMap(m map[string]interface{}) {
 	if _opt, ok := m["Subscription"].(map[string]interface{}); ok {
 		if _val, ok := _opt["Premium"].(map[string]interface{}); ok {
-			field := new(Person_Client_Subscription)
+			field := new(Person_Client_Premium)
 			field.LoadMap(_val)
-			// GONAMEPerson_Client_Premium
 			e.Type = &Person_Client_Premium_{Premium: field}
 		}
 		if _val, ok := _opt["Gold"].(map[string]interface{}); ok {
-			field := new(Person_Client_Subscription)
+			field := new(Person_Client_Gold)
 			field.LoadMap(_val)
-			// GONAMEPerson_Client_Gold
 			e.Type = &Person_Client_Gold_{Gold: field}
 		}
 		if _val, ok := _opt["Silver"].(map[string]interface{}); ok {
-			field := new(Person_Client_Subscription)
+			field := new(Person_Client_Silver)
 			field.LoadMap(_val)
-			// GONAMEPerson_Client_Silver
 			e.Type = &Person_Client_Silver_{Silver: field}
 		}
 	}
