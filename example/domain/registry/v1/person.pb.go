@@ -882,7 +882,7 @@ func file_registry_v1_person_proto_init() {
 
 // LoadMap loads map values into given struct.
 func (e *Person) LoadMap(m map[string]interface{}) {
-	e.Name = string
+	e.Name = m["first_name"].(string)
 	if _opt, ok := m["Type"].(map[string]interface{}); ok {
 		if _val, ok := _opt["Admin"].(map[string]interface{}); ok {
 			field := new(Person_Admin)
@@ -953,10 +953,10 @@ func (e *Person_Client_Silver) LoadMap(m map[string]interface{}) {
 
 // LoadMap loads map values into given struct.
 func (e *Person_Address) LoadMap(m map[string]interface{}) {
-	e.Street = string
-	e.Number = string
-	e.Location = string
-	e.Province = string
-	e.PostalCode = string
-	e.Country = string
+	e.Street = m["street"].(string)
+	e.Number = m["number"].(string)
+	e.Location = m["location"].(string)
+	e.Province = m["province"].(string)
+	e.PostalCode = m["postal_code"].(string)
+	e.Country = m["country"].(string)
 }

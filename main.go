@@ -122,7 +122,7 @@ func fieldGoType(g *protogen.GeneratedFile, f *protogen.File, field *protogen.Fi
 	pointer = field.Desc.HasPresence()
 	switch field.Desc.Kind() {
 	case protoreflect.BoolKind:
-		goType = "bool"
+		goType = fmt.Sprintf("m[\"%s\"].(bool)", field.Desc.Name())
 	case protoreflect.EnumKind:
 		goType = g.QualifiedGoIdent(field.Enum.GoIdent)
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
@@ -142,9 +142,9 @@ func fieldGoType(g *protogen.GeneratedFile, f *protogen.File, field *protogen.Fi
 	case protoreflect.BytesKind:
 		goType = fmt.Sprintf("m[\"%s\"].([]byte)", field.Desc.Name())
 		pointer = false // rely on nullability of slices for presence
-	case protoreflect.MessageKind, protoreflect.GroupKind:
-		goType = "*" + g.QualifiedGoIdent(field.Message.GoIdent)
-		pointer = false // pointer captured as part of the type
+	// case protoreflect.MessageKind, protoreflect.GroupKind:
+	// 	goType = "*" + g.QualifiedGoIdent(field.Message.GoIdent)
+	// 	pointer = false // pointer captured as part of the type
 	}
 	switch {
 	case field.Desc.IsList():
