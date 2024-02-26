@@ -152,4 +152,3 @@ func file_registry_v1_person_proto_init() {
 }
 
 //Person
-// end here.

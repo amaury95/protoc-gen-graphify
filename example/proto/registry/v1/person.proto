@@ -1,4 +1,11 @@
 syntax = "proto3";
 package registry.v1;
 
-message Person { string name = 1 [ json_name = "first_name" ]; }
+message Person {
+  string name = 1 [ json_name = "first_name" ];
+  oneof role {
+    string admin = 2;
+    string manager = 3;
+    string client = 4;
+  }
+}
