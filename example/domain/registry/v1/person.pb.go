@@ -819,15 +819,28 @@ func file_registry_v1_person_proto_init() {
 func (e *Person) LoadMap(m map[string]interface{}) {
 	e.Name = m["first_name"].(string)
 	e.Address = m["address"].(*Person_Address)
-	if option, ok := m["Type"].(map[string]interface{}); ok {
-		if value , ok := option["Admin"].(map[string]interface{});ok {
-			val:= new(Person_Admin)
-			val.LoadMap(value)
-			e.Type = &Person_Admin_{Admin: val}
+	if _, ok := m["Type"].(map[string]interface{}); ok {
+		if _, ok := option["missing"].(map[string]interface{}); ok {
+			// Admin
+			// Person_Admin_
+			// YearsInCharge
+			// HasHolidays
+			e.Type = &Admin{}
 		}
-		// Person_Admin_
-		// Person_Manager_
-		// Person_Client_
+		if _, ok := option["missing"].(map[string]interface{}); ok {
+			// Manager
+			// Person_Manager_
+			// ManagesClients
+			e.Type = &Manager{}
+		}
+		if _, ok := option["missing"].(map[string]interface{}); ok {
+			// Client
+			// Person_Client_
+			// Premium
+			// Gold
+			// Silver
+			e.Type = &Client{}
+		}
 	}
 }
 
@@ -845,9 +858,24 @@ func (e *Person_Manager) LoadMap(m map[string]interface{}) {
 // LoadMap loads map values into given struct.
 func (e *Person_Client) LoadMap(m map[string]interface{}) {
 	if _, ok := m["Subscription"].(map[string]interface{}); ok {
-		// Person_Client_Premium_
-		// Person_Client_Gold_
-		// Person_Client_Silver_
+		if _, ok := option["missing"].(map[string]interface{}); ok {
+			// Premium
+			// Person_Client_Premium_
+			// YearlyLimit
+			e.Type = &Premium{}
+		}
+		if _, ok := option["missing"].(map[string]interface{}); ok {
+			// Gold
+			// Person_Client_Gold_
+			// MonthlyLimit
+			e.Type = &Gold{}
+		}
+		if _, ok := option["missing"].(map[string]interface{}); ok {
+			// Silver
+			// Person_Client_Silver_
+			// DailyLimit
+			e.Type = &Silver{}
+		}
 	}
 }
 

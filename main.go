@@ -93,13 +93,11 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			}
 			g.P("if _, ok := m[\"" + oneof.GoName + "\"].(map[string]interface{}); ok {")
 			for _, oneofField := range oneof.Fields {
-				g.P("if _ , ok := option[\"missing\"].(map[string]interface{}); ok {")
-				g.P("//", oneofField.GoName)
-				g.P("//", oneofField.GoIdent)
+				g.P("if _ , ok := option[\"", oneofField.GoName, "\"].(map[string]interface{}); ok {")
 				for _, f00 := range oneofField.Message.Fields {
 					g.P("//", f00.GoName)
 				}
-				g.P("e.Type = &", oneofField.GoName, "{}")
+				g.P("e.Type = &", oneofField.GoIdent, "{}")
 				g.P("}")
 				/*
 						if value , ok := option["Admin"].(map[string]interface{});ok {
