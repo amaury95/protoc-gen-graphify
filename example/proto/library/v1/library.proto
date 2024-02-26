@@ -1,0 +1,86 @@
+syntax = "proto3";
+package library.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message Person {
+  message Address {
+    string street = 1;
+    string number = 2;
+    optional string additional = 3;
+    string location = 4;
+    string province = 5;
+    string postal_code = 6;
+    string country = 7;
+  }
+
+  string key = 1 [ json_name = "_key" ];
+  string name = 2;
+  string email = 3;
+  int64 age = 4;
+  Address address = 5;
+}
+
+message Book {
+  message Novel {
+    string genre = 1;
+    int32 publication_year = 2;
+  }
+
+  message ShortStory {
+    int32 length_pages = 1;
+    bool is_collection = 2;
+  }
+
+  message Academic {
+    string subject = 1;
+    int32 edition = 2;
+  }
+
+  message Poetry {
+    string style = 1;
+    bool is_anthology = 2;
+  }
+
+  message Biography {
+    string subject_person = 1;
+    string notable_achievements = 2;
+  }
+
+  string key = 1 [ json_name = "_key" ];
+  string title = 2;
+  string author = 3;
+
+  oneof type {
+    Novel novel = 4;
+    ShortStory short_story = 5;
+    Academic academic = 6;
+    Poetry poetry = 7;
+    Biography biography = 8;
+  }
+
+  oneof mode {
+    string allow = 9;
+    string disallow = 10;
+  }
+}
+
+message Borrow {
+  string key = 1 [ json_name = "_key" ];
+  string from = 2 [ json_name = "_from" ];
+  string to = 3 [ json_name = "_to" ];
+  google.protobuf.Timestamp date = 4;
+}
+
+message Library {
+  string key = 1 [ json_name = "_key" ];
+  string name = 2;
+  string location = 3;
+}
+
+message Stock {
+  string key = 1 [ json_name = "_key" ];
+  string from = 2 [ json_name = "_from" ];
+  string to = 3 [ json_name = "_to" ];
+  int64 stock = 4;
+}
