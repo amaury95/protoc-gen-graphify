@@ -90,7 +90,7 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 
 			goType, parseType, _ := fieldGoType(g, f, field)
 			if parseType != nil {
-				g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(", parseType, "); ok {")
+				g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(", *parseType, "); ok {")
 				g.P("e."+field.GoName+" = ", goType, "(_val)")
 				g.P("}")
 			} else {
