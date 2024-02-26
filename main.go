@@ -91,10 +91,10 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			if oneof.Desc.IsSynthetic() {
 				continue
 			}
-			g.P("if _, ok := m[\"" + oneof.GoName + "\"].(map[string]interface{}); ok {")
+			g.P("if _opt, ok := m[\"" + oneof.GoName + "\"].(map[string]interface{}); ok {")
 			for _, oneofField := range oneof.Fields {
-				g.P("if _val , ok := option[\"", oneofField.GoName, "\"].(map[string]interface{}); ok {")
-				g.P("field := new(", oneofField.Oneof.GoIdent, ")")
+				g.P("if _val , ok := _opt[\"", oneofField.GoName, "\"].(map[string]interface{}); ok {")
+				g.P("field := new(", oneofField.Oneof.Desc.Name(), ")")
 				g.P("field.LoadMap(_val)")
 				g.P("e.Type = &", oneofField.GoIdent, "{", oneofField.GoName, ":field}")
 				g.P("}")

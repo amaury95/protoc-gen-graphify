@@ -820,20 +820,20 @@ func (e *Person) LoadMap(m map[string]interface{}) {
 	e.Name = m["first_name"].(string)
 	e.Address = m["address"].(*Person_Address)
 	if _, ok := m["Type"].(map[string]interface{}); ok {
-		if _, ok := option["Admin"].(map[string]interface{}); ok {
-			// Type
-			// Person_Type
-			e.Type = &Person_Admin_{}
+		if _val, ok := option["Admin"].(map[string]interface{}); ok {
+			field := new(Person_Type)
+			field.LoadMap(_val)
+			e.Type = &Person_Admin_{Admin: field}
 		}
-		if _, ok := option["Manager"].(map[string]interface{}); ok {
-			// Type
-			// Person_Type
-			e.Type = &Person_Manager_{}
+		if _val, ok := option["Manager"].(map[string]interface{}); ok {
+			field := new(Person_Type)
+			field.LoadMap(_val)
+			e.Type = &Person_Manager_{Manager: field}
 		}
-		if _, ok := option["Client"].(map[string]interface{}); ok {
-			// Type
-			// Person_Type
-			e.Type = &Person_Client_{}
+		if _val, ok := option["Client"].(map[string]interface{}); ok {
+			field := new(Person_Type)
+			field.LoadMap(_val)
+			e.Type = &Person_Client_{Client: field}
 		}
 	}
 }
@@ -852,20 +852,20 @@ func (e *Person_Manager) LoadMap(m map[string]interface{}) {
 // LoadMap loads map values into given struct.
 func (e *Person_Client) LoadMap(m map[string]interface{}) {
 	if _, ok := m["Subscription"].(map[string]interface{}); ok {
-		if _, ok := option["Premium"].(map[string]interface{}); ok {
-			// Subscription
-			// Person_Client_Subscription
-			e.Type = &Person_Client_Premium_{}
+		if _val, ok := option["Premium"].(map[string]interface{}); ok {
+			field := new(Person_Client_Subscription)
+			field.LoadMap(_val)
+			e.Type = &Person_Client_Premium_{Premium: field}
 		}
-		if _, ok := option["Gold"].(map[string]interface{}); ok {
-			// Subscription
-			// Person_Client_Subscription
-			e.Type = &Person_Client_Gold_{}
+		if _val, ok := option["Gold"].(map[string]interface{}); ok {
+			field := new(Person_Client_Subscription)
+			field.LoadMap(_val)
+			e.Type = &Person_Client_Gold_{Gold: field}
 		}
-		if _, ok := option["Silver"].(map[string]interface{}); ok {
-			// Subscription
-			// Person_Client_Subscription
-			e.Type = &Person_Client_Silver_{}
+		if _val, ok := option["Silver"].(map[string]interface{}); ok {
+			field := new(Person_Client_Subscription)
+			field.LoadMap(_val)
+			e.Type = &Person_Client_Silver_{Silver: field}
 		}
 	}
 }
