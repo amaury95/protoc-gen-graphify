@@ -64,6 +64,8 @@ func main() {
 						}
 					}
 				}
+
+				g.P("// end here.")
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures
