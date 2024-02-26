@@ -821,18 +821,18 @@ func (e *Person) LoadMap(m map[string]interface{}) {
 	e.Address = m["address"].(*Person_Address)
 	if _, ok := m["Type"].(map[string]interface{}); ok {
 		if _, ok := option["Admin"].(map[string]interface{}); ok {
-			// YearsInCharge
-			// HasHolidays
+			// Type
+			// Person_Type
 			e.Type = &Person_Admin_{}
 		}
 		if _, ok := option["Manager"].(map[string]interface{}); ok {
-			// ManagesClients
+			// Type
+			// Person_Type
 			e.Type = &Person_Manager_{}
 		}
 		if _, ok := option["Client"].(map[string]interface{}); ok {
-			// Premium
-			// Gold
-			// Silver
+			// Type
+			// Person_Type
 			e.Type = &Person_Client_{}
 		}
 	}
@@ -853,15 +853,18 @@ func (e *Person_Manager) LoadMap(m map[string]interface{}) {
 func (e *Person_Client) LoadMap(m map[string]interface{}) {
 	if _, ok := m["Subscription"].(map[string]interface{}); ok {
 		if _, ok := option["Premium"].(map[string]interface{}); ok {
-			// YearlyLimit
+			// Subscription
+			// Person_Client_Subscription
 			e.Type = &Person_Client_Premium_{}
 		}
 		if _, ok := option["Gold"].(map[string]interface{}); ok {
-			// MonthlyLimit
+			// Subscription
+			// Person_Client_Subscription
 			e.Type = &Person_Client_Gold_{}
 		}
 		if _, ok := option["Silver"].(map[string]interface{}); ok {
-			// DailyLimit
+			// Subscription
+			// Person_Client_Subscription
 			e.Type = &Person_Client_Silver_{}
 		}
 	}
