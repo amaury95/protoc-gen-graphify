@@ -855,17 +855,17 @@ func (e *Person_Client) LoadMap(m map[string]interface{}) {
 		if _val, ok := _opt["Premium"].(map[string]interface{}); ok {
 			field := new(Person_Client_Premium)
 			field.LoadMap(_val)
-			e.Type = &Person_Client_Premium_{Premium: field}
+			e.Subscription = &Person_Client_Premium_{Premium: field}
 		}
 		if _val, ok := _opt["Gold"].(map[string]interface{}); ok {
 			field := new(Person_Client_Gold)
 			field.LoadMap(_val)
-			e.Type = &Person_Client_Gold_{Gold: field}
+			e.Subscription = &Person_Client_Gold_{Gold: field}
 		}
 		if _val, ok := _opt["Silver"].(map[string]interface{}); ok {
 			field := new(Person_Client_Silver)
 			field.LoadMap(_val)
-			e.Type = &Person_Client_Silver_{Silver: field}
+			e.Subscription = &Person_Client_Silver_{Silver: field}
 		}
 	}
 }
