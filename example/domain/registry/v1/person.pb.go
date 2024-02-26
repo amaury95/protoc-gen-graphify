@@ -815,39 +815,39 @@ func file_registry_v1_person_proto_init() {
 	file_registry_v1_person_proto_depIdxs = nil
 }
 func (e *Person) LoadMap(m map[string]interface{}) {
-	e.Name = m["first_name"]
-	e.Address = m["address"]
-	e.Admin = m["admin"]
-	e.Manager = m["manager"]
-	e.Client = m["client"]
+	e.Name = m["first_name"].(string)
+	e.Address = m["address"].(*Person_Address)
+	e.Admin = m["admin"].(*Person_Admin)
+	e.Manager = m["manager"].(*Person_Manager)
+	e.Client = m["client"].(*Person_Client)
 }
 func (e *Person_Admin) LoadMap(m map[string]interface{}) {
-	e.YearsInCharge = m["years_in_charge"]
-	e.HasHolidays = m["has_holidays"]
+	e.YearsInCharge = m["years_in_charge"].(int64)
+	e.HasHolidays = m["has_holidays"].(bool)
 }
 func (e *Person_Manager) LoadMap(m map[string]interface{}) {
-	e.ManagesClients = m["manages_clients"]
+	e.ManagesClients = m["manages_clients"].(bool)
 }
 func (e *Person_Client) LoadMap(m map[string]interface{}) {
-	e.Premium = m["premium"]
-	e.Gold = m["gold"]
-	e.Silver = m["silver"]
+	e.Premium = m["premium"].(*Person_Client_Premium)
+	e.Gold = m["gold"].(*Person_Client_Gold)
+	e.Silver = m["silver"].(*Person_Client_Silver)
 }
 func (e *Person_Client_Premium) LoadMap(m map[string]interface{}) {
-	e.YearlyLimit = m["yearly_limit"]
+	e.YearlyLimit = m["yearly_limit"].(int64)
 }
 func (e *Person_Client_Gold) LoadMap(m map[string]interface{}) {
-	e.MonthlyLimit = m["monthly_limit"]
+	e.MonthlyLimit = m["monthly_limit"].(int64)
 }
 func (e *Person_Client_Silver) LoadMap(m map[string]interface{}) {
-	e.DailyLimit = m["daily_limit"]
+	e.DailyLimit = m["daily_limit"].(int64)
 }
 func (e *Person_Address) LoadMap(m map[string]interface{}) {
-	e.Street = m["street"]
-	e.Number = m["number"]
-	e.Additional = m["additional"]
-	e.Location = m["location"]
-	e.Province = m["province"]
-	e.PostalCode = m["postal_code"]
-	e.Country = m["country"]
+	e.Street = m["street"].(string)
+	e.Number = m["number"].(string)
+	e.Additional = m["additional"].(string)
+	e.Location = m["location"].(string)
+	e.Province = m["province"].(string)
+	e.PostalCode = m["postal_code"].(string)
+	e.Country = m["country"].(string)
 }

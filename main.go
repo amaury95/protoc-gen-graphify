@@ -82,7 +82,7 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			goType, _ := fieldGoType(g, f, field)
 			g.P("e."+field.GoName+" = m[\"", field.Desc.Name(), "\"]", ".(", goType, ")")
 		}
-		g.P("}")
+		g.P("}\n")
 	}
 }
 
