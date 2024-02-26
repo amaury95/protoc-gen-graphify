@@ -82,7 +82,7 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 		g.P("func (e *", message.GoIdent, ") LoadMap(m map[string]interface{}) {")
 		for _, field := range message.Fields {
 			g.P("// ", field.Desc.Name())
-			if field.Oneof != nil {
+			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 				g.P("// skipping ", field.GoIdent.GoName, "...")
 				continue
 			}
