@@ -679,5 +679,9 @@ func file_registry_v1_person_proto_init() {
 	file_registry_v1_person_proto_goTypes = nil
 	file_registry_v1_person_proto_depIdxs = nil
 }
-func (x *Person) SetMap(val map[string]interface{}) {
+
+var OneofWrappers = []interface{}{
+	(*Person_Admin_)(nil),
+	(*Person_Manager_)(nil),
+	(*Person_Client_)(nil),
 }

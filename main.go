@@ -56,10 +56,7 @@ func main() {
 				}
 
 				g := gengo.GenerateFile(gen, f)
-
-				for _, message := range f.Messages {
-					genMessageMapSetter(g, message)
-				}
+				exposeOneofWrappers(g, walkMessages(f.Messages)...)
 
 			}
 		}
@@ -68,10 +65,24 @@ func main() {
 	})
 }
 
-func genMessageMapSetter(g *protogen.GeneratedFile, m *protogen.Message) {
-	// Reset method.
-	g.P("func (x *", m.GoIdent, ") SetMap(val map[string]interface{}) {")
+func walkMessages(messages []*protogen.Message) []*protogen.Message {
+	var result []*protogen.Message
+	for _, message := range messages {
+		result = append(result, message)
+		result = append(result, walkMessages(message.Messages)...)
+	}
+	return result
+}
 
+func exposeOneofWrappers(g *protogen.GeneratedFile, messages ...*protogen.Message) {
+	// Print OneofWrappers
+	g.P("var OneofWrappers = []interface{}{")
+	for _, message := range messages {
+		for _, oneof := range message.Oneofs {
+			for _, field := range oneof.Fields {
+				g.P("(*", field.GoIdent, ")(nil),")
+			}
+		}
+	}
 	g.P("}")
-	g.P()
 }
