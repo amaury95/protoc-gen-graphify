@@ -87,13 +87,28 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			goType, _ := fieldGoType(g, f, field)
 			g.P("e."+field.GoName+" = m[\"", field.Desc.Name(), "\"]", ".(", goType, ")")
 		}
-		for _, field := range message.Oneofs {
-			if field.Desc.IsSynthetic() {
+		for _, oneof := range message.Oneofs {
+			if oneof.Desc.IsSynthetic() {
 				continue
 			}
-			g.P("if _, ok := m[\"" + field.GoName + "\"].(map[string]interface{}); ok {")
-			for _, message := range field.Fields {
-				g.P("// ", message.GoIdent)
+			g.P("if _, ok := m[\"" + oneof.GoName + "\"].(map[string]interface{}); ok {")
+			for _, oneofField := range oneof.Fields {
+				g.P("if _ , ok := option[\"missing\"].(map[string]interface{}); ok {")
+				g.P("//", oneofField.GoName)
+				g.P("//", oneofField.GoIdent)
+				for _, f00 := range oneofField.Message.Fields {
+					g.P("//", f00.GoName)
+				}
+				g.P("e.Type = &", oneofField.GoName, "{}")
+				g.P("}")
+				/*
+						if value , ok := option["Admin"].(map[string]interface{});ok {
+						val:= new(Person_Admin)
+						val.LoadMap(value)
+						e.Type = &Person_Admin_{Admin: val}
+					}
+				*/
+
 			}
 			g.P("}")
 		}

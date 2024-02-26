@@ -820,6 +820,14 @@ func (e *Person) LoadMap(m map[string]interface{}) {
 	e.Name = m["first_name"].(string)
 	e.Address = m["address"].(*Person_Address)
 	if option, ok := m["Type"].(map[string]interface{}); ok {
+		if value , ok := option["Admin"].(map[string]interface{});ok {
+			val:= new(Person_Admin)
+			val.LoadMap(value)
+			e.Type = &Person_Admin_{Admin: val}
+		}
+		// Person_Admin_
+		// Person_Manager_
+		// Person_Client_
 	}
 }
 
@@ -836,7 +844,10 @@ func (e *Person_Manager) LoadMap(m map[string]interface{}) {
 
 // LoadMap loads map values into given struct.
 func (e *Person_Client) LoadMap(m map[string]interface{}) {
-	if option, ok := m["Subscription"].(map[string]interface{}); ok {
+	if _, ok := m["Subscription"].(map[string]interface{}); ok {
+		// Person_Client_Premium_
+		// Person_Client_Gold_
+		// Person_Client_Silver_
 	}
 }
 
