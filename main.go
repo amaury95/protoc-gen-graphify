@@ -47,7 +47,16 @@ func main() {
 		}
 		for _, f := range gen.Files {
 			if f.Generate {
-				f.GeneratedFilenamePrefix = "node"
+				for _, message := range f.Messages {
+					for _, field := range message.Fields {
+						if field.Desc.HasJSONName() {
+							field.GoName = "Name_" + field.Desc.JSONName()
+						}
+					}
+					// for _, oneof := range message.Oneofs {
+
+					// }
+				}
 				gengo.GenerateFile(gen, f)
 			}
 		}
