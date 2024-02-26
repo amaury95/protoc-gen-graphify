@@ -47,8 +47,7 @@ func main() {
 		}
 		for _, f := range gen.Files {
 			if f.Generate {
-				genFile := gengo.GenerateFile(gen, f)
-				fmt.Printf("genFile: %v\n", genFile)
+				gengo.GenerateFile(gen, f)
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures
