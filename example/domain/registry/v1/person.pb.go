@@ -822,5 +822,6 @@ var OneofWrappers = []interface{}{
 	(*Person_Client_Premium_)(nil),
 	(*Person_Client_Gold_)(nil),
 	(*Person_Client_Silver_)(nil),
-	(*Person_Address_Additional)(nil),
 }
+
+

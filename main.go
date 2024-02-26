@@ -56,8 +56,8 @@ func main() {
 				}
 
 				g := gengo.GenerateFile(gen, f)
-				exposeOneofWrappers(g, walkMessages(f.Messages)...)
-
+				// exposeOneofWrappers(g, walkMessages(f.Messages)...)
+				exposeMapBuilders(g, walkMessages(f.Messages)...)
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures
@@ -72,6 +72,16 @@ func walkMessages(messages []*protogen.Message) []*protogen.Message {
 		result = append(result, walkMessages(message.Messages)...)
 	}
 	return result
+}
+
+func exposeMapBuilders(g *protogen.GeneratedFile, messages ...*protogen.Message) {
+	for _, message := range messages {
+		g.P("func (e *", message.GoIdent, ") LoadMap(m map[string]interface{}) {")
+		for _, field := range message.Fields {
+			g.P("e."+field.GoName+" = m[\"", field.Desc.Name(), "\"]")
+		}
+		g.P("}")
+	}
 }
 
 func exposeOneofWrappers(g *protogen.GeneratedFile, messages ...*protogen.Message) {
