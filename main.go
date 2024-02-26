@@ -91,8 +91,10 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			if field.Desc.IsSynthetic() {
 				continue
 			}
-			g.P("if option, ok := m[\"" + field.GoName + "\"].(map[string]interface{}); ok {")
-
+			g.P("if _, ok := m[\"" + field.GoName + "\"].(map[string]interface{}); ok {")
+			for _, message := range field.Fields {
+				g.P("// ", message.GoIdent)
+			}
 			g.P("}")
 		}
 		g.P("}")

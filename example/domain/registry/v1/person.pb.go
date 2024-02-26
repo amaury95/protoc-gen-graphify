@@ -819,7 +819,8 @@ func file_registry_v1_person_proto_init() {
 func (e *Person) LoadMap(m map[string]interface{}) {
 	e.Name = m["first_name"].(string)
 	e.Address = m["address"].(*Person_Address)
-	// Type is oneof
+	if option, ok := m["Type"].(map[string]interface{}); ok {
+	}
 }
 
 // LoadMap loads map values into given struct.
@@ -835,7 +836,8 @@ func (e *Person_Manager) LoadMap(m map[string]interface{}) {
 
 // LoadMap loads map values into given struct.
 func (e *Person_Client) LoadMap(m map[string]interface{}) {
-	// Subscription is oneof
+	if option, ok := m["Subscription"].(map[string]interface{}); ok {
+	}
 }
 
 // LoadMap loads map values into given struct.
