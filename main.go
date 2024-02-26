@@ -55,21 +55,30 @@ func main() {
 					}
 				}
 
-				g := gengo.GenerateFile(gen, f)
-
-				// Print OneofWrappers
-				g.P("var OneofWrappers = []interface{}{")
-				for _, message := range f.Messages {
-					for _, oneof := range message.Oneofs {
-						for _, field := range oneof.Fields {
-							g.P("(*", field.GoIdent, ")(nil),")
-						}
-					}
-				}
-				g.P("}")
+				gengo.GenerateFile(gen, f)
+				GenerateMapFile(gen, f)
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures
 		return nil
 	})
+}
+
+func GenerateMapFile(gen *protogen.Plugin, file *protogen.File) *protogen.GeneratedFile {
+	filename := file.GeneratedFilenamePrefix + ".map.pb.go"
+	g := gen.NewGeneratedFile(filename, file.GoImportPath)
+
+	for _, message := range file.Messages {
+		genMessageMapSetter(g, message)
+	}
+
+	return g
+}
+
+func genMessageMapSetter(g *protogen.GeneratedFile, m *protogen.Message) {
+	// Reset method.
+	g.P("func (x *", m.GoIdent, ") SetMap(val map[string]interface{}) {")
+
+	g.P("}")
+	g.P()
 }

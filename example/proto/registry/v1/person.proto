@@ -9,7 +9,17 @@ message Person {
 
   message Manager { bool manages_clients = 1; }
 
-  message Client { string subscription = 1; }
+  message Client {
+    message Premium { int64 yearly_limit = 1; }
+    message Gold { int64 monthly_limit = 2; }
+    message Silver { int64 daily_limit = 3; }
+
+    oneof subscription {
+      Premium premium = 1;
+      Gold gold = 2;
+      Silver silver = 3;
+    }
+  }
 
   string name = 1 [ json_name = "first_name" ];
 
