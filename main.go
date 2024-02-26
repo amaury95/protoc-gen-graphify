@@ -88,7 +88,7 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 				continue
 			}
 			goType, _ := fieldGoType(g, f, field)
-			g.P("e."+field.GoName+" = m[\"", field.Desc.Name(), "\"]", ".(", goType, ")")
+			g.P("e."+field.GoName+" = ", goType)
 		}
 		for _, oneof := range message.Oneofs {
 			if oneof.Desc.IsSynthetic() {
@@ -126,13 +126,13 @@ func fieldGoType(g *protogen.GeneratedFile, f *protogen.File, field *protogen.Fi
 	case protoreflect.EnumKind:
 		goType = g.QualifiedGoIdent(field.Enum.GoIdent)
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
-		goType = "int32"
+		goType = fmt.Sprintf("int32(m[\"%s\"].(float32))", field.Desc.Name())
 	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
-		goType = "uint32"
+		goType = fmt.Sprintf("uint32(m[\"%s\"].(float32))", field.Desc.Name())
 	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
-		goType = "int64"
+		goType = fmt.Sprintf("int64(m[\"%s\"].(float64))", field.Desc.Name())
 	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
-		goType = "uint64"
+		goType = fmt.Sprintf("uint64(m[\"%s\"].(float64))", field.Desc.Name())
 	case protoreflect.FloatKind:
 		goType = "float32"
 	case protoreflect.DoubleKind:
