@@ -14,7 +14,7 @@ message Person {
     string country = 7;
   }
 
-  string _key = 1;
+  string key = 1 [ json_name = "_key" ];
   string name = 2;
   string email = 3;
   int64 age = 4;
@@ -47,7 +47,7 @@ message Book {
     string notable_achievements = 2;
   }
 
-  string _key = 1;
+  string key = 1 [ json_name = "_key" ];
   string title = 2;
   string author = 3;
 
@@ -66,21 +66,21 @@ message Book {
 }
 
 message Borrow {
-  string _key = 1;
-  string _from = 2;
-  string _to = 3;
+  string key = 1 [ json_name = "_key" ];
+  string from = 2 [ json_name = "_from" ];
+  string to = 3 [ json_name = "_to" ];
   google.protobuf.Timestamp date = 4;
 }
 
 message Library {
-  string _key = 1;
+  string key = 1 [ json_name = "_key" ];
   string name = 2;
   string location = 3;
 }
 
 message Stock {
-  string _key = 1;
-  string _from = 2;
-  string _to = 3;
+  string key = 1 [ json_name = "_key" ];
+  string from = 2 [ json_name = "_from" ];
+  string to = 3 [ json_name = "_to" ];
   int64 stock = 4;
 }

@@ -49,7 +49,9 @@ func main() {
 			if f.Generate {
 				for _, message := range f.Messages {
 					for _, field := range message.Fields {
-						field.GoName = removeXPrefix(field.GoName)
+						if field.Desc.HasJSONName() {
+							field.Desc = overrideJsonName{name: field.Desc.JSONName(), FieldDescriptor: field.Desc}
+						}
 					}
 				}
 				gengo.GenerateFile(gen, f)
@@ -59,14 +61,3 @@ func main() {
 		return nil
 	})
 }
-
-func removeXPrefix(input string) string {
-	for len(input) > 0 && input[0] == 'X' {
-		input = input[1:]
-	}
-	return input
-}
-
-// func GenerateOneofsMap(file *protogen.File) *protogen.GeneratedFile {
-
-// }
