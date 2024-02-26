@@ -87,8 +87,17 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			if field.Message != nil {
 				continue
 			}
-			goType, _ := fieldGoType(g, f, field)
-			g.P("e."+field.GoName+" = ", goType)
+
+			goType, parseType, _ := fieldGoType(g, f, field)
+			if parseType != nil {
+				g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(", parseType, "); ok {")
+				g.P("e."+field.GoName+" = ", goType, "(_val)")
+				g.P("}")
+			} else {
+				g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(", goType, "); ok {")
+				g.P("e." + field.GoName + " = _val")
+				g.P("}")
+			}
 		}
 		for _, oneof := range message.Oneofs {
 			if oneof.Desc.IsSynthetic() {
@@ -114,45 +123,52 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 // fieldGoType returns the Go type used for a field.
 //
 // If it returns pointer=true, the struct field is a pointer to the type.
-func fieldGoType(g *protogen.GeneratedFile, f *protogen.File, field *protogen.Field) (goType string, pointer bool) {
+func fieldGoType(g *protogen.GeneratedFile, f *protogen.File, field *protogen.Field) (goType string, parseType *string, pointer bool) {
 	if field.Desc.IsWeak() {
-		return "struct{}", false
+		return "struct{}", nil, false
 	}
+
+	float64T := "float64"
 
 	pointer = field.Desc.HasPresence()
 	switch field.Desc.Kind() {
 	case protoreflect.BoolKind:
-		goType = fmt.Sprintf("m[\"%s\"].(bool)", field.Desc.Name())
+		goType = "bool"
 	case protoreflect.EnumKind:
 		goType = g.QualifiedGoIdent(field.Enum.GoIdent)
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
-		goType = fmt.Sprintf("int32(m[\"%s\"].(float64))", field.Desc.Name())
+		goType = "int32"
+		parseType = &float64T
 	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
-		goType = fmt.Sprintf("uint32(m[\"%s\"].(float64))", field.Desc.Name())
+		goType = "uint32"
+		parseType = &float64T
 	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
-		goType = fmt.Sprintf("int64(m[\"%s\"].(float64))", field.Desc.Name())
+		goType = "int64"
+		parseType = &float64T
 	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
-		goType = fmt.Sprintf("uint64(m[\"%s\"].(float64))", field.Desc.Name())
+		goType = "uint64"
+		parseType = &float64T
 	case protoreflect.FloatKind:
-		goType = fmt.Sprintf("float32(m[\"%s\"].(float64))", field.Desc.Name())
+		goType = "float32"
+		parseType = &float64T
 	case protoreflect.DoubleKind:
-		goType = fmt.Sprintf("m[\"%s\"].(float64)", field.Desc.Name())
+		goType = "float64"
 	case protoreflect.StringKind:
-		goType = fmt.Sprintf("m[\"%s\"].(string)", field.Desc.Name())
+		goType = "string"
 	case protoreflect.BytesKind:
-		goType = fmt.Sprintf("m[\"%s\"].([]byte)", field.Desc.Name())
+		goType = "[]byte"
 		pointer = false // rely on nullability of slices for presence
-	// case protoreflect.MessageKind, protoreflect.GroupKind:
-	// 	goType = "*" + g.QualifiedGoIdent(field.Message.GoIdent)
-	// 	pointer = false // pointer captured as part of the type
+		// case protoreflect.MessageKind, protoreflect.GroupKind:
+		// 	goType = "*" + g.QualifiedGoIdent(field.Message.GoIdent)
+		// 	pointer = false // pointer captured as part of the type
 	}
 	switch {
 	case field.Desc.IsList():
-		return "[]" + goType, false
+		return "[]" + goType, nil, false
 	case field.Desc.IsMap():
-		keyType, _ := fieldGoType(g, f, field.Message.Fields[0])
-		valType, _ := fieldGoType(g, f, field.Message.Fields[1])
-		return fmt.Sprintf("map[%v]%v", keyType, valType), false
+		keyType, _, _ := fieldGoType(g, f, field.Message.Fields[0])
+		valType, _, _ := fieldGoType(g, f, field.Message.Fields[1])
+		return fmt.Sprintf("map[%v]%v", keyType, valType), nil, false
 	}
-	return goType, pointer
+	return goType, parseType, pointer
 }
