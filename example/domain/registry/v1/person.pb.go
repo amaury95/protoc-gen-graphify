@@ -817,35 +817,35 @@ func file_registry_v1_person_proto_init() {
 func (e *Person) LoadMap(m map[string]interface{}) {
 	e.Name = m["first_name"].(string)
 	e.Address = m["address"].(*Person_Address)
-	e.Admin = m["admin"].(*Person_Admin)
-	e.Manager = m["manager"].(*Person_Manager)
-	e.Client = m["client"].(*Person_Client)
 }
+
 func (e *Person_Admin) LoadMap(m map[string]interface{}) {
 	e.YearsInCharge = m["years_in_charge"].(int64)
 	e.HasHolidays = m["has_holidays"].(bool)
 }
+
 func (e *Person_Manager) LoadMap(m map[string]interface{}) {
 	e.ManagesClients = m["manages_clients"].(bool)
 }
+
 func (e *Person_Client) LoadMap(m map[string]interface{}) {
-	e.Premium = m["premium"].(*Person_Client_Premium)
-	e.Gold = m["gold"].(*Person_Client_Gold)
-	e.Silver = m["silver"].(*Person_Client_Silver)
 }
+
 func (e *Person_Client_Premium) LoadMap(m map[string]interface{}) {
 	e.YearlyLimit = m["yearly_limit"].(int64)
 }
+
 func (e *Person_Client_Gold) LoadMap(m map[string]interface{}) {
 	e.MonthlyLimit = m["monthly_limit"].(int64)
 }
+
 func (e *Person_Client_Silver) LoadMap(m map[string]interface{}) {
 	e.DailyLimit = m["daily_limit"].(int64)
 }
+
 func (e *Person_Address) LoadMap(m map[string]interface{}) {
 	e.Street = m["street"].(string)
 	e.Number = m["number"].(string)
-	e.Additional = m["additional"].(string)
 	e.Location = m["location"].(string)
 	e.Province = m["province"].(string)
 	e.PostalCode = m["postal_code"].(string)

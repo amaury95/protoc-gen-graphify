@@ -77,6 +77,8 @@ func walkMessages(messages []*protogen.Message) []*protogen.Message {
 
 func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...*protogen.Message) {
 	for _, message := range messages {
+		g.P()
+		g.P("// LoadMap loads map values into given struct.")
 		g.P("func (e *", message.GoIdent, ") LoadMap(m map[string]interface{}) {")
 		for _, field := range message.Fields {
 			if field.Oneof != nil {
@@ -85,7 +87,13 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			goType, _ := fieldGoType(g, f, field)
 			g.P("e."+field.GoName+" = m[\"", field.Desc.Name(), "\"]", ".(", goType, ")")
 		}
-		g.P("}\n")
+		for _, field := range message.Oneofs {
+			if field.Desc.IsSynthetic() {
+				continue
+			}
+			g.P("//", field.GoName, " is oneof")
+		}
+		g.P("}")
 	}
 }
 
@@ -133,20 +141,4 @@ func fieldGoType(g *protogen.GeneratedFile, f *protogen.File, field *protogen.Fi
 		return fmt.Sprintf("map[%v]%v", keyType, valType), false
 	}
 	return goType, pointer
-}
-
-func exposeOneofWrappers(g *protogen.GeneratedFile, messages ...*protogen.Message) {
-	// Print OneofWrappers
-	g.P("var OneofWrappers = []interface{}{")
-	for _, message := range messages {
-		for _, oneof := range message.Oneofs {
-			for _, field := range oneof.Fields {
-				if field.Oneof.Desc.IsSynthetic() {
-					continue
-				}
-				g.P("(*", field.GoIdent, ")(nil),")
-			}
-		}
-	}
-	g.P("}")
 }
