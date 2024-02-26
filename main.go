@@ -84,8 +84,13 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			if field.Oneof != nil {
 				continue
 			}
+			
 			if field.Message != nil {
-				continue
+				g.P("if _val , ok := m[\"", field.GoName, "\"].(map[string]interface{}); ok {")
+				g.P("field := new(", field.Message.GoIdent.GoName, ")")
+				g.P("field.LoadMap(_val)")
+				g.P("e.", field.GoName, " = field")
+				g.P("}")
 			}
 
 			goType, parseType, _ := fieldGoType(g, f, field)

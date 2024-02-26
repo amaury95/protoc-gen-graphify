@@ -882,7 +882,9 @@ func file_registry_v1_person_proto_init() {
 
 // LoadMap loads map values into given struct.
 func (e *Person) LoadMap(m map[string]interface{}) {
-	e.Name = m["first_name"].(string)
+	if _val, ok := m["first_name"].(string); ok {
+		e.Name = _val
+	}
 	if _opt, ok := m["Type"].(map[string]interface{}); ok {
 		if _val, ok := _opt["Admin"].(map[string]interface{}); ok {
 			field := new(Person_Admin)
@@ -904,13 +906,19 @@ func (e *Person) LoadMap(m map[string]interface{}) {
 
 // LoadMap loads map values into given struct.
 func (e *Person_Admin) LoadMap(m map[string]interface{}) {
-	e.YearsInCharge = int64(m["years_in_charge"].(float64))
-	e.HasHolidays = m["has_holidays"].(bool)
+	if _val, ok := m["years_in_charge"].(float64); ok {
+		e.YearsInCharge = int64(_val)
+	}
+	if _val, ok := m["has_holidays"].(bool); ok {
+		e.HasHolidays = _val
+	}
 }
 
 // LoadMap loads map values into given struct.
 func (e *Person_Manager) LoadMap(m map[string]interface{}) {
-	e.ManagesClients = m["manages_clients"].(bool)
+	if _val, ok := m["manages_clients"].(bool); ok {
+		e.ManagesClients = _val
+	}
 }
 
 // LoadMap loads map values into given struct.
@@ -938,25 +946,43 @@ func (e *Person_Client) LoadMap(m map[string]interface{}) {
 
 // LoadMap loads map values into given struct.
 func (e *Person_Client_Premium) LoadMap(m map[string]interface{}) {
-	e.YearlyLimit = int64(m["yearly_limit"].(float64))
+	if _val, ok := m["yearly_limit"].(float64); ok {
+		e.YearlyLimit = int64(_val)
+	}
 }
 
 // LoadMap loads map values into given struct.
 func (e *Person_Client_Gold) LoadMap(m map[string]interface{}) {
-	e.MonthlyLimit = int64(m["monthly_limit"].(float64))
+	if _val, ok := m["monthly_limit"].(float64); ok {
+		e.MonthlyLimit = int64(_val)
+	}
 }
 
 // LoadMap loads map values into given struct.
 func (e *Person_Client_Silver) LoadMap(m map[string]interface{}) {
-	e.DailyLimit = int64(m["daily_limit"].(float64))
+	if _val, ok := m["daily_limit"].(float64); ok {
+		e.DailyLimit = int64(_val)
+	}
 }
 
 // LoadMap loads map values into given struct.
 func (e *Person_Address) LoadMap(m map[string]interface{}) {
-	e.Street = m["street"].(string)
-	e.Number = m["number"].(string)
-	e.Location = m["location"].(string)
-	e.Province = m["province"].(string)
-	e.PostalCode = m["postal_code"].(string)
-	e.Country = m["country"].(string)
+	if _val, ok := m["street"].(string); ok {
+		e.Street = _val
+	}
+	if _val, ok := m["number"].(string); ok {
+		e.Number = _val
+	}
+	if _val, ok := m["location"].(string); ok {
+		e.Location = _val
+	}
+	if _val, ok := m["province"].(string); ok {
+		e.Province = _val
+	}
+	if _val, ok := m["postal_code"].(string); ok {
+		e.PostalCode = _val
+	}
+	if _val, ok := m["country"].(string); ok {
+		e.Country = _val
+	}
 }
