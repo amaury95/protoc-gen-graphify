@@ -2,10 +2,20 @@ syntax = "proto3";
 package registry.v1;
 
 message Person {
+  message Admin {
+    int64 years_in_charge = 1;
+    bool has_holidays = 2;
+  }
+
+  message Manager { bool manages_clients = 1; }
+
+  message Client { string subscription = 1; }
+
   string name = 1 [ json_name = "first_name" ];
-  oneof role {
-    string admin = 2;
-    string manager = 3;
-    string client = 4;
+
+  oneof type {
+    Admin admin = 2;
+    Manager manager = 3;
+    Client client = 4;
   }
 }

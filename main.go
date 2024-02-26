@@ -57,15 +57,16 @@ func main() {
 
 				g := gengo.GenerateFile(gen, f)
 
+				// Print OneofWrappers
+				g.P("var OneofWrappers = []interface{}{")
 				for _, message := range f.Messages {
-					g.P("//", message.Desc.Name())
 					for _, oneof := range message.Oneofs {
-						g.P("//", oneof.Desc.Name())
 						for _, field := range oneof.Fields {
-							g.P("//", field.GoIdent)
+							g.P("(*", field.GoIdent, ")(nil),")
 						}
 					}
 				}
+				g.P("}")
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures
