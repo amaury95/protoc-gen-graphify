@@ -58,6 +58,7 @@ func main() {
 				g := gengo.GenerateFile(gen, f)
 
 				for _, message := range f.Messages {
+					g.P("//", message.Desc.Name())
 					for _, oneof := range message.Oneofs {
 						for _, field := range oneof.Fields {
 							g.P("// ", field.GoIdent)
