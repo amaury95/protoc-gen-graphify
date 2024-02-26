@@ -54,7 +54,16 @@ func main() {
 						}
 					}
 				}
-				gengo.GenerateFile(gen, f)
+
+				g := gengo.GenerateFile(gen, f)
+
+				for _, message := range f.Messages {
+					for _, oneof := range message.Oneofs {
+						for _, field := range oneof.Fields {
+							g.P("// ", field.GoIdent)
+						}
+					}
+				}
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures
