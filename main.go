@@ -55,24 +55,17 @@ func main() {
 					}
 				}
 
-				gengo.GenerateFile(gen, f)
-				GenerateMapFile(gen, f)
+				g := gengo.GenerateFile(gen, f)
+
+				for _, message := range f.Messages {
+					genMessageMapSetter(g, message)
+				}
+
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures
 		return nil
 	})
-}
-
-func GenerateMapFile(gen *protogen.Plugin, file *protogen.File) *protogen.GeneratedFile {
-	filename := file.GeneratedFilenamePrefix + ".map.pb.go"
-	g := gen.NewGeneratedFile(filename, file.GoImportPath)
-
-	for _, message := range file.Messages {
-		genMessageMapSetter(g, message)
-	}
-
-	return g
 }
 
 func genMessageMapSetter(g *protogen.GeneratedFile, m *protogen.Message) {
