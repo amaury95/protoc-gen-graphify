@@ -47,6 +47,7 @@ func main() {
 		}
 		for _, f := range gen.Files {
 			if f.Generate {
+				f.GeneratedFilenamePrefix = "node"
 				gengo.GenerateFile(gen, f)
 			}
 		}
