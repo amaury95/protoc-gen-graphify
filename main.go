@@ -78,33 +78,115 @@ func walkMessages(messages []*protogen.Message) []*protogen.Message {
 func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...*protogen.Message) {
 	for _, message := range messages {
 		g.P()
-		g.P("// LoadMap loads map values into given struct.")
+		g.P("// LoadMap ...")
 		g.P("func (e *", message.GoIdent, ") LoadMap(m map[string]interface{}) {")
 		for _, field := range message.Fields {
 			if field.Oneof != nil {
 				continue
 			}
 
-			if field.Desc.Kind() == protoreflect.MessageKind {
+			switch field.Desc.Kind() {
+			case protoreflect.MessageKind:
 				g.P("if _val , ok := m[\"", field.Desc.Name(), "\"].(map[string]interface{}); ok {")
 				g.P("field := new(", field.Message.GoIdent.GoName, ")")
 				g.P("field.LoadMap(_val)")
 				g.P("e.", field.GoName, " = field")
 				g.P("}")
-				continue
-			}
-
-			goType, parseType, _ := fieldGoType(g, f, field)
-			if parseType != nil {
-				g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(", *parseType, "); ok {")
-				g.P("e."+field.GoName+" = ", goType, "(_val)")
-				g.P("}")
-			} else {
-				g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(", goType, "); ok {")
-				g.P("e." + field.GoName + " = _val")
-				g.P("}")
+			case protoreflect.BoolKind:
+				if field.Desc.HasPresence() {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(bool); ok {")
+					g.P("e." + field.GoName + " = &_val")
+					g.P("}")
+				} else {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(bool); ok {")
+					g.P("e." + field.GoName + " = _val")
+					g.P("}")
+				}
+			case protoreflect.EnumKind:
+				// goType = g.QualifiedGoIdent(field.Enum.GoIdent)
+			case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
+				if field.Desc.HasPresence() {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
+					g.P("e." + field.GoName + " = &(int32(_val))")
+					g.P("}")
+				} else {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
+					g.P("e." + field.GoName + " = int32(_val)")
+					g.P("}")
+				}
+			case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
+				if field.Desc.HasPresence() {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
+					g.P("e." + field.GoName + " = &(uint32(_val))")
+					g.P("}")
+				} else {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
+					g.P("e." + field.GoName + " = uint32(_val)")
+					g.P("}")
+				}
+			case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
+				if field.Desc.HasPresence() {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
+					g.P("e." + field.GoName + " = &(int64(_val))")
+					g.P("}")
+				} else {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
+					g.P("e." + field.GoName + " = int64(_val)")
+					g.P("}")
+				}
+			case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
+				if field.Desc.HasPresence() {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
+					g.P("e." + field.GoName + " = &(uint64(_val))")
+					g.P("}")
+				} else {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
+					g.P("e." + field.GoName + " = uint64(_val)")
+					g.P("}")
+				}
+			case protoreflect.FloatKind:
+				if field.Desc.HasPresence() {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
+					g.P("e." + field.GoName + " = &(float32(_val))")
+					g.P("}")
+				} else {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
+					g.P("e." + field.GoName + " = float32(_val)")
+					g.P("}")
+				}
+			case protoreflect.DoubleKind:
+				if field.Desc.HasPresence() {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
+					g.P("e." + field.GoName + " = &_val")
+					g.P("}")
+				} else {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(float64); ok {")
+					g.P("e." + field.GoName + " = _val")
+					g.P("}")
+				}
+			case protoreflect.StringKind:
+				if field.Desc.HasPresence() {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(string); ok {")
+					g.P("e." + field.GoName + " = &_val")
+					g.P("}")
+				} else {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].(string); ok {")
+					g.P("e." + field.GoName + " = _val")
+					g.P("}")
+				}
+			case protoreflect.BytesKind:
+				if field.Desc.HasPresence() {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].([]byte); ok {")
+					g.P("e." + field.GoName + " = &_val")
+					g.P("}")
+				} else {
+					g.P("if _val, ok := m[\"", field.Desc.Name(), "\"].([]byte); ok {")
+					g.P("e." + field.GoName + " = _val")
+					g.P("}")
+				}
 			}
 		}
+
 		for _, oneof := range message.Oneofs {
 			if oneof.Desc.IsSynthetic() {
 				continue
