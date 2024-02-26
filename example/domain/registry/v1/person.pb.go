@@ -151,4 +151,5 @@ func file_registry_v1_person_proto_init() {
 	file_registry_v1_person_proto_depIdxs = nil
 }
 
+//Person
 // end here.
