@@ -126,15 +126,15 @@ func fieldGoType(g *protogen.GeneratedFile, f *protogen.File, field *protogen.Fi
 	case protoreflect.EnumKind:
 		goType = g.QualifiedGoIdent(field.Enum.GoIdent)
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
-		goType = fmt.Sprintf("int32(m[\"%s\"].(float32))", field.Desc.Name())
+		goType = fmt.Sprintf("int32(m[\"%s\"].(float64))", field.Desc.Name())
 	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
-		goType = fmt.Sprintf("uint32(m[\"%s\"].(float32))", field.Desc.Name())
+		goType = fmt.Sprintf("uint32(m[\"%s\"].(float64))", field.Desc.Name())
 	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
 		goType = fmt.Sprintf("int64(m[\"%s\"].(float64))", field.Desc.Name())
 	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
 		goType = fmt.Sprintf("uint64(m[\"%s\"].(float64))", field.Desc.Name())
 	case protoreflect.FloatKind:
-		goType = fmt.Sprintf("m[\"%s\"].(float32)", field.Desc.Name())
+		goType = fmt.Sprintf("float32(m[\"%s\"].(float64))", field.Desc.Name())
 	case protoreflect.DoubleKind:
 		goType = fmt.Sprintf("m[\"%s\"].(float64)", field.Desc.Name())
 	case protoreflect.StringKind:

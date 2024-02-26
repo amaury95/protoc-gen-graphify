@@ -905,12 +905,12 @@ func (e *Person) LoadMap(m map[string]interface{}) {
 // LoadMap loads map values into given struct.
 func (e *Person_Admin) LoadMap(m map[string]interface{}) {
 	e.YearsInCharge = int64(m["years_in_charge"].(float64))
-	e.HasHolidays = bool
+	e.HasHolidays = m["has_holidays"].(bool)
 }
 
 // LoadMap loads map values into given struct.
 func (e *Person_Manager) LoadMap(m map[string]interface{}) {
-	e.ManagesClients = bool
+	e.ManagesClients = m["manages_clients"].(bool)
 }
 
 // LoadMap loads map values into given struct.
