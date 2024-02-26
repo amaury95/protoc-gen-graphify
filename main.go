@@ -83,6 +83,7 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 		for _, field := range message.Fields {
 			g.P("// ", field.Desc.Name())
 			if field.Oneof != nil {
+				g.P("// skipping ", field.GoIdent.GoName, "...")
 				continue
 			}
 
