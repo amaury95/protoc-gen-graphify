@@ -5,7 +5,7 @@ tag:
 	@git tag $(version)
 
 push:
-	@git push origin master
+	@git push origin master $(version)
 
 release: commit tag push
 
