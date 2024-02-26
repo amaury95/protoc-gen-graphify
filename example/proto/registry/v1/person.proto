@@ -1,0 +1,4 @@
+syntax = "proto3";
+package registry.v1;
+
+message Person { string name = 1 [ json_name = "first_name" ]; }
