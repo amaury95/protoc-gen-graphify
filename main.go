@@ -91,6 +91,7 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 				g.P("field.LoadMap(_val)")
 				g.P("e.", field.GoName, " = field")
 				g.P("}")
+				continue
 			}
 
 			goType, parseType, _ := fieldGoType(g, f, field)
