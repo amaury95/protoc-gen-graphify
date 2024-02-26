@@ -19,6 +19,7 @@ import (
 	"github.com/amaury95/protoc-gen-go-tag/internal/version"
 	gengo "google.golang.org/protobuf/cmd/protoc-gen-go/internal_gengo"
 	"google.golang.org/protobuf/compiler/protogen"
+	
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
