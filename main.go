@@ -134,13 +134,13 @@ func fieldGoType(g *protogen.GeneratedFile, f *protogen.File, field *protogen.Fi
 	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
 		goType = fmt.Sprintf("uint64(m[\"%s\"].(float64))", field.Desc.Name())
 	case protoreflect.FloatKind:
-		goType = "float32"
+		goType = fmt.Sprintf("m[\"%s\"].(float32)", field.Desc.Name())
 	case protoreflect.DoubleKind:
-		goType = "float64"
+		goType = fmt.Sprintf("m[\"%s\"].(float64)", field.Desc.Name())
 	case protoreflect.StringKind:
-		goType = "string"
+		goType = fmt.Sprintf("m[\"%s\"].(string)", field.Desc.Name())
 	case protoreflect.BytesKind:
-		goType = "[]byte"
+		goType = fmt.Sprintf("m[\"%s\"].([]byte)", field.Desc.Name())
 		pointer = false // rely on nullability of slices for presence
 	case protoreflect.MessageKind, protoreflect.GroupKind:
 		goType = "*" + g.QualifiedGoIdent(field.Message.GoIdent)
