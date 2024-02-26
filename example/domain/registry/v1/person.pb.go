@@ -814,14 +814,40 @@ func file_registry_v1_person_proto_init() {
 	file_registry_v1_person_proto_goTypes = nil
 	file_registry_v1_person_proto_depIdxs = nil
 }
-
-var OneofWrappers = []interface{}{
-	(*Person_Admin_)(nil),
-	(*Person_Manager_)(nil),
-	(*Person_Client_)(nil),
-	(*Person_Client_Premium_)(nil),
-	(*Person_Client_Gold_)(nil),
-	(*Person_Client_Silver_)(nil),
+func (e *Person) LoadMap(m map[string]interface{}) {
+	e.Name = m["first_name"]
+	e.Address = m["address"]
+	e.Admin = m["admin"]
+	e.Manager = m["manager"]
+	e.Client = m["client"]
 }
-
-
+func (e *Person_Admin) LoadMap(m map[string]interface{}) {
+	e.YearsInCharge = m["years_in_charge"]
+	e.HasHolidays = m["has_holidays"]
+}
+func (e *Person_Manager) LoadMap(m map[string]interface{}) {
+	e.ManagesClients = m["manages_clients"]
+}
+func (e *Person_Client) LoadMap(m map[string]interface{}) {
+	e.Premium = m["premium"]
+	e.Gold = m["gold"]
+	e.Silver = m["silver"]
+}
+func (e *Person_Client_Premium) LoadMap(m map[string]interface{}) {
+	e.YearlyLimit = m["yearly_limit"]
+}
+func (e *Person_Client_Gold) LoadMap(m map[string]interface{}) {
+	e.MonthlyLimit = m["monthly_limit"]
+}
+func (e *Person_Client_Silver) LoadMap(m map[string]interface{}) {
+	e.DailyLimit = m["daily_limit"]
+}
+func (e *Person_Address) LoadMap(m map[string]interface{}) {
+	e.Street = m["street"]
+	e.Number = m["number"]
+	e.Additional = m["additional"]
+	e.Location = m["location"]
+	e.Province = m["province"]
+	e.PostalCode = m["postal_code"]
+	e.Country = m["country"]
+}
