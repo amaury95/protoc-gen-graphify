@@ -823,16 +823,19 @@ func (e *Person) LoadMap(m map[string]interface{}) {
 		if _val, ok := _opt["Admin"].(map[string]interface{}); ok {
 			field := new(Person_Type)
 			field.LoadMap(_val)
+			// &{{admin FieldDescriptor{Syntax: proto3, FullName: registry.v1.Person.admin, Number: 3, Cardinality: optional, Kind: message, HasJSONName: true, JSONName: "admin", HasPresence: true, Oneof: type, Message: registry.v1.Person.Admin}} Admin "\"github.com/amaury95/graphify/example/registry/v1\"".Person_Admin_ 0x14000153440 0x1400018b8c0 <nil> <nil> 0x14000153560 {registry/v1/person.proto .message_type[0].field[2]} {[]  }}
 			e.Type = &Person_Admin_{Admin: field}
 		}
 		if _val, ok := _opt["Manager"].(map[string]interface{}); ok {
 			field := new(Person_Type)
 			field.LoadMap(_val)
+			// &{{manager FieldDescriptor{Syntax: proto3, FullName: registry.v1.Person.manager, Number: 4, Cardinality: optional, Kind: message, HasJSONName: true, JSONName: "manager", HasPresence: true, Oneof: type, Message: registry.v1.Person.Manager}} Manager "\"github.com/amaury95/graphify/example/registry/v1\"".Person_Manager_ 0x14000153440 0x1400018b8c0 <nil> <nil> 0x14000153680 {registry/v1/person.proto .message_type[0].field[3]} {[]  }}
 			e.Type = &Person_Manager_{Manager: field}
 		}
 		if _val, ok := _opt["Client"].(map[string]interface{}); ok {
 			field := new(Person_Type)
 			field.LoadMap(_val)
+			// &{{client FieldDescriptor{Syntax: proto3, FullName: registry.v1.Person.client, Number: 5, Cardinality: optional, Kind: message, HasJSONName: true, JSONName: "client", HasPresence: true, Oneof: type, Message: registry.v1.Person.Client}} Client "\"github.com/amaury95/graphify/example/registry/v1\"".Person_Client_ 0x14000153440 0x1400018b8c0 <nil> <nil> 0x140001537a0 {registry/v1/person.proto .message_type[0].field[4]} {[]  }}
 			e.Type = &Person_Client_{Client: field}
 		}
 	}
@@ -855,16 +858,19 @@ func (e *Person_Client) LoadMap(m map[string]interface{}) {
 		if _val, ok := _opt["Premium"].(map[string]interface{}); ok {
 			field := new(Person_Client_Subscription)
 			field.LoadMap(_val)
+			// &{FieldDescriptor{Syntax: proto3, FullName: registry.v1.Person.Client.premium, Number: 1, Cardinality: optional, Kind: message, HasJSONName: true, JSONName: "premium", HasPresence: true, Oneof: subscription, Message: registry.v1.Person.Client.Premium} Premium "\"github.com/amaury95/graphify/example/registry/v1\"".Person_Client_Premium_ 0x140001537a0 0x1400018b740 <nil> <nil> 0x140001538c0 {registry/v1/person.proto .message_type[0].nested_type[2].field[0]} {[]  }}
 			e.Type = &Person_Client_Premium_{Premium: field}
 		}
 		if _val, ok := _opt["Gold"].(map[string]interface{}); ok {
 			field := new(Person_Client_Subscription)
 			field.LoadMap(_val)
+			// &{FieldDescriptor{Syntax: proto3, FullName: registry.v1.Person.Client.gold, Number: 2, Cardinality: optional, Kind: message, HasJSONName: true, JSONName: "gold", HasPresence: true, Oneof: subscription, Message: registry.v1.Person.Client.Gold} Gold "\"github.com/amaury95/graphify/example/registry/v1\"".Person_Client_Gold_ 0x140001537a0 0x1400018b740 <nil> <nil> 0x140001539e0 {registry/v1/person.proto .message_type[0].nested_type[2].field[1]} {[]  }}
 			e.Type = &Person_Client_Gold_{Gold: field}
 		}
 		if _val, ok := _opt["Silver"].(map[string]interface{}); ok {
 			field := new(Person_Client_Subscription)
 			field.LoadMap(_val)
+			// &{FieldDescriptor{Syntax: proto3, FullName: registry.v1.Person.Client.silver, Number: 3, Cardinality: optional, Kind: message, HasJSONName: true, JSONName: "silver", HasPresence: true, Oneof: subscription, Message: registry.v1.Person.Client.Silver} Silver "\"github.com/amaury95/graphify/example/registry/v1\"".Person_Client_Silver_ 0x140001537a0 0x1400018b740 <nil> <nil> 0x14000153b00 {registry/v1/person.proto .message_type[0].nested_type[2].field[2]} {[]  }}
 			e.Type = &Person_Client_Silver_{Silver: field}
 		}
 	}
