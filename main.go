@@ -81,6 +81,7 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 		g.P("// LoadMap ...")
 		g.P("func (e *", message.GoIdent, ") LoadMap(m map[string]interface{}) {")
 		for _, field := range message.Fields {
+			g.P("// ", field.Desc.Name())
 			if field.Oneof != nil {
 				continue
 			}
