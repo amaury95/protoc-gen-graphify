@@ -882,8 +882,7 @@ func file_registry_v1_person_proto_init() {
 
 // LoadMap loads map values into given struct.
 func (e *Person) LoadMap(m map[string]interface{}) {
-	e.Name = m["first_name"].(string)
-	e.Address = m["address"].(*Person_Address)
+	e.Name = string
 	if _opt, ok := m["Type"].(map[string]interface{}); ok {
 		if _val, ok := _opt["Admin"].(map[string]interface{}); ok {
 			field := new(Person_Admin)
@@ -905,13 +904,13 @@ func (e *Person) LoadMap(m map[string]interface{}) {
 
 // LoadMap loads map values into given struct.
 func (e *Person_Admin) LoadMap(m map[string]interface{}) {
-	e.YearsInCharge = m["years_in_charge"].(int64)
-	e.HasHolidays = m["has_holidays"].(bool)
+	e.YearsInCharge = int64(m["years_in_charge"].(float64))
+	e.HasHolidays = bool
 }
 
 // LoadMap loads map values into given struct.
 func (e *Person_Manager) LoadMap(m map[string]interface{}) {
-	e.ManagesClients = m["manages_clients"].(bool)
+	e.ManagesClients = bool
 }
 
 // LoadMap loads map values into given struct.
@@ -939,25 +938,25 @@ func (e *Person_Client) LoadMap(m map[string]interface{}) {
 
 // LoadMap loads map values into given struct.
 func (e *Person_Client_Premium) LoadMap(m map[string]interface{}) {
-	e.YearlyLimit = m["yearly_limit"].(int64)
+	e.YearlyLimit = int64(m["yearly_limit"].(float64))
 }
 
 // LoadMap loads map values into given struct.
 func (e *Person_Client_Gold) LoadMap(m map[string]interface{}) {
-	e.MonthlyLimit = m["monthly_limit"].(int64)
+	e.MonthlyLimit = int64(m["monthly_limit"].(float64))
 }
 
 // LoadMap loads map values into given struct.
 func (e *Person_Client_Silver) LoadMap(m map[string]interface{}) {
-	e.DailyLimit = m["daily_limit"].(int64)
+	e.DailyLimit = int64(m["daily_limit"].(float64))
 }
 
 // LoadMap loads map values into given struct.
 func (e *Person_Address) LoadMap(m map[string]interface{}) {
-	e.Street = m["street"].(string)
-	e.Number = m["number"].(string)
-	e.Location = m["location"].(string)
-	e.Province = m["province"].(string)
-	e.PostalCode = m["postal_code"].(string)
-	e.Country = m["country"].(string)
+	e.Street = string
+	e.Number = string
+	e.Location = string
+	e.Province = string
+	e.PostalCode = string
+	e.Country = string
 }
