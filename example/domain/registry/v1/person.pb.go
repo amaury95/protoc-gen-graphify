@@ -815,16 +815,24 @@ func file_registry_v1_person_proto_init() {
 	file_registry_v1_person_proto_depIdxs = nil
 }
 
-// LoadMap loads map values into given struct.
+// LoadMap ...
 func (e *Person) LoadMap(m map[string]interface{}) {
+	// first_name
 	if _val, ok := m["first_name"].(string); ok {
 		e.Name = _val
 	}
-	if _val, ok := m["Address"].(map[string]interface{}); ok {
+	// address
+	if _val, ok := m["address"].(map[string]interface{}); ok {
 		field := new(Person_Address)
 		field.LoadMap(_val)
 		e.Address = field
 	}
+	// admin
+	// skipping Person_Admin_...
+	// manager
+	// skipping Person_Manager_...
+	// client
+	// skipping Person_Client_...
 	if _opt, ok := m["Type"].(map[string]interface{}); ok {
 		if _val, ok := _opt["Admin"].(map[string]interface{}); ok {
 			field := new(Person_Admin)
@@ -844,25 +852,34 @@ func (e *Person) LoadMap(m map[string]interface{}) {
 	}
 }
 
-// LoadMap loads map values into given struct.
+// LoadMap ...
 func (e *Person_Admin) LoadMap(m map[string]interface{}) {
+	// years_in_charge
 	if _val, ok := m["years_in_charge"].(float64); ok {
 		e.YearsInCharge = int64(_val)
 	}
+	// has_holidays
 	if _val, ok := m["has_holidays"].(bool); ok {
 		e.HasHolidays = _val
 	}
 }
 
-// LoadMap loads map values into given struct.
+// LoadMap ...
 func (e *Person_Manager) LoadMap(m map[string]interface{}) {
+	// manages_clients
 	if _val, ok := m["manages_clients"].(bool); ok {
 		e.ManagesClients = _val
 	}
 }
 
-// LoadMap loads map values into given struct.
+// LoadMap ...
 func (e *Person_Client) LoadMap(m map[string]interface{}) {
+	// premium
+	// skipping Person_Client_Premium_...
+	// gold
+	// skipping Person_Client_Gold_...
+	// silver
+	// skipping Person_Client_Silver_...
 	if _opt, ok := m["Subscription"].(map[string]interface{}); ok {
 		if _val, ok := _opt["Premium"].(map[string]interface{}); ok {
 			field := new(Person_Client_Premium)
@@ -882,44 +899,55 @@ func (e *Person_Client) LoadMap(m map[string]interface{}) {
 	}
 }
 
-// LoadMap loads map values into given struct.
+// LoadMap ...
 func (e *Person_Client_Premium) LoadMap(m map[string]interface{}) {
+	// yearly_limit
 	if _val, ok := m["yearly_limit"].(float64); ok {
 		e.YearlyLimit = int64(_val)
 	}
 }
 
-// LoadMap loads map values into given struct.
+// LoadMap ...
 func (e *Person_Client_Gold) LoadMap(m map[string]interface{}) {
+	// monthly_limit
 	if _val, ok := m["monthly_limit"].(float64); ok {
 		e.MonthlyLimit = int64(_val)
 	}
 }
 
-// LoadMap loads map values into given struct.
+// LoadMap ...
 func (e *Person_Client_Silver) LoadMap(m map[string]interface{}) {
+	// daily_limit
 	if _val, ok := m["daily_limit"].(float64); ok {
 		e.DailyLimit = int64(_val)
 	}
 }
 
-// LoadMap loads map values into given struct.
+// LoadMap ...
 func (e *Person_Address) LoadMap(m map[string]interface{}) {
+	// street
 	if _val, ok := m["street"].(string); ok {
 		e.Street = _val
 	}
+	// number
 	if _val, ok := m["number"].(string); ok {
 		e.Number = _val
 	}
+	// additional
+	// skipping Person_Address_Additional...
+	// location
 	if _val, ok := m["location"].(string); ok {
 		e.Location = _val
 	}
+	// province
 	if _val, ok := m["province"].(string); ok {
 		e.Province = _val
 	}
+	// postal_code
 	if _val, ok := m["postal_code"].(string); ok {
 		e.PostalCode = _val
 	}
+	// country
 	if _val, ok := m["country"].(string); ok {
 		e.Country = _val
 	}
