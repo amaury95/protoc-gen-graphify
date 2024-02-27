@@ -178,6 +178,13 @@ func fetchOneof(g *protogen.GeneratedFile, field *protogen.Oneof, recipient, ass
 }
 
 func fetchField(g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
+	fetchField_Exportable(false, g, field, recipient, assign, identifier...)
+}
+func fetchAndExportField(g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
+	fetchField_Exportable(true, g, field, recipient, assign, identifier...)
+}
+
+func fetchField_Exportable(export bool, g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
 	switch {
 	case field.Desc.IsList():
 		g.P(join("if list , ok := ", identifier, ".([]interface{}); ok {")...)
@@ -197,7 +204,7 @@ func fetchField(g *protogen.GeneratedFile, field *protogen.Field, recipient, ass
 			fetchField(g, valField, recipient+"[key]", "=", "value")
 		} else {
 			g.P("var tmp interface{} = parseFloat(key)")
-			fetchField(g, keyField, "parsedKey", ":=", "tmp")
+			fetchAndExportField(g, keyField, "parsedKey", ":=", "tmp")
 			fetchField(g, valField, recipient+"[parsedKey]", "=", "value")
 		}
 		g.P("}")
@@ -207,110 +214,66 @@ func fetchField(g *protogen.GeneratedFile, field *protogen.Field, recipient, ass
 
 	switch field.Desc.Kind() {
 	case protoreflect.MessageKind:
-		g.P(join("if val , ok := ", identifier, ".(map[string]interface{}); ok {")...)
-		g.P("field := new(", field.Message.GoIdent.GoName, ")")
-		g.P("field.LoadMap(val)")
-		g.P(recipient, assign, "field")
-		g.P("}")
+		assignMessage(export, g, field, recipient, assign, identifier...)
 	case protoreflect.BoolKind:
-		if field.Desc.HasPresence() {
-			g.P(join("if val, ok := ", identifier, ".(bool); ok {")...)
-			g.P(recipient, assign, "&val")
-			g.P("}")
-		} else {
-			g.P(join("if val, ok := ", identifier, ".(bool); ok {")...)
-			g.P(recipient, assign, "val")
-			g.P("}")
-		}
+		assignField(export, g, field, "bool", recipient, assign, identifier...)
 	case protoreflect.EnumKind:
 		// goType = g.QualifiedGoIdent(field.Enum.GoIdent)
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
-		if field.Desc.HasPresence() {
-			g.P(join("if val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(join("if ok {")...)
-			g.P("_d := int32(val)")
-			g.P(recipient, assign, "&_d")
-			g.P("}")
-		} else {
-			g.P(join("if val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(recipient, assign, "int32(val)")
-			g.P("}")
-		}
+		parseField(export, g, field, "float64", "int32", recipient, assign, identifier...)
 	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
-		if field.Desc.HasPresence() {
-			g.P(join("if val, ok := ", identifier, ".(float64); ok {")...)
-			g.P("_d := uint32(val)")
-			g.P(recipient, assign, "&_d")
-			g.P("}")
-		} else {
-			g.P(join("if val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(recipient, assign, "uint32(val)")
-			g.P("}")
-		}
+		parseField(export, g, field, "float64", "uint32", recipient, assign, identifier...)
 	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
-		if field.Desc.HasPresence() {
-			g.P(join("if val, ok := ", identifier, ".(float64); ok {")...)
-			g.P("_d := int64(val)")
-			g.P(recipient, assign, "&_d")
-			g.P("}")
-		} else {
-			g.P(join("if val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(recipient, assign, "int64(val)")
-			g.P("}")
-		}
+		parseField(export, g, field, "float64", "int64", recipient, assign, identifier...)
 	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
-		if field.Desc.HasPresence() {
-			g.P(join("if val, ok := ", identifier, ".(float64); ok {")...)
-			g.P("_d := uint64(val)")
-			g.P(recipient, assign, "&_d")
-			g.P("}")
-		} else {
-			g.P(join("if val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(recipient, assign, "uint64(val)")
-			g.P("}")
-		}
+		parseField(export, g, field, "float64", "uint64", recipient, assign, identifier...)
 	case protoreflect.FloatKind:
-		if field.Desc.HasPresence() {
-			g.P(join("if val, ok := ", identifier, ".(float64); ok {")...)
-			g.P("_d := float32(val)")
-			g.P(recipient, assign, "&_d")
-			g.P("}")
-		} else {
-			g.P(join("if val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(recipient, assign, "float32(val)")
-			g.P("}")
-		}
+		parseField(export, g, field, "float64", "float32", recipient, assign, identifier...)
 	case protoreflect.DoubleKind:
-		if field.Desc.HasPresence() {
-			g.P(join("if val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(recipient, assign, "&val")
-			g.P("}")
-		} else {
-			g.P(join("if val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(recipient, assign, "val")
-			g.P("}")
-		}
+		assignField(export, g, field, "float64", recipient, assign, identifier...)
 	case protoreflect.StringKind:
-		if field.Desc.HasPresence() {
-			g.P(join("if val, ok := ", identifier, ".(string); ok {")...)
-			g.P(recipient, assign, "&val")
-			g.P("}")
-		} else {
-			g.P(join("if val, ok := ", identifier, ".(string); ok {")...)
-			g.P(recipient, assign, "val")
-			g.P("}")
-		}
+		assignField(export, g, field, "string", recipient, assign, identifier...)
 	case protoreflect.BytesKind:
-		if field.Desc.HasPresence() {
-			g.P(join("if val, ok := ", identifier, ".(string); ok {")...)
-			g.P("_d := []byte(val)")
-			g.P(recipient, assign, "&_d")
-			g.P("}")
-		} else {
-			g.P(join("if val, ok := ", identifier, ".(string); ok {")...)
-			g.P(recipient, assign, "[]byte(val)")
-			g.P("}")
-		}
+		parseField(export, g, field, "string", "[]byte", recipient, assign, identifier...)
+	}
+}
+
+func assignMessage(export bool, g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
+	g.P(join("if val , ok := ", identifier, ".(map[string]interface{}); ok {")...)
+	g.P("field := new(", field.Message.GoIdent.GoName, ")")
+	g.P("field.LoadMap(val)")
+	g.P(recipient, assign, "field")
+	g.P("}")
+}
+
+func assignField(export bool, g *protogen.GeneratedFile, field *protogen.Field, typeTo string, recipient, assign string, identifier ...interface{}) {
+	if export {
+		g.P("var ", recipient, " ", typeTo)
+	}
+	if field.Desc.HasPresence() {
+		g.P(join("if val, ok := ", identifier, ".(", typeTo, "); ok {")...)
+		g.P(recipient, assign, "&val")
+		g.P("}")
+	} else {
+		g.P(join("if val, ok := ", identifier, ".(", typeTo, "); ok {")...)
+		g.P(recipient, assign, "val")
+		g.P("}")
+	}
+}
+
+func parseField(export bool, g *protogen.GeneratedFile, field *protogen.Field, typeFrom, typeTo string, recipient, assign string, identifier ...interface{}) {
+	if export {
+		g.P("var ", recipient, " ", typeTo)
+	}
+	if field.Desc.HasPresence() {
+		g.P(join("if val, ok := ", identifier, ".(", typeFrom, "); ok {")...)
+		g.P("tmp := ", typeTo, "(val)")
+		g.P(recipient, assign, "&tmp")
+		g.P("}")
+	} else {
+		g.P(join("if val, ok := ", identifier, ".(", typeFrom, "); ok {")...)
+		g.P(recipient, assign, typeTo, "(val)")
+		g.P("}")
 	}
 }
 
