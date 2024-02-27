@@ -128,12 +128,14 @@ func fetchField(g *protogen.GeneratedFile, field *protogen.Field, identifier ...
 		g.P(join("if _ , ok := ", identifier, ".([]interface{}); ok {")...)
 
 		g.P("}")
+		return
 	case field.Desc.IsMap():
 		// keyType, _, _ := fieldGoType(g, f, field.Message.Fields[0])
 		// valType, _, _ := fieldGoType(g, f, field.Message.Fields[1])
 		g.P(join("if _ , ok := ", identifier, ".(map[string]interface{}); ok {")...)
 
 		g.P("}")
+		return
 	}
 
 	switch field.Desc.Kind() {
