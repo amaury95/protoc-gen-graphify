@@ -137,9 +137,9 @@ func fetchField(g *protogen.GeneratedFile, field *protogen.Field, recipient, ass
 	case field.Desc.IsMap():
 		// keyType, _, _ := fieldGoType(g, f, field.Message.Fields[0])
 		// valType, _, _ := fieldGoType(g, f, field.Message.Fields[1])
-		g.P(join("if _ , ok := ", identifier, ".(map[string]interface{}); ok {")...)
+		// g.P(join("if _ , ok := ", identifier, ".(map[string]interface{}); ok {")...)
 
-		g.P("}")
+		// g.P("}")
 		return
 	}
 
