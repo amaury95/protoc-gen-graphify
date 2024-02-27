@@ -8,7 +8,7 @@ import (
 )
 
 func setHelpers(g *protogen.GeneratedFile) {
-	path := protogen.GoImportPath("protocgengotag \"github.com/amaury95/protoc-gen-go-tag/utils\"")
+	path := protogen.GoImportPath("github.com/amaury95/protoc-gen-go-tag/utils")
 	g.Import(path)
 }
 

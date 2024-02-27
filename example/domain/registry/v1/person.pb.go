@@ -9,6 +9,7 @@ package registryv1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	_ "protocgengotag \"github.com/amaury95/protoc-gen-go-tag/utils\""
 	reflect "reflect"
 	sync "sync"
 )
@@ -925,56 +926,5 @@ func (o *Person_Address) LoadMap(values map[string]interface{}) {
 	}
 	if val, ok := values["country"].(string); ok {
 		o.Country = val
-	}
-}
-
-func parseFloat(s string) float64 {
-	var res, decFactor float64
-	var neg, decSeen bool
-	for _, char := range s {
-		switch char {
-		case '-':
-			if res != 0 || neg {
-				return 0
-			}
-			neg = true
-		case '.':
-			if decSeen {
-				return 0
-			}
-			decSeen = true
-			decFactor = 0.1
-		default:
-			if char < '0' || char > '9' {
-				return 0
-			}
-			digit := float64(char - '0')
-			if decSeen {
-				res = res + digit*decFactor
-				decFactor *= 0.1
-			} else {
-				res = res*10 + digit
-			}
-		}
-	}
-	if neg {
-		res = -res
-	}
-	return res
-}
-
-func makeSlice(ptr interface{}, size int) {
-	ptrVal := reflect.ValueOf(ptr)
-	if ptrVal.Kind() == reflect.Ptr && ptrVal.Elem().Kind() == reflect.Slice {
-		_n := reflect.MakeSlice(ptrVal.Elem().Type(), size, size)
-		ptrVal.Elem().Set(_n)
-	}
-}
-
-func makeMap(ptr interface{}) {
-	mapVal := reflect.ValueOf(ptr)
-	if mapVal.Kind() == reflect.Ptr && mapVal.Elem().Kind() == reflect.Map {
-		newMap := reflect.MakeMap(mapVal.Elem().Type())
-		mapVal.Elem().Set(newMap)
 	}
 }
