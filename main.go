@@ -225,7 +225,7 @@ func fetchField_Exportable(export bool, g *protogen.GeneratedFile, field *protog
 	case protoreflect.BoolKind:
 		assignField(export, g, field, "bool", recipient, assign, identifier...)
 	case protoreflect.EnumKind:
-		// goType = g.QualifiedGoIdent(field.Enum.GoIdent)
+		assignEnum(export, g, field, recipient, assign, identifier...)
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
 		parseField(export, g, field, "float64", "int32", recipient, assign, identifier...)
 	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
@@ -251,6 +251,12 @@ func assignMessage(export bool, g *protogen.GeneratedFile, field *protogen.Field
 	g.P("field.LoadMap(val)")
 	g.P(recipient, assign, "field")
 	g.P("}")
+}
+
+func assignEnum(export bool, g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
+	g.P("var tmp int32")
+	parseField(true, g, field, "float64", "int32", "tmp", " = ", identifier...)
+	g.P(recipient, assign, g.QualifiedGoIdent(field.Enum.GoIdent), "(tmp)")
 }
 
 func assignField(export bool, g *protogen.GeneratedFile, field *protogen.Field, typeTo string, recipient, assign string, identifier ...interface{}) {
@@ -282,59 +288,6 @@ func parseField(export bool, g *protogen.GeneratedFile, field *protogen.Field, t
 		g.P(recipient, assign, typeTo, "(val)")
 		g.P("}")
 	}
-}
-
-// fieldGoType returns the Go type used for a field.
-//
-// If it returns pointer=true, the struct field is a pointer to the type.
-func fieldGoType(g *protogen.GeneratedFile, f *protogen.File, field *protogen.Field) (goType string, parseType *string, pointer bool) {
-	if field.Desc.IsWeak() {
-		return "struct{}", nil, false
-	}
-
-	float64T := "float64"
-
-	pointer = field.Desc.HasPresence()
-	switch field.Desc.Kind() {
-	case protoreflect.BoolKind:
-		goType = "bool"
-	case protoreflect.EnumKind:
-		goType = g.QualifiedGoIdent(field.Enum.GoIdent)
-	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
-		goType = "int32"
-		parseType = &float64T
-	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
-		goType = "uint32"
-		parseType = &float64T
-	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
-		goType = "int64"
-		parseType = &float64T
-	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
-		goType = "uint64"
-		parseType = &float64T
-	case protoreflect.FloatKind:
-		goType = "float32"
-		parseType = &float64T
-	case protoreflect.DoubleKind:
-		goType = "float64"
-	case protoreflect.StringKind:
-		goType = "string"
-	case protoreflect.BytesKind:
-		goType = "[]byte"
-		pointer = false // rely on nullability of slices for presence
-		// case protoreflect.MessageKind, protoreflect.GroupKind:
-		// 	goType = "*" + g.QualifiedGoIdent(field.Message.GoIdent)
-		// 	pointer = false // pointer captured as part of the type
-	}
-	switch {
-	case field.Desc.IsList():
-		return "[]" + goType, nil, false
-	case field.Desc.IsMap():
-		keyType, _, _ := fieldGoType(g, f, field.Message.Fields[0])
-		valType, _, _ := fieldGoType(g, f, field.Message.Fields[1])
-		return fmt.Sprintf("map[%v]%v", keyType, valType), nil, false
-	}
-	return goType, parseType, pointer
 }
 
 func join(parts ...interface{}) (result []interface{}) {
