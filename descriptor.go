@@ -1,6 +1,8 @@
 package main
 
-import "google.golang.org/protobuf/reflect/protoreflect"
+import (
+	"google.golang.org/protobuf/reflect/protoreflect"
+)
 
 type overrideJsonName struct {
 	name string
