@@ -816,150 +816,167 @@ func file_registry_v1_person_proto_init() {
 }
 
 // LoadMap ...
-func (e *Person) LoadMap(m map[string]interface{}) {
-	if _val, ok := m["first_name"].(string); ok {
-		e.Name = _val
+func (o *Person) LoadMap(values map[string]interface{}) {
+	if val, ok := values["first_name"].(string); ok {
+		o.Name = val
 	}
-	if _val, ok := m["address"].(map[string]interface{}); ok {
+	if val, ok := values["address"].(map[string]interface{}); ok {
 		field := new(Person_Address)
-		field.LoadMap(_val)
-		e.Address = field
+		field.LoadMap(val)
+		o.Address = field
 	}
-	if _opt, ok := m["Type"].(map[string]interface{}); ok {
-		if _val, ok := _opt["Admin"].(map[string]interface{}); ok {
+	if _opt, ok := values["Type"].(map[string]interface{}); ok {
+		if val, ok := _opt["Admin"].(map[string]interface{}); ok {
 			field := new(Person_Admin)
-			field.LoadMap(_val)
-			e.Type = &Person_Admin_{Admin: field}
+			field.LoadMap(val)
+			o.Type = &Person_Admin_{Admin: field}
 		}
-		if _val, ok := _opt["Manager"].(map[string]interface{}); ok {
+		if val, ok := _opt["Manager"].(map[string]interface{}); ok {
 			field := new(Person_Manager)
-			field.LoadMap(_val)
-			e.Type = &Person_Manager_{Manager: field}
+			field.LoadMap(val)
+			o.Type = &Person_Manager_{Manager: field}
 		}
-		if _val, ok := _opt["Client"].(map[string]interface{}); ok {
+		if val, ok := _opt["Client"].(map[string]interface{}); ok {
 			field := new(Person_Client)
-			field.LoadMap(_val)
-			e.Type = &Person_Client_{Client: field}
+			field.LoadMap(val)
+			o.Type = &Person_Client_{Client: field}
 		}
 	}
 }
 
 // LoadMap ...
-func (e *Person_Admin) LoadMap(m map[string]interface{}) {
-	if _val, ok := m["yearsInCharge"].(float64); ok {
-		e.YearsInCharge = int64(_val)
+func (o *Person_Admin) LoadMap(values map[string]interface{}) {
+	if val, ok := values["yearsInCharge"].(float64); ok {
+		o.YearsInCharge = int64(val)
 	}
-	if _val, ok := m["hasHolidays"].(bool); ok {
-		e.HasHolidays = _val
-	}
-}
-
-// LoadMap ...
-func (e *Person_Manager) LoadMap(m map[string]interface{}) {
-	if _val, ok := m["managesClients"].(bool); ok {
-		e.ManagesClients = _val
+	if val, ok := values["hasHolidays"].(bool); ok {
+		o.HasHolidays = val
 	}
 }
 
 // LoadMap ...
-func (e *Person_Client) LoadMap(m map[string]interface{}) {
-	if _opt, ok := m["Subscription"].(map[string]interface{}); ok {
-		if _val, ok := _opt["Premium"].(map[string]interface{}); ok {
+func (o *Person_Manager) LoadMap(values map[string]interface{}) {
+	if val, ok := values["managesClients"].(bool); ok {
+		o.ManagesClients = val
+	}
+}
+
+// LoadMap ...
+func (o *Person_Client) LoadMap(values map[string]interface{}) {
+	if _opt, ok := values["Subscription"].(map[string]interface{}); ok {
+		if val, ok := _opt["Premium"].(map[string]interface{}); ok {
 			field := new(Person_Client_Premium)
-			field.LoadMap(_val)
-			e.Subscription = &Person_Client_Premium_{Premium: field}
+			field.LoadMap(val)
+			o.Subscription = &Person_Client_Premium_{Premium: field}
 		}
-		if _val, ok := _opt["Gold"].(map[string]interface{}); ok {
+		if val, ok := _opt["Gold"].(map[string]interface{}); ok {
 			field := new(Person_Client_Gold)
-			field.LoadMap(_val)
-			e.Subscription = &Person_Client_Gold_{Gold: field}
+			field.LoadMap(val)
+			o.Subscription = &Person_Client_Gold_{Gold: field}
 		}
-		if _val, ok := _opt["Silver"].(map[string]interface{}); ok {
+		if val, ok := _opt["Silver"].(map[string]interface{}); ok {
 			field := new(Person_Client_Silver)
-			field.LoadMap(_val)
-			e.Subscription = &Person_Client_Silver_{Silver: field}
+			field.LoadMap(val)
+			o.Subscription = &Person_Client_Silver_{Silver: field}
 		}
 	}
 }
 
 // LoadMap ...
-func (e *Person_Client_Premium) LoadMap(m map[string]interface{}) {
-	if _val, ok := m["yearlyLimit"].(float64); ok {
-		e.YearlyLimit = int64(_val)
+func (o *Person_Client_Premium) LoadMap(values map[string]interface{}) {
+	if val, ok := values["yearlyLimit"].(float64); ok {
+		o.YearlyLimit = int64(val)
 	}
 }
 
 // LoadMap ...
-func (e *Person_Client_Gold) LoadMap(m map[string]interface{}) {
-	if _val, ok := m["monthlyLimit"].(float64); ok {
-		e.MonthlyLimit = int64(_val)
+func (o *Person_Client_Gold) LoadMap(values map[string]interface{}) {
+	if val, ok := values["monthlyLimit"].(float64); ok {
+		o.MonthlyLimit = int64(val)
 	}
 }
 
 // LoadMap ...
-func (e *Person_Client_Silver) LoadMap(m map[string]interface{}) {
-	if _val, ok := m["dailyLimit"].(float64); ok {
-		e.DailyLimit = int64(_val)
+func (o *Person_Client_Silver) LoadMap(values map[string]interface{}) {
+	if val, ok := values["dailyLimit"].(float64); ok {
+		o.DailyLimit = int64(val)
 	}
 }
 
 // LoadMap ...
-func (e *Person_Address) LoadMap(m map[string]interface{}) {
-	if _val, ok := m["street"].(string); ok {
-		e.Street = _val
+func (o *Person_Address) LoadMap(values map[string]interface{}) {
+	if val, ok := values["street"].(string); ok {
+		o.Street = val
 	}
-	if _val, ok := m["number"].(string); ok {
-		e.Number = _val
+	if val, ok := values["number"].(string); ok {
+		o.Number = val
 	}
-	if _val, ok := m["additional"].(string); ok {
-		e.Additional = &_val
+	if val, ok := values["additional"].(string); ok {
+		o.Additional = &val
 	}
-	if _val, ok := m["location"].(string); ok {
-		e.Location = _val
+	if val, ok := values["location"].(string); ok {
+		o.Location = val
 	}
-	if _val, ok := m["province"].(string); ok {
-		e.Province = _val
+	if val, ok := values["province"].(string); ok {
+		o.Province = val
 	}
-	if _val, ok := m["postalCode"].(string); ok {
-		e.PostalCode = _val
+	if val, ok := values["postalCode"].(string); ok {
+		o.PostalCode = val
 	}
-	if _val, ok := m["country"].(string); ok {
-		e.Country = _val
+	if val, ok := values["country"].(string); ok {
+		o.Country = val
 	}
-	if _opt, ok := m["XAdditional"].(map[string]interface{}); ok {
+	if _opt, ok := values["XAdditional"].(map[string]interface{}); ok {
 	}
 }
+
 func parseFloat(s string) float64 {
-	var _r, _df float64
-	var _n, _ds bool
+	var res, decFactor float64
+	var neg, decSeen bool
 	for _, char := range s {
 		switch char {
 		case '-':
-			if _r != 0 || _n {
+			if res != 0 || neg {
 				return 0
 			}
-			_n = true
+			neg = true
 		case '.':
-			if _ds {
+			if decSeen {
 				return 0
 			}
-			_ds = true
-			_df = 0.1
+			decSeen = true
+			decFactor = 0.1
 		default:
 			if char < '0' || char > '9' {
 				return 0
 			}
 			digit := float64(char - '0')
-			if _ds {
-				_r = _r + digit*_df
-				_df *= 0.1
+			if decSeen {
+				res = res + digit*decFactor
+				decFactor *= 0.1
 			} else {
-				_r = _r*10 + digit
+				res = res*10 + digit
 			}
 		}
 	}
-	if _n {
-		_r = -_r
+	if neg {
+		res = -res
 	}
-	return _r
+	return res
+}
+
+func makeSlice(ptr interface{}, size int) {
+	ptrVal := reflect.ValueOf(ptr)
+	if ptrVal.Kind() == reflect.Ptr && ptrVal.Elem().Kind() == reflect.Slice {
+		_n := reflect.MakeSlice(ptrVal.Elem().Type(), size, size)
+		ptrVal.Elem().Set(_n)
+	}
+}
+
+func makeMap(ptr interface{}) {
+	mapVal := reflect.ValueOf(ptr)
+	if mapVal.Kind() == reflect.Ptr && mapVal.Elem().Kind() == reflect.Map {
+		newMap := reflect.MakeMap(mapVal.Elem().Type())
+		mapVal.Elem().Set(newMap)
+	}
 }

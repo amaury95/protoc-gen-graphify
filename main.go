@@ -156,6 +156,9 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 			fetchField(g, field, "o."+field.GoName, " = ", "values[\"", field.Desc.Name(), "\"]")
 		}
 		for _, field := range message.Oneofs {
+			if field.Desc.IsSynthetic() {
+				continue
+			}
 			fetchOneof(g, field, "o."+field.GoName, " = ", "values[\"", field.GoName, "\"]")
 		}
 		g.P("}")
@@ -180,6 +183,7 @@ func fetchOneof(g *protogen.GeneratedFile, field *protogen.Oneof, recipient, ass
 func fetchField(g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
 	fetchField_Exportable(false, g, field, recipient, assign, identifier...)
 }
+
 func fetchAndExportField(g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
 	fetchField_Exportable(true, g, field, recipient, assign, identifier...)
 }
