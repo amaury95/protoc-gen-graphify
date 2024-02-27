@@ -93,15 +93,15 @@ func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...
 		}
 		g.P()
 		g.P("// LoadMap ...")
-		g.P("func (message *", message.GoIdent, ") LoadMap(m map[string]interface{}) {")
+		g.P("func (o *", message.GoIdent, ") LoadMap(values map[string]interface{}) {")
 		for _, field := range message.Fields {
 			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 				continue
 			}
-			fetchField(g, field, "message", "m[\"", field.Desc.Name(), "\"]")
+			fetchField(g, field, "o."+field.GoName+" = ", "values[\"", field.Desc.Name(), "\"]")
 		}
 		for _, field := range message.Oneofs {
-			fetchOneof(g, field, "message", "m[\"", field.GoName, "\"]")
+			fetchOneof(g, field, "o."+field.GoName+" = ", "values[\"", field.GoName, "\"]")
 		}
 		g.P("}")
 	}
@@ -116,7 +116,7 @@ func fetchOneof(g *protogen.GeneratedFile, field *protogen.Oneof, recipient stri
 		g.P("if _val , ok := _opt[\"", oneofField.GoName, "\"].(map[string]interface{}); ok {")
 		g.P("field := new(", oneofField.Message.GoIdent.GoName, ")")
 		g.P("field.LoadMap(_val)")
-		g.P(recipient, ".", field.GoName, " = &", oneofField.GoIdent, "{", oneofField.GoName, ":field}")
+		g.P(recipient, "&", oneofField.GoIdent, "{", oneofField.GoName, ":field}")
 		g.P("}")
 	}
 	g.P("}")
@@ -125,8 +125,10 @@ func fetchOneof(g *protogen.GeneratedFile, field *protogen.Oneof, recipient stri
 func fetchField(g *protogen.GeneratedFile, field *protogen.Field, recipient string, identifier ...interface{}) {
 	switch {
 	case field.Desc.IsList():
-		g.P(join("if _ , ok := ", identifier, ".([]interface{}); ok {")...)
+		g.P(join("if _list , ok := ", identifier, ".([]interface{}); ok {")...)
+		g.P("for _, _val := range _list {")
 
+		g.P("}")
 		g.P("}")
 		return
 	case field.Desc.IsMap():
@@ -143,16 +145,16 @@ func fetchField(g *protogen.GeneratedFile, field *protogen.Field, recipient stri
 		g.P(join("if _val , ok := ", identifier, ".(map[string]interface{}); ok {")...)
 		g.P("field := new(", field.Message.GoIdent.GoName, ")")
 		g.P("field.LoadMap(_val)")
-		g.P(recipient, ".", field.GoName, " = field")
+		g.P(recipient, "field")
 		g.P("}")
 	case protoreflect.BoolKind:
 		if field.Desc.HasPresence() {
 			g.P(join("if _val, ok := ", identifier, ".(bool); ok {")...)
-			g.P(recipient, "."+field.GoName+" = &_val")
+			g.P(recipient, "&_val")
 			g.P("}")
 		} else {
 			g.P(join("if _val, ok := ", identifier, ".(bool); ok {")...)
-			g.P(recipient, "."+field.GoName+" = _val")
+			g.P(recipient, "_val")
 			g.P("}")
 		}
 	case protoreflect.EnumKind:
@@ -161,85 +163,85 @@ func fetchField(g *protogen.GeneratedFile, field *protogen.Field, recipient stri
 		if field.Desc.HasPresence() {
 			g.P(join("if _val, ok := ", identifier, ".(float64); ok {")...)
 			g.P("_d := int32(_val)")
-			g.P(recipient, "."+field.GoName+" = &_d")
+			g.P(recipient, "&_d")
 			g.P("}")
 		} else {
 			g.P(join("if _val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(recipient, "."+field.GoName+" = int32(_val)")
+			g.P(recipient, "int32(_val)")
 			g.P("}")
 		}
 	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
 		if field.Desc.HasPresence() {
 			g.P(join("if _val, ok := ", identifier, ".(float64); ok {")...)
 			g.P("_d := uint32(_val)")
-			g.P(recipient, "."+field.GoName+" = &_d")
+			g.P(recipient, "&_d")
 			g.P("}")
 		} else {
 			g.P(join("if _val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(recipient, "."+field.GoName+" = uint32(_val)")
+			g.P(recipient, "uint32(_val)")
 			g.P("}")
 		}
 	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
 		if field.Desc.HasPresence() {
 			g.P(join("if _val, ok := ", identifier, ".(float64); ok {")...)
 			g.P("_d := int64(_val)")
-			g.P(recipient, "."+field.GoName+" = &_d")
+			g.P(recipient, "&_d")
 			g.P("}")
 		} else {
 			g.P(join("if _val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(recipient, "."+field.GoName+" = int64(_val)")
+			g.P(recipient, "int64(_val)")
 			g.P("}")
 		}
 	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
 		if field.Desc.HasPresence() {
 			g.P(join("if _val, ok := ", identifier, ".(float64); ok {")...)
 			g.P("_d := uint64(_val)")
-			g.P(recipient, "."+field.GoName+" = &_d")
+			g.P(recipient, "&_d")
 			g.P("}")
 		} else {
 			g.P(join("if _val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(recipient, "."+field.GoName+" = uint64(_val)")
+			g.P(recipient, "uint64(_val)")
 			g.P("}")
 		}
 	case protoreflect.FloatKind:
 		if field.Desc.HasPresence() {
 			g.P(join("if _val, ok := ", identifier, ".(float64); ok {")...)
 			g.P("_d := float32(_val)")
-			g.P(recipient, "."+field.GoName+" = &_d")
+			g.P(recipient, "&_d")
 			g.P("}")
 		} else {
 			g.P(join("if _val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(recipient, "."+field.GoName+" = float32(_val)")
+			g.P(recipient, "float32(_val)")
 			g.P("}")
 		}
 	case protoreflect.DoubleKind:
 		if field.Desc.HasPresence() {
 			g.P(join("if _val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(recipient, "."+field.GoName+" = &_val")
+			g.P(recipient, "&_val")
 			g.P("}")
 		} else {
 			g.P(join("if _val, ok := ", identifier, ".(float64); ok {")...)
-			g.P(recipient, "."+field.GoName+" = _val")
+			g.P(recipient, "_val")
 			g.P("}")
 		}
 	case protoreflect.StringKind:
 		if field.Desc.HasPresence() {
 			g.P(join("if _val, ok := ", identifier, ".(string); ok {")...)
-			g.P(recipient, "."+field.GoName+" = &_val")
+			g.P(recipient, "&_val")
 			g.P("}")
 		} else {
 			g.P(join("if _val, ok := ", identifier, ".(string); ok {")...)
-			g.P(recipient, "."+field.GoName+" = _val")
+			g.P(recipient, "_val")
 			g.P("}")
 		}
 	case protoreflect.BytesKind:
 		if field.Desc.HasPresence() {
 			g.P(join("if _val, ok := ", identifier, ".([]byte); ok {")...)
-			g.P(recipient, "."+field.GoName+" = &_val")
+			g.P(recipient, "&_val")
 			g.P("}")
 		} else {
 			g.P(join("if _val, ok := ", identifier, ".([]byte); ok {")...)
-			g.P(recipient, "."+field.GoName+" = _val")
+			g.P(recipient, "_val")
 			g.P("}")
 		}
 	}
