@@ -52,6 +52,7 @@ func main() {
 				updateMessageNames(messages...)
 				g := gengo.GenerateFile(gen, f)
 				exposeMapBuilders(g, f, messages...)
+				setParseFloatFunction(g)
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures
@@ -66,6 +67,10 @@ func walkMessages(messages []*protogen.Message) []*protogen.Message {
 		result = append(result, walkMessages(message.Messages)...)
 	}
 	return result
+}
+
+func setParseFloatFunction(g *protogen.GeneratedFile) {
+	g.P("func parseFloat(s string) float64 { var _r, _df float64 ;var _n, _ds bool;for _, char := range s { switch char { case '-': if _r != 0 || _n { return 0};_n = true; case '.': if _ds { return 0 } ;_ds = true ;	_df = 0.1 ;default: if char < '0' || char > '9' { return 0 } ; digit := float64(char - '0') ; if _ds { _r = _r + digit*_df ; _df *= 0.1 } else { _r = _r*10 + digit } } } ;if _n { _r = -_r }; return _r }")
 }
 
 func updateMessageNames(messages ...*protogen.Message) {
