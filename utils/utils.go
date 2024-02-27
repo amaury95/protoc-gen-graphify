@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/base64"
 	"reflect"
 	"strconv"
 )
@@ -27,4 +28,10 @@ func MakeMap(ptr interface{}) {
 		newMap := reflect.MakeMap(mapVal.Elem().Type())
 		mapVal.Elem().Set(newMap)
 	}
+}
+
+// DecodeBytes ...
+func DecodeBytes(encodedString string) []byte {
+	decodedBytes, _ := base64.StdEncoding.DecodeString(encodedString)
+	return decodedBytes
 }

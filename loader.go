@@ -114,7 +114,7 @@ func fetchField_Exportable(export bool, g *protogen.GeneratedFile, field *protog
 	case protoreflect.StringKind:
 		assignField(export, g, field, "string", recipient, assign, identifier...)
 	case protoreflect.BytesKind:
-		parseField(export, g, field, "string", "[]byte", recipient, assign, identifier...)
+		parseField(export, g, field, "string", g.QualifiedGoIdent(decodeBytes), recipient, assign, identifier...)
 	}
 }
 
@@ -190,6 +190,11 @@ type ignoreDesc struct {
 
 func (*ignoreDesc) IsList() bool {
 	return false
+}
+
+var decodeBytes protogen.GoIdent = protogen.GoIdent{
+	GoName:       "DecodeBytes",
+	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
 }
 
 var makeMap protogen.GoIdent = protogen.GoIdent{
