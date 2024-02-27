@@ -73,7 +73,7 @@ func fetchField_Exportable(export bool, g *protogen.GeneratedFile, field *protog
 	switch {
 	case field.Desc.IsList():
 		g.P(join("if list , ok := ", identifier, ".([]interface{}); ok {")...)
-		g.P("protocgengotag.MakeSlice(&", recipient, ", len(list))")
+		g.P("MakeSlice(&", recipient, ", len(list))")
 		g.P("for index, item := range list {")
 		fetchField(g, ignoreType(field), recipient+"[index]", "=", "item")
 		g.P("}")
@@ -83,12 +83,12 @@ func fetchField_Exportable(export bool, g *protogen.GeneratedFile, field *protog
 		keyField := field.Message.Fields[0]
 		valField := field.Message.Fields[1]
 		g.P(join("if values, ok := ", identifier, ".(map[string]interface{}); ok {")...)
-		g.P("protocgengotag.MakeMap(&", recipient, ")")
+		g.P("MakeMap(&", recipient, ")")
 		g.P("for key, value := range values {")
 		if keyField.Desc.Kind() == protoreflect.StringKind {
 			fetchField(g, valField, recipient+"[key]", "=", "value")
 		} else {
-			g.P("var tmp interface{} = protocgengotag.ParseFloat(key)")
+			g.P("var tmp interface{} = ParseFloat(key)")
 			fetchAndExportField(g, keyField, "parsedKey", "=", "tmp")
 			fetchField(g, valField, recipient+"[parsedKey]", "=", "value")
 		}

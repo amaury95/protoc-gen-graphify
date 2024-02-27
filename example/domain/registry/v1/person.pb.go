@@ -7,9 +7,9 @@
 package registryv1
 
 import (
+	_ "github.com/amaury95/protoc-gen-go-tag/utils"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "protocgengotag \"github.com/amaury95/protoc-gen-go-tag/utils\""
 	reflect "reflect"
 	sync "sync"
 )
