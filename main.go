@@ -49,14 +49,7 @@ func main() {
 		for _, f := range gen.Files {
 			if f.Generate {
 				messages := walkMessages(f.Messages)
-				for _, message := range messages {
-					for _, field := range message.Fields {
-						if field.Desc.HasJSONName() {
-							field.Desc = overrideJsonName{name: field.Desc.JSONName(), FieldDescriptor: field.Desc}
-						}
-					}
-				}
-
+				updateMessageNames(messages...)
 				g := gengo.GenerateFile(gen, f)
 				exposeMapBuilders(g, f, messages...)
 			}
@@ -75,8 +68,21 @@ func walkMessages(messages []*protogen.Message) []*protogen.Message {
 	return result
 }
 
+func updateMessageNames(messages ...*protogen.Message) {
+	for _, message := range messages {
+		for _, field := range message.Fields {
+			if field.Desc.HasJSONName() {
+				field.Desc = overrideJsonName{name: field.Desc.JSONName(), FieldDescriptor: field.Desc}
+			}
+		}
+	}
+}
+
 func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...*protogen.Message) {
 	for _, message := range messages {
+		if message.Desc.IsMapEntry() {
+			continue
+		}
 		g.P()
 		g.P("// LoadMap ...")
 		g.P("func (e *", message.GoIdent, ") LoadMap(m map[string]interface{}) {")
