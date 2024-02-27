@@ -240,12 +240,13 @@ func fetchField(g *protogen.GeneratedFile, field *protogen.Field, recipient, ass
 		}
 	case protoreflect.BytesKind:
 		if field.Desc.HasPresence() {
-			g.P(join("if _val, ok := ", identifier, ".([]byte); ok {")...)
-			g.P(recipient, assign, "&_val")
+			g.P(join("if _val, ok := ", identifier, ".(string); ok {")...)
+			g.P("_d := []byte(_val)")
+			g.P(recipient, assign, "&_d")
 			g.P("}")
 		} else {
-			g.P(join("if _val, ok := ", identifier, ".([]byte); ok {")...)
-			g.P(recipient, assign, "_val")
+			g.P(join("if _val, ok := ", identifier, ".(string); ok {")...)
+			g.P(recipient, assign, "[]byte(_val)")
 			g.P("}")
 		}
 	}
