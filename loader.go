@@ -7,11 +7,6 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-func setHelpers(g *protogen.GeneratedFile) {
-	path := protogen.GoImportPath("github.com/amaury95/protoc-gen-go-tag/utils")
-	g.Import(path)
-}
-
 func updateMessageNames(messages ...*protogen.Message) {
 	for _, message := range messages {
 		for _, field := range message.Fields {
@@ -73,7 +68,7 @@ func fetchField_Exportable(export bool, g *protogen.GeneratedFile, field *protog
 	switch {
 	case field.Desc.IsList():
 		g.P(join("if list , ok := ", identifier, ".([]interface{}); ok {")...)
-		g.P("MakeSlice(&", recipient, ", len(list))")
+		g.P(g.QualifiedGoIdent(makeSlice), "(&", recipient, ", len(list))")
 		g.P("for index, item := range list {")
 		fetchField(g, ignoreType(field), recipient+"[index]", "=", "item")
 		g.P("}")
@@ -83,12 +78,12 @@ func fetchField_Exportable(export bool, g *protogen.GeneratedFile, field *protog
 		keyField := field.Message.Fields[0]
 		valField := field.Message.Fields[1]
 		g.P(join("if values, ok := ", identifier, ".(map[string]interface{}); ok {")...)
-		g.P("MakeMap(&", recipient, ")")
+		g.P(g.QualifiedGoIdent(makeMap), "(&", recipient, ")")
 		g.P("for key, value := range values {")
 		if keyField.Desc.Kind() == protoreflect.StringKind {
 			fetchField(g, valField, recipient+"[key]", "=", "value")
 		} else {
-			g.P("var tmp interface{} = ParseFloat(key)")
+			g.P("var tmp interface{} = ", g.QualifiedGoIdent(parseFloat), "(key)")
 			fetchAndExportField(g, keyField, "parsedKey", "=", "tmp")
 			fetchField(g, valField, recipient+"[parsedKey]", "=", "value")
 		}
@@ -195,4 +190,17 @@ type ignoreDesc struct {
 
 func (*ignoreDesc) IsList() bool {
 	return false
+}
+
+var makeMap protogen.GoIdent = protogen.GoIdent{
+	GoName:       "MakeMap",
+	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
+}
+var makeSlice protogen.GoIdent = protogen.GoIdent{
+	GoName:       "MakeMap",
+	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
+}
+var parseFloat protogen.GoIdent = protogen.GoIdent{
+	GoName:       "MakeMap",
+	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
 }

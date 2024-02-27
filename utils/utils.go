@@ -1,4 +1,4 @@
-package protocgengotag
+package utils
 
 import (
 	"reflect"
