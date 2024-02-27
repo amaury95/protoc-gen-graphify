@@ -204,7 +204,7 @@ func fetchField_Exportable(export bool, g *protogen.GeneratedFile, field *protog
 			fetchField(g, valField, recipient+"[key]", "=", "value")
 		} else {
 			g.P("var tmp interface{} = parseFloat(key)")
-			fetchAndExportField(g, keyField, "parsedKey", ":=", "tmp")
+			fetchAndExportField(g, keyField, "parsedKey", "=", "tmp")
 			fetchField(g, valField, recipient+"[parsedKey]", "=", "value")
 		}
 		g.P("}")
