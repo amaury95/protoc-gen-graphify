@@ -136,8 +136,8 @@ type Person_Admin struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	YearsInCharge int64 `protobuf:"varint,1,opt,name=years_in_charge,json=yearsInCharge,proto3" json:"years_in_charge,omitempty"`
-	HasHolidays   bool  `protobuf:"varint,2,opt,name=has_holidays,json=hasHolidays,proto3" json:"has_holidays,omitempty"`
+	YearsInCharge int64 `protobuf:"varint,1,opt,name=yearsInCharge,proto3" json:"yearsInCharge,omitempty"`
+	HasHolidays   bool  `protobuf:"varint,2,opt,name=hasHolidays,proto3" json:"hasHolidays,omitempty"`
 }
 
 func (x *Person_Admin) Reset() {
@@ -191,7 +191,7 @@ type Person_Manager struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ManagesClients bool `protobuf:"varint,1,opt,name=manages_clients,json=managesClients,proto3" json:"manages_clients,omitempty"`
+	ManagesClients bool `protobuf:"varint,1,opt,name=managesClients,proto3" json:"managesClients,omitempty"`
 }
 
 func (x *Person_Manager) Reset() {
@@ -338,7 +338,7 @@ type Person_Address struct {
 	Additional *string `protobuf:"bytes,3,opt,name=additional,proto3,oneof" json:"additional,omitempty"`
 	Location   string  `protobuf:"bytes,4,opt,name=location,proto3" json:"location,omitempty"`
 	Province   string  `protobuf:"bytes,5,opt,name=province,proto3" json:"province,omitempty"`
-	PostalCode string  `protobuf:"bytes,6,opt,name=postal_code,json=postalCode,proto3" json:"postal_code,omitempty"`
+	PostalCode string  `protobuf:"bytes,6,opt,name=postalCode,proto3" json:"postalCode,omitempty"`
 	Country    string  `protobuf:"bytes,7,opt,name=country,proto3" json:"country,omitempty"`
 }
 
@@ -428,7 +428,7 @@ type Person_Client_Premium struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	YearlyLimit int64 `protobuf:"varint,1,opt,name=yearly_limit,json=yearlyLimit,proto3" json:"yearly_limit,omitempty"`
+	YearlyLimit int64 `protobuf:"varint,1,opt,name=yearlyLimit,proto3" json:"yearlyLimit,omitempty"`
 }
 
 func (x *Person_Client_Premium) Reset() {
@@ -475,7 +475,7 @@ type Person_Client_Gold struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MonthlyLimit int64 `protobuf:"varint,2,opt,name=monthly_limit,json=monthlyLimit,proto3" json:"monthly_limit,omitempty"`
+	MonthlyLimit int64 `protobuf:"varint,2,opt,name=monthlyLimit,proto3" json:"monthlyLimit,omitempty"`
 }
 
 func (x *Person_Client_Gold) Reset() {
@@ -522,7 +522,7 @@ type Person_Client_Silver struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	DailyLimit int64 `protobuf:"varint,3,opt,name=daily_limit,json=dailyLimit,proto3" json:"daily_limit,omitempty"`
+	DailyLimit int64 `protobuf:"varint,3,opt,name=dailyLimit,proto3" json:"dailyLimit,omitempty"`
 }
 
 func (x *Person_Client_Silver) Reset() {
@@ -817,22 +817,14 @@ func file_registry_v1_person_proto_init() {
 
 // LoadMap ...
 func (e *Person) LoadMap(m map[string]interface{}) {
-	// first_name
 	if _val, ok := m["first_name"].(string); ok {
 		e.Name = _val
 	}
-	// address
 	if _val, ok := m["address"].(map[string]interface{}); ok {
 		field := new(Person_Address)
 		field.LoadMap(_val)
 		e.Address = field
 	}
-	// admin
-	// skipping Person_Admin_...
-	// manager
-	// skipping Person_Manager_...
-	// client
-	// skipping Person_Client_...
 	if _opt, ok := m["Type"].(map[string]interface{}); ok {
 		if _val, ok := _opt["Admin"].(map[string]interface{}); ok {
 			field := new(Person_Admin)
@@ -854,32 +846,23 @@ func (e *Person) LoadMap(m map[string]interface{}) {
 
 // LoadMap ...
 func (e *Person_Admin) LoadMap(m map[string]interface{}) {
-	// years_in_charge
-	if _val, ok := m["years_in_charge"].(float64); ok {
+	if _val, ok := m["yearsInCharge"].(float64); ok {
 		e.YearsInCharge = int64(_val)
 	}
-	// has_holidays
-	if _val, ok := m["has_holidays"].(bool); ok {
+	if _val, ok := m["hasHolidays"].(bool); ok {
 		e.HasHolidays = _val
 	}
 }
 
 // LoadMap ...
 func (e *Person_Manager) LoadMap(m map[string]interface{}) {
-	// manages_clients
-	if _val, ok := m["manages_clients"].(bool); ok {
+	if _val, ok := m["managesClients"].(bool); ok {
 		e.ManagesClients = _val
 	}
 }
 
 // LoadMap ...
 func (e *Person_Client) LoadMap(m map[string]interface{}) {
-	// premium
-	// skipping Person_Client_Premium_...
-	// gold
-	// skipping Person_Client_Gold_...
-	// silver
-	// skipping Person_Client_Silver_...
 	if _opt, ok := m["Subscription"].(map[string]interface{}); ok {
 		if _val, ok := _opt["Premium"].(map[string]interface{}); ok {
 			field := new(Person_Client_Premium)
@@ -901,54 +884,82 @@ func (e *Person_Client) LoadMap(m map[string]interface{}) {
 
 // LoadMap ...
 func (e *Person_Client_Premium) LoadMap(m map[string]interface{}) {
-	// yearly_limit
-	if _val, ok := m["yearly_limit"].(float64); ok {
+	if _val, ok := m["yearlyLimit"].(float64); ok {
 		e.YearlyLimit = int64(_val)
 	}
 }
 
 // LoadMap ...
 func (e *Person_Client_Gold) LoadMap(m map[string]interface{}) {
-	// monthly_limit
-	if _val, ok := m["monthly_limit"].(float64); ok {
+	if _val, ok := m["monthlyLimit"].(float64); ok {
 		e.MonthlyLimit = int64(_val)
 	}
 }
 
 // LoadMap ...
 func (e *Person_Client_Silver) LoadMap(m map[string]interface{}) {
-	// daily_limit
-	if _val, ok := m["daily_limit"].(float64); ok {
+	if _val, ok := m["dailyLimit"].(float64); ok {
 		e.DailyLimit = int64(_val)
 	}
 }
 
 // LoadMap ...
 func (e *Person_Address) LoadMap(m map[string]interface{}) {
-	// street
 	if _val, ok := m["street"].(string); ok {
 		e.Street = _val
 	}
-	// number
 	if _val, ok := m["number"].(string); ok {
 		e.Number = _val
 	}
-	// additional
-	// skipping Person_Address_Additional...
-	// location
+	if _val, ok := m["additional"].(string); ok {
+		e.Additional = &_val
+	}
 	if _val, ok := m["location"].(string); ok {
 		e.Location = _val
 	}
-	// province
 	if _val, ok := m["province"].(string); ok {
 		e.Province = _val
 	}
-	// postal_code
-	if _val, ok := m["postal_code"].(string); ok {
+	if _val, ok := m["postalCode"].(string); ok {
 		e.PostalCode = _val
 	}
-	// country
 	if _val, ok := m["country"].(string); ok {
 		e.Country = _val
 	}
+	if _opt, ok := m["XAdditional"].(map[string]interface{}); ok {
+	}
+}
+func parseFloat(s string) float64 {
+	var _r, _df float64
+	var _n, _ds bool
+	for _, char := range s {
+		switch char {
+		case '-':
+			if _r != 0 || _n {
+				return 0
+			}
+			_n = true
+		case '.':
+			if _ds {
+				return 0
+			}
+			_ds = true
+			_df = 0.1
+		default:
+			if char < '0' || char > '9' {
+				return 0
+			}
+			digit := float64(char - '0')
+			if _ds {
+				_r = _r + digit*_df
+				_df *= 0.1
+			} else {
+				_r = _r*10 + digit
+			}
+		}
+	}
+	if _n {
+		_r = -_r
+	}
+	return _r
 }
