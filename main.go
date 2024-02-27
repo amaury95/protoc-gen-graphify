@@ -130,7 +130,7 @@ func fetchField(g *protogen.GeneratedFile, field *protogen.Field, recipient, ass
 		g.P(join("if _list , ok := ", identifier, ".([]interface{}); ok {")...)
 		g.P("makeSlice(&", recipient, ", len(_list))")
 		g.P("for _i, _item := range _list {")
-		fetchField(g, field, recipient+"[_i]", "=", "_item")
+		fetchField(g, ignoreType(field), recipient+"[_i]", "=", "_item")
 		g.P("}")
 		g.P("}")
 		return
@@ -319,4 +319,17 @@ func join(parts ...interface{}) (result []interface{}) {
 		}
 	}
 	return result
+}
+
+func ignoreType(f *protogen.Field) *protogen.Field {
+	f.Desc = &ignoreDesc{FieldDescriptor: f.Desc}
+	return f
+}
+
+type ignoreDesc struct {
+	protoreflect.FieldDescriptor
+}
+
+func (*ignoreDesc) IsList() bool {
+	return false
 }
