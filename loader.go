@@ -196,11 +196,13 @@ var makeMap protogen.GoIdent = protogen.GoIdent{
 	GoName:       "MakeMap",
 	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
 }
+
 var makeSlice protogen.GoIdent = protogen.GoIdent{
-	GoName:       "MakeMap",
+	GoName:       "MakeSlice",
 	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
 }
+
 var parseFloat protogen.GoIdent = protogen.GoIdent{
-	GoName:       "MakeMap",
+	GoName:       "ParseFloat",
 	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
 }
