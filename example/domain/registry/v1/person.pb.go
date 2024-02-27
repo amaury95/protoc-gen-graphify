@@ -926,8 +926,6 @@ func (o *Person_Address) LoadMap(values map[string]interface{}) {
 	if val, ok := values["country"].(string); ok {
 		o.Country = val
 	}
-	if _opt, ok := values["XAdditional"].(map[string]interface{}); ok {
-	}
 }
 
 func parseFloat(s string) float64 {

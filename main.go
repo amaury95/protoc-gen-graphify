@@ -73,6 +73,7 @@ func walkMessages(messages []*protogen.Message) []*protogen.Message {
 func setHelpers(g *protogen.GeneratedFile) {
 	g.P()
 	g.P(`
+		// parseFloat ...
 		func parseFloat(s string) float64 {
 			var res, decFactor float64
 			var neg, decSeen bool
@@ -110,6 +111,7 @@ func setHelpers(g *protogen.GeneratedFile) {
 	`)
 	g.P()
 	g.P(`
+		// makeSlice ... 
 		func makeSlice(ptr interface{}, size int) {
 			ptrVal := reflect.ValueOf(ptr)
 			if ptrVal.Kind() == reflect.Ptr && ptrVal.Elem().Kind() == reflect.Slice {
@@ -120,6 +122,7 @@ func setHelpers(g *protogen.GeneratedFile) {
 	`)
 	g.P()
 	g.P(`
+		// makeMap ... 
 		func makeMap(ptr interface{}) {
 			mapVal := reflect.ValueOf(ptr)
 			if mapVal.Kind() == reflect.Ptr && mapVal.Elem().Kind() == reflect.Map {
