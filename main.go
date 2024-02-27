@@ -48,7 +48,8 @@ func main() {
 		}
 		for _, f := range gen.Files {
 			if f.Generate {
-				for _, message := range f.Messages {
+				messages := walkMessages(f.Messages)
+				for _, message := range messages {
 					for _, field := range message.Fields {
 						if field.Desc.HasJSONName() {
 							field.Desc = overrideJsonName{name: field.Desc.JSONName(), FieldDescriptor: field.Desc}
@@ -57,8 +58,7 @@ func main() {
 				}
 
 				g := gengo.GenerateFile(gen, f)
-				// exposeOneofWrappers(g, walkMessages(f.Messages)...)
-				exposeMapBuilders(g, f, walkMessages(f.Messages)...)
+				exposeMapBuilders(g, f, messages...)
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures
