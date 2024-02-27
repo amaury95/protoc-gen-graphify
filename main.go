@@ -53,7 +53,7 @@ func main() {
 				updateMessageNames(messages...)
 				g := gengo.GenerateFile(gen, f)
 				exposeMapBuilders(g, f, messages...)
-				setParseFloatFunction(g)
+				setHelpers(g)
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures
@@ -70,9 +70,11 @@ func walkMessages(messages []*protogen.Message) []*protogen.Message {
 	return result
 }
 
-func setParseFloatFunction(g *protogen.GeneratedFile) {
+func setHelpers(g *protogen.GeneratedFile) {
 	g.P()
 	g.P("func parseFloat(s string) float64 { var _r, _df float64 ;var _n, _ds bool;for _, char := range s { switch char { case '-': if _r != 0 || _n { return 0};_n = true; case '.': if _ds { return 0 } ;_ds = true ;	_df = 0.1 ;default: if char < '0' || char > '9' { return 0 } ; digit := float64(char - '0') ; if _ds { _r = _r + digit*_df ; _df *= 0.1 } else { _r = _r*10 + digit } } } ;if _n { _r = -_r }; return _r }")
+	g.P()
+	g.P("func makeSlice(_ptr interface{}, _s int) { _val := reflect.ValueOf(_ptr);if _val.Kind() == reflect.Ptr && _val.Elem().Kind() == reflect.Slice { _n := reflect.MakeSlice(_val.Elem().Type(), _s, _s); _val.Elem().Set(_n) } }")
 	g.P()
 }
 
@@ -126,8 +128,9 @@ func fetchField(g *protogen.GeneratedFile, field *protogen.Field, recipient, ass
 	switch {
 	case field.Desc.IsList():
 		g.P(join("if _list , ok := ", identifier, ".([]interface{}); ok {")...)
-		g.P("for _, _val := range _list {")
-
+		g.P("makeSlice(&", recipient, ", len(_list))")
+		g.P("for _i, _item := range _list {")
+		fetchField(g, field, recipient+"[_i]", "=", "_item")
 		g.P("}")
 		g.P("}")
 		return
@@ -162,6 +165,7 @@ func fetchField(g *protogen.GeneratedFile, field *protogen.Field, recipient, ass
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
 		if field.Desc.HasPresence() {
 			g.P(join("if _val, ok := ", identifier, ".(float64); ok {")...)
+			g.P(join("if ok {")...)
 			g.P("_d := int32(_val)")
 			g.P(recipient, assign, "&_d")
 			g.P("}")
