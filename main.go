@@ -188,11 +188,19 @@ func fetchField(g *protogen.GeneratedFile, field *protogen.Field, recipient, ass
 		g.P("}")
 		return
 	case field.Desc.IsMap():
-		// keyType, _, _ := fieldGoType(g, f, field.Message.Fields[0])
-		// valType, _, _ := fieldGoType(g, f, field.Message.Fields[1])
-		g.P(join("if _, ok := ", identifier, ".(map[string]interface{}); ok {")...)
+		keyField := field.Message.Fields[0]
+		valField := field.Message.Fields[1]
+		g.P(join("if values, ok := ", identifier, ".(map[string]interface{}); ok {")...)
 		g.P("makeMap(&", recipient, ")")
-
+		g.P("for key, value := range values {")
+		if keyField.Desc.Kind() == protoreflect.StringKind {
+			fetchField(g, valField, recipient+"[key]", "=", "value")
+		} else {
+			g.P("var tmp interface{} = parseFloat(key)")
+			fetchField(g, keyField, "parsedKey", ":=", "tmp")
+			fetchField(g, valField, recipient+"[parsedKey]", "=", "value")
+		}
+		g.P("}")
 		g.P("}")
 		return
 	}
