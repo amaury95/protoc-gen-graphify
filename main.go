@@ -72,9 +72,62 @@ func walkMessages(messages []*protogen.Message) []*protogen.Message {
 
 func setHelpers(g *protogen.GeneratedFile) {
 	g.P()
-	g.P("func parseFloat(s string) float64 { var _r, _df float64 ;var _n, _ds bool;for _, char := range s { switch char { case '-': if _r != 0 || _n { return 0};_n = true; case '.': if _ds { return 0 } ;_ds = true ;	_df = 0.1 ;default: if char < '0' || char > '9' { return 0 } ; digit := float64(char - '0') ; if _ds { _r = _r + digit*_df ; _df *= 0.1 } else { _r = _r*10 + digit } } } ;if _n { _r = -_r }; return _r }")
+	g.P(`
+		func parseFloat(s string) float64 {
+			var res, decFactor float64
+			var neg, decSeen bool
+			for _, char := range s {
+				switch char {
+				case '-':
+					if res != 0 || neg {
+						return 0
+					}
+					neg = true
+				case '.':
+					if decSeen {
+						return 0
+					}
+					decSeen = true
+					decFactor = 0.1
+				default:
+					if char < '0' || char > '9' {
+						return 0
+					}
+					digit := float64(char - '0')
+					if decSeen {
+						res = res + digit*decFactor
+						decFactor *= 0.1
+					} else {
+						res = res*10 + digit
+					}
+				}
+			}
+			if neg {
+				res = -res
+			}
+			return res
+		}
+	`)
 	g.P()
-	g.P("func makeSlice(_ptr interface{}, _s int) { _val := reflect.ValueOf(_ptr);if _val.Kind() == reflect.Ptr && _val.Elem().Kind() == reflect.Slice { _n := reflect.MakeSlice(_val.Elem().Type(), _s, _s); _val.Elem().Set(_n) } }")
+	g.P(`
+		func makeSlice(ptr interface{}, size int) {
+			ptrVal := reflect.ValueOf(ptr)
+			if ptrVal.Kind() == reflect.Ptr && ptrVal.Elem().Kind() == reflect.Slice {
+				_n := reflect.MakeSlice(ptrVal.Elem().Type(), size, size)
+				ptrVal.Elem().Set(_n)
+			}
+		}
+	`)
+	g.P()
+	g.P(`
+		func makeMap(ptr interface{}) {
+			mapVal := reflect.ValueOf(ptr)
+			if mapVal.Kind() == reflect.Ptr && mapVal.Elem().Kind() == reflect.Map {
+				newMap := reflect.MakeMap(mapVal.Elem().Type())
+				mapVal.Elem().Set(newMap)
+			}
+		}
+	`)
 	g.P()
 }
 
@@ -127,19 +180,20 @@ func fetchOneof(g *protogen.GeneratedFile, field *protogen.Oneof, recipient, ass
 func fetchField(g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
 	switch {
 	case field.Desc.IsList():
-		g.P(join("if _list , ok := ", identifier, ".([]interface{}); ok {")...)
-		g.P("makeSlice(&", recipient, ", len(_list))")
-		g.P("for _i, _item := range _list {")
-		fetchField(g, field.Message.Fields[0], recipient+"[_i]", "=", "_item")
+		g.P(join("if list , ok := ", identifier, ".([]interface{}); ok {")...)
+		g.P("makeSlice(&", recipient, ", len(list))")
+		g.P("for index, item := range list {")
+		fetchField(g, ignoreType(field), recipient+"[index]", "=", "item")
 		g.P("}")
 		g.P("}")
 		return
 	case field.Desc.IsMap():
 		// keyType, _, _ := fieldGoType(g, f, field.Message.Fields[0])
 		// valType, _, _ := fieldGoType(g, f, field.Message.Fields[1])
-		// g.P(join("if _ , ok := ", identifier, ".(map[string]interface{}); ok {")...)
+		g.P(join("if _, ok := ", identifier, ".(map[string]interface{}); ok {")...)
+		g.P("makeMap(&", recipient, ")")
 
-		// g.P("}")
+		g.P("}")
 		return
 	}
 
