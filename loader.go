@@ -7,6 +7,10 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
+type IMapLoader interface {
+	LoadMap(m map[string]interface{})
+}
+
 func updateMessageNames(messages ...*protogen.Message) {
 	for _, message := range messages {
 		for _, field := range message.Fields {
@@ -219,3 +223,9 @@ var parseFloat protogen.GoIdent = protogen.GoIdent{
 	GoName:       "ParseFloat",
 	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
 }
+
+var mapLoader protogen.GoIdent = protogen.GoIdent{
+	GoName:       "IMapLoader",
+	GoImportPath: "github.com/amaury95/protoc-gen-go-tag",
+}
+
