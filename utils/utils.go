@@ -38,3 +38,8 @@ func DecodeBytes(input string) []byte {
 	}
 	return []byte(input)
 }
+
+// IMapLoader ...
+type IMapLoader interface {
+	LoadMap(m map[string]interface{})
+}

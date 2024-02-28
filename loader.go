@@ -7,10 +7,6 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-type IMapLoader interface {
-	LoadMap(m map[string]interface{})
-}
-
 func updateMessageNames(messages ...*protogen.Message) {
 	for _, message := range messages {
 		for _, field := range message.Fields {
