@@ -52,7 +52,7 @@ func fetchOneof(g *protogen.GeneratedFile, field *protogen.Oneof, recipient, ass
 			continue
 		}
 		g.P("if val , ok := _opt[\"", oneofField.GoName, "\"].(map[string]interface{}); ok {")
-		g.P("field := new(", oneofField.Message.GoIdent.GoName, ")")
+		g.P("field := new(", g.QualifiedGoIdent(oneofField.Message.GoIdent), ")")
 		g.P("field.LoadMap(val)")
 		g.P(recipient, assign, "&", oneofField.GoIdent, "{", oneofField.GoName, ":field}")
 		g.P("}")
@@ -124,7 +124,7 @@ func fetchField_Exportable(export bool, g *protogen.GeneratedFile, field *protog
 
 func assignMessage(export bool, g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
 	g.P(join("if val , ok := ", identifier, ".(map[string]interface{}); ok {")...)
-	g.P("field := new(", field.Message.GoIdent.GoName, ")")
+	g.P("field := new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
 	g.P("field.LoadMap(val)")
 	g.P(recipient, assign, "field")
 	g.P("}")
@@ -223,9 +223,3 @@ var parseFloat protogen.GoIdent = protogen.GoIdent{
 	GoName:       "ParseFloat",
 	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
 }
-
-var mapLoader protogen.GoIdent = protogen.GoIdent{
-	GoName:       "IMapLoader",
-	GoImportPath: "github.com/amaury95/protoc-gen-go-tag",
-}
-
