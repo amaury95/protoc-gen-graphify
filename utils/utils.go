@@ -31,7 +31,10 @@ func MakeMap(ptr interface{}) {
 }
 
 // DecodeBytes ...
-func DecodeBytes(encodedString string) []byte {
-	decodedBytes, _ := base64.StdEncoding.DecodeString(encodedString)
-	return decodedBytes
+func DecodeBytes(input string) []byte {
+	decoded, err := base64.StdEncoding.DecodeString(input)
+	if err == nil {
+		return decoded
+	}
+	return []byte(input)
 }
