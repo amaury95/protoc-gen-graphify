@@ -114,7 +114,7 @@ func fetchField_Exportable(export bool, g *protogen.GeneratedFile, field *protog
 	case protoreflect.StringKind:
 		assignField(export, g, field, "string", recipient, assign, identifier...)
 	case protoreflect.BytesKind:
-		parseField(export, g, field, "string", g.QualifiedGoIdent(decodeBytes), recipient, assign, identifier...)
+		parseBytes(export, g, field, recipient, assign, identifier...)
 	}
 }
 
@@ -160,6 +160,14 @@ func parseField(export bool, g *protogen.GeneratedFile, field *protogen.Field, t
 		g.P(recipient, assign, typeTo, "(val)")
 		g.P("}")
 	}
+}
+func parseBytes(export bool, g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
+	if export {
+		g.P("var ", recipient, " []byte")
+	}
+	g.P(join("if val, ok := ", identifier, ".(string); ok {")...)
+	g.P(recipient, assign, g.QualifiedGoIdent(decodeBytes), "(val)")
+	g.P("}")
 }
 
 func join(parts ...interface{}) (result []interface{}) {
