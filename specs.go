@@ -39,7 +39,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			g.P(bufferWrite(quote(field.Desc.JSONName()), ": {")...)
 			g.P(bufferWrite(quote("name"), ":", quote(field.Desc.JSONName()), ",")...)
 			if field.Desc.HasPresence() {
-				g.P(bufferWrite(quote("required"), ":true,")...)
+				g.P(bufferWrite(quote("optional"), ":true,")...)
 			}
 			if field.Desc.IsList() {
 				g.P(bufferWrite(quote("isList"), ":true,")...)
