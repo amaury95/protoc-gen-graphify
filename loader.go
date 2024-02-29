@@ -173,7 +173,7 @@ func join(parts ...interface{}) (result []interface{}) {
 			result = append(result, part)
 		}
 	}
-	return result
+	return 
 }
 
 func ignoreType(f *protogen.Field) *protogen.Field {

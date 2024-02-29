@@ -10,25 +10,56 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 		g.P("\n// Specs ...")
 		g.P("func (*", message.GoIdent, ") Specs() []byte {")
 		g.P("var buffer ", g.QualifiedGoIdent(bytesBuffer))
+
+		g.P(bufferWrite("{")...)
+
+		// fields
+		g.P(bufferWrite(quote("fields"), ": [")...)
+		var fields [][]interface{}
 		for _, field := range message.Fields {
+			var fb []interface{}
 			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 				continue
 			}
-			P(g, quote("name"), ":", quote(string(field.Desc.Name())))
-			P(g, quote("name"), ":", quote(field.Desc.Kind().String()))
+			fb = append(fb, bufferWrite("{"))
+			fb = append(fb, bufferWrite(quote("name"), ":", quote(string(field.Desc.Name())), ","))
+			fb = append(fb, bufferWrite(quote("type"), ":", quote(field.Desc.Kind().String())))
+			fb = append(fb, bufferWrite("}"))
+			fields = append(fields, fb)
 		}
+		for _, field := range joinLines(comma, fields...) {
+			g.P(field)
+		}
+		g.P(bufferWrite("],")...)
+
+		// oneofs
+		g.P(bufferWrite(quote("oneofs"), ": {")...)
 		for _, field := range message.Oneofs {
 			if field.Desc.IsSynthetic() {
 				continue
 			}
+
 		}
+		g.P(bufferWrite("}")...)
+
+		g.P(bufferWrite("}")...)
 		g.P("return buffer.Bytes()")
 		g.P("}")
 	}
 }
 
-func P(g *protogen.GeneratedFile, v ...interface{}) {
-	g.P(join("buffer.WriteString(\"", v, "\")")...)
+func joinLines(sep []interface{}, vals ...[]interface{}) (result [][]interface{}) {
+	for i, val := range vals {
+		result = append(result, val)
+		if i < len(vals)-1 {
+			result = append(result, sep)
+		}
+	}
+	return
+}
+
+func bufferWrite(v ...interface{}) []interface{} {
+	return join("buffer.WriteString(\"", v, "\")")
 }
 
 func quote(val string) string {
@@ -39,3 +70,5 @@ var bytesBuffer protogen.GoIdent = protogen.GoIdent{
 	GoName:       "Buffer",
 	GoImportPath: "bytes",
 }
+
+var comma = []interface{}{","}
