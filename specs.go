@@ -24,7 +24,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			if field.Desc.Kind() == protoreflect.MessageKind {
 				fieldName := "_" + field.GoName
 				g.P(bufferWrite(quote(field.Desc.JSONName()), ": ")...)
-				g.P(fieldName, " := new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
+				g.P("var ", fieldName, " interface{} = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
 				g.P("if spec, ok := ", fieldName, ".(", g.QualifiedGoIdent(specs), "); ok {")
 				g.P("buffer.Write(spec.Specs())")
 				g.P("}")
