@@ -15,6 +15,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 				continue
 			}
 			P(g, quote("name"), ":", quote(string(field.Desc.Name())))
+			P(g, quote("name"), ":", quote(field.Desc.Kind().String()))
 		}
 		for _, field := range message.Oneofs {
 			if field.Desc.IsSynthetic() {

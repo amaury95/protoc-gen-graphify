@@ -12,8 +12,7 @@ func exposeMapBuilders(g *protogen.GeneratedFile, _ *protogen.File, messages ...
 		if message.Desc.IsMapEntry() {
 			continue
 		}
-		g.P()
-		g.P("// LoadMap populates struct fields from a map, handling decoding for special fields.")
+		g.P("\n// LoadMap populates struct fields from a map, handling decoding for special fields.")
 		g.P("func (o *", message.GoIdent, ") LoadMap(values map[string]interface{}) {")
 		for _, field := range message.Fields {
 			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
