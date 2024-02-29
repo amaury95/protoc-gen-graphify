@@ -7,17 +7,7 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-func updateMessageNames(messages ...*protogen.Message) {
-	for _, message := range messages {
-		for _, field := range message.Fields {
-			if field.Desc.HasJSONName() {
-				field.Desc = overrideJsonName{name: field.Desc.JSONName(), FieldDescriptor: field.Desc}
-			}
-		}
-	}
-}
-
-func exposeMapBuilders(g *protogen.GeneratedFile, f *protogen.File, messages ...*protogen.Message) {
+func exposeMapBuilders(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
 	for _, message := range messages {
 		if message.Desc.IsMapEntry() {
 			continue
@@ -118,7 +108,7 @@ func fetchField_Exportable(export bool, g *protogen.GeneratedFile, field *protog
 	}
 }
 
-func assignMessage(export bool, g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
+func assignMessage(_ bool, g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
 	g.P(join("if val , ok := ", identifier, ".(map[string]interface{}); ok {")...)
 	g.P("field := new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
 	g.P("field.LoadMap(val)")
@@ -126,7 +116,7 @@ func assignMessage(export bool, g *protogen.GeneratedFile, field *protogen.Field
 	g.P("}")
 }
 
-func assignEnum(export bool, g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
+func assignEnum(_ bool, g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
 	parseField(true, g, field, "float64", "int32", field.Desc.JSONName(), " = ", identifier...)
 	g.P(recipient, assign, g.QualifiedGoIdent(field.Enum.GoIdent), "(", field.Desc.JSONName(), ")")
 }
@@ -161,7 +151,7 @@ func parseField(export bool, g *protogen.GeneratedFile, field *protogen.Field, t
 		g.P("}")
 	}
 }
-func parseBytes(export bool, g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
+func parseBytes(export bool, g *protogen.GeneratedFile, _ *protogen.Field, recipient, assign string, identifier ...interface{}) {
 	if export {
 		g.P("var ", recipient, " []byte")
 	}

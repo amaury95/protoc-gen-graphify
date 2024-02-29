@@ -51,6 +51,7 @@ func main() {
 				updateMessageNames(messages...)
 				g := gengo.GenerateFile(gen, f)
 				exposeMapBuilders(g, f, messages...)
+				generateSpecs(g, f, messages...)
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures
