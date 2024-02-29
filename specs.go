@@ -21,30 +21,33 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 				continue
 			}
-			if field.Desc.IsMap() {
-				continue
-			}
-
-			if field.Desc.Kind() == protoreflect.MessageKind {
-				fieldName := "_" + field.GoName
-				g.P(bufferWrite(quote(field.Desc.JSONName()), ": ")...)
-				g.P("var ", fieldName, " interface{} = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
-				g.P("if spec, ok := ", fieldName, ".(", g.QualifiedGoIdent(specs), "); ok {")
-				g.P("buffer.Write(spec.Specs())")
-				g.P("}")
-				g.P(bufferWrite(",")...)
-				continue
-			}
 
 			g.P(bufferWrite(quote(field.Desc.JSONName()), ": {")...)
+
 			g.P(bufferWrite(quote("name"), ":", quote(field.Desc.JSONName()), ",")...)
+
 			if field.Desc.HasPresence() {
 				g.P(bufferWrite(quote("optional"), ":true,")...)
 			}
 			if field.Desc.IsList() {
 				g.P(bufferWrite(quote("isList"), ":true,")...)
 			}
-			g.P(bufferWrite(quote("type"), ":", quote(field.Desc.Kind().String()))...)
+
+			if field.Desc.IsMap() {
+
+			} else if field.Desc.Kind() == protoreflect.MessageKind {
+				fieldName := "_" + field.GoName
+				g.P("var ", fieldName, " interface{} = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
+				g.P("if spec, ok := ", fieldName, ".(", g.QualifiedGoIdent(specs), "); ok {")
+				g.P(bufferWrite(quote("value"), ":")...)
+				g.P("buffer.Write(spec.Specs())")
+				g.P("}")
+				g.P(bufferWrite(",")...)
+
+			}
+
+			g.P(bufferWrite(quote("type"), ":", quote(field.Desc.Kind().String()), ",")...)
+
 			g.P(bufferWrite("},")...)
 
 		}
