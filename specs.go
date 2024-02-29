@@ -30,7 +30,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			fields = append(fields, fb)
 		}
 		for _, field := range joinLines(comma, fields...) {
-			g.P(bufferWrite(field)...)
+			g.P(bufferWrite(field...)...)
 		}
 		g.P(bufferWrite("},")...)
 
@@ -40,7 +40,6 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			if field.Desc.IsSynthetic() {
 				continue
 			}
-
 		}
 		g.P(bufferWrite("}")...)
 
