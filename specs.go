@@ -33,18 +33,20 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 				g.P("buffer.Write(spec.Specs())")
 				g.P("}")
 				g.P(bufferWrite(",")...)
-			} else {
-				g.P(bufferWrite(quote(field.Desc.JSONName()), ": {")...)
-				g.P(bufferWrite(quote("name"), ":", quote(field.Desc.JSONName()), ",")...)
-				if field.Desc.HasPresence() {
-					g.P(bufferWrite(quote("required"), ":true,")...)
-				}
-				if field.Desc.IsList() {
-					g.P(bufferWrite(quote("isList"), ":true,")...)
-				}
-				g.P(bufferWrite(quote("type"), ":", quote(field.Desc.Kind().String()))...)
-				g.P(bufferWrite("},")...)
+				continue
 			}
+
+			g.P(bufferWrite(quote(field.Desc.JSONName()), ": {")...)
+			g.P(bufferWrite(quote("name"), ":", quote(field.Desc.JSONName()), ",")...)
+			if field.Desc.HasPresence() {
+				g.P(bufferWrite(quote("required"), ":true,")...)
+			}
+			if field.Desc.IsList() {
+				g.P(bufferWrite(quote("isList"), ":true,")...)
+			}
+			g.P(bufferWrite(quote("type"), ":", quote(field.Desc.Kind().String()))...)
+			g.P(bufferWrite("},")...)
+
 		}
 		g.P(g.QualifiedGoIdent(trimTrailingComma), "(&buffer)")
 		g.P(bufferWrite("},")...)
