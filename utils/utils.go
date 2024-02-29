@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"bytes"
 	"encoding/base64"
 	"reflect"
 	"strconv"
@@ -37,6 +38,14 @@ func DecodeBytes(input string) []byte {
 		return decoded
 	}
 	return []byte(input)
+}
+
+// TrimTrailingComma ...
+func TrimTrailingComma(bb *bytes.Buffer) {
+	if bb.Len() > 0 && bb.Bytes()[bb.Len()-1] == ',' {
+		// Remove the last byte
+		bb.Truncate(bb.Len() - 1)
+	}
 }
 
 // IMapLoader ...
