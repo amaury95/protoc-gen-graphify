@@ -21,14 +21,14 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 				continue
 			}
-			fieldBytes = append(fieldBytes, bufferWrite(quote(field.Desc.JSONName()), "{"))
-			fieldBytes = append(fieldBytes, bufferWrite(quote("name"), ":", quote(field.Desc.JSONName()), ","))
-			fieldBytes = append(fieldBytes, bufferWrite(quote("type"), ":", quote(field.Desc.Kind().String())))
-			fieldBytes = append(fieldBytes, bufferWrite("}"))
+			fieldBytes = append(fieldBytes, quote(field.Desc.JSONName()), "{")
+			fieldBytes = append(fieldBytes, quote("name"), ":", quote(field.Desc.JSONName()), ",")
+			fieldBytes = append(fieldBytes, quote("type"), ":", quote(field.Desc.Kind().String()))
+			fieldBytes = append(fieldBytes, "}")
 			fields = append(fields, fieldBytes)
 		}
 		for _, field := range joinLines(comma, fields...) {
-			g.P(field)
+			g.P(bufferWrite(field)...)
 		}
 		g.P(bufferWrite("},")...)
 
