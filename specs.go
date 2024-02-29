@@ -36,18 +36,13 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 
 		// oneofs
 		g.P(bufferWrite(quote("oneofs"), ": {")...)
-		var oneofs [][]interface{}
+
 		for _, field := range message.Oneofs {
-			var rep []interface{}
 			if field.Desc.IsSynthetic() {
 				continue
 			}
-			rep = append(rep, bufferWrite(quote(field.GoName), ": {")...)
-			rep = append(rep, bufferWrite("}")...)
-			oneofs = append(oneofs, rep)
-		}
-		for _, oneof := range joinLines(comma, oneofs...) {
-			g.P(oneof...)
+			g.P(bufferWrite(quote(field.GoName), ": {")...)
+			g.P(bufferWrite("}")...)
 		}
 		g.P(bufferWrite("}")...)
 
