@@ -17,17 +17,17 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 		g.P(bufferWrite(quote("fields"), ": {")...)
 		var fields [][]interface{}
 		for _, field := range message.Fields {
-			var fb []interface{}
+			var rep []interface{}
 			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 				continue
 			}
-			
-			fb = append(fb, quote(field.Desc.JSONName()), ": {")
-			fb = append(fb, quote("name"), ":", quote(field.Desc.JSONName()), ",")
-			fb = append(fb, quote("type"), ":", quote(field.Desc.Kind().String()))
-			fb = append(fb, "}")
 
-			fields = append(fields, fb)
+			rep = append(rep, quote(field.Desc.JSONName()), ": {")
+			rep = append(rep, quote("name"), ":", quote(field.Desc.JSONName()), ",")
+			rep = append(rep, quote("type"), ":", quote(field.Desc.Kind().String()))
+			rep = append(rep, "}")
+
+			fields = append(fields, rep)
 		}
 		for _, field := range joinLines(comma, fields...) {
 			g.P(bufferWrite(field...)...)
@@ -36,10 +36,18 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 
 		// oneofs
 		g.P(bufferWrite(quote("oneofs"), ": {")...)
+		var oneofs [][]interface{}
 		for _, field := range message.Oneofs {
+			var rep []interface{}
 			if field.Desc.IsSynthetic() {
 				continue
 			}
+			rep = append(rep, bufferWrite(quote(field.GoName), ": {")...)
+			rep = append(rep, bufferWrite("}")...)
+			oneofs = append(oneofs, rep)
+		}
+		for _, oneof := range joinLines(comma, oneofs...) {
+			g.P(oneof...)
 		}
 		g.P(bufferWrite("}")...)
 
