@@ -42,7 +42,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 				continue
 			}
 			g.P(bufferWrite(quote(field.GoName), ": ")...)
-			g.P("buffer.Write(", quote(field.GoName), ".Specs())")
+			g.P("buffer.Write(", field.GoName, ".Specs())")
 			g.P(bufferWrite(",")...)
 		}
 		g.P(bufferWrite("}")...)
