@@ -29,12 +29,13 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 				g.P(bufferWrite(quote("optional"), ": true,")...)
 			}
 
-			switch {
-			case field.Desc.IsList():
-				g.P(bufferWrite(quote("isList"), ": true,")...)
+			if field.Desc.IsList() {
+				g.P(bufferWrite(quote("kind"), ":", quote("list"))...)
+			}
 
-			case field.Desc.IsMap():
-
+			if field.Desc.IsMap() {
+				g.P(bufferWrite(quote("kind"), ":", quote("map"))...)
+				continue
 			}
 
 			if field.Desc.Kind() == protoreflect.MessageKind {
