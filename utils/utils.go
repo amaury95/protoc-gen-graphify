@@ -43,3 +43,8 @@ func DecodeBytes(input string) []byte {
 type IMapLoader interface {
 	LoadMap(m map[string]interface{})
 }
+
+// ISpecs
+type ISpecs interface {
+	Specs() []byte
+}
