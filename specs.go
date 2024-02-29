@@ -27,9 +27,9 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			fb = append(fb, bufferWrite("}"))
 			fields = append(fields, fb)
 		}
-		for _, field := range joinLines(comma, fields...) {
-			g.P(field)
-		}
+		// for _, field := range joinLines(comma, fields...) {
+		// 	g.P(field)
+		// }
 		g.P(bufferWrite("],")...)
 
 		// oneofs
