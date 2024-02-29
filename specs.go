@@ -7,8 +7,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 		if message.Desc.IsMapEntry() {
 			continue
 		}
-		g.P()
-		g.P("// Specs ...")
+		g.P("\n// Specs ...")
 		g.P("func (*", message.GoIdent, ") Specs() []byte {")
 		g.P("var buffer ", g.QualifiedGoIdent(bytesBuffer))
 		for _, field := range message.Fields {
@@ -17,21 +16,14 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			}
 			P(g, quote("name"), ":", quote(string(field.Desc.Name())))
 		}
-		P(g, "}")
 		for _, field := range message.Oneofs {
 			if field.Desc.IsSynthetic() {
 				continue
 			}
 		}
-		P(g, "}")
+		g.P("return buffer.Bytes()")
+		g.P("}")
 	}
-	g.P("return buffer.Bytes()")
-	g.P("}")
-}
-
-var bytesBuffer protogen.GoIdent = protogen.GoIdent{
-	GoName:       "Buffer",
-	GoImportPath: "bytes",
 }
 
 func P(g *protogen.GeneratedFile, v ...interface{}) {
@@ -40,4 +32,9 @@ func P(g *protogen.GeneratedFile, v ...interface{}) {
 
 func quote(val string) string {
 	return "\\\"" + val + "\\\""
+}
+
+var bytesBuffer protogen.GoIdent = protogen.GoIdent{
+	GoName:       "Buffer",
+	GoImportPath: "bytes",
 }
