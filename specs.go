@@ -29,7 +29,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 
 			fields = append(fields, rep)
 		}
-		for _, field := range joinLines(comma, fields...) {
+		for _, field := range joinLines([]interface{}{","}, fields...) {
 			g.P(bufferWrite(field...)...)
 		}
 		g.P(bufferWrite("},")...)
@@ -48,6 +48,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 				g.P("buffer.Write(_", option.GoName, ".Specs())")
 				g.P(bufferWrite(",")...)
 			}
+			g.P(g.QualifiedGoIdent(trimTrailingComma), "(&buffer)")
 			g.P(bufferWrite("}")...)
 		}
 		g.P(bufferWrite("}")...)
@@ -81,4 +82,7 @@ var bytesBuffer protogen.GoIdent = protogen.GoIdent{
 	GoImportPath: "bytes",
 }
 
-var comma = []interface{}{","}
+var trimTrailingComma protogen.GoIdent = protogen.GoIdent{
+	GoName:       "TrimTrailingComma",
+	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
+}
