@@ -17,15 +17,17 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 		g.P(bufferWrite(quote("fields"), ": {")...)
 		var fields [][]interface{}
 		for _, field := range message.Fields {
-			var fieldBytes []interface{}
+			var fb []interface{}
 			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 				continue
 			}
-			fieldBytes = append(fieldBytes, quote(field.Desc.JSONName()), "{")
-			fieldBytes = append(fieldBytes, quote("name"), ":", quote(field.Desc.JSONName()), ",")
-			fieldBytes = append(fieldBytes, quote("type"), ":", quote(field.Desc.Kind().String()))
-			fieldBytes = append(fieldBytes, "}")
-			fields = append(fields, fieldBytes)
+			
+			fb = append(fb, quote(field.Desc.JSONName()), ": {")
+			fb = append(fb, quote("name"), ":", quote(field.Desc.JSONName()), ",")
+			fb = append(fb, quote("type"), ":", quote(field.Desc.Kind().String()))
+			fb = append(fb, "}")
+
+			fields = append(fields, fb)
 		}
 		for _, field := range joinLines(comma, fields...) {
 			g.P(bufferWrite(field)...)
