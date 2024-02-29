@@ -23,19 +23,21 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			}
 
 			g.P(bufferWrite(quote(field.Desc.JSONName()), ": {")...)
-
 			g.P(bufferWrite(quote("name"), ":", quote(field.Desc.JSONName()), ",")...)
 
 			if field.Desc.HasPresence() {
-				g.P(bufferWrite(quote("optional"), ":true,")...)
-			}
-			if field.Desc.IsList() {
-				g.P(bufferWrite(quote("isList"), ":true,")...)
+				g.P(bufferWrite(quote("optional"), ": true,")...)
 			}
 
-			if field.Desc.IsMap() {
+			switch {
+			case field.Desc.IsList():
+				g.P(bufferWrite(quote("isList"), ": true,")...)
 
-			} else if field.Desc.Kind() == protoreflect.MessageKind {
+			case field.Desc.IsMap():
+
+			}
+
+			if field.Desc.Kind() == protoreflect.MessageKind {
 				fieldName := "_" + field.GoName
 				g.P("var ", fieldName, " interface{} = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
 				g.P("if spec, ok := ", fieldName, ".(", g.QualifiedGoIdent(specs), "); ok {")
@@ -46,7 +48,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 
 			}
 
-			g.P(bufferWrite(quote("type"), ":", quote(field.Desc.Kind().String()))...)
+			g.P(bufferWrite(quote("type"), ": ", quote(field.Desc.Kind().String()))...)
 
 			g.P(bufferWrite("},")...)
 
