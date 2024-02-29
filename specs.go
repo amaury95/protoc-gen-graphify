@@ -41,9 +41,13 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			if field.Desc.IsSynthetic() {
 				continue
 			}
-			g.P(bufferWrite(quote(field.GoName), ": ")...)
-			g.P("buffer.Write(", field.GoName, ".Specs())")
-			g.P(bufferWrite(",")...)
+			g.P(bufferWrite(quote(field.GoName), ": {")...)
+			for _, option := range field.Fields {
+				g.P(bufferWrite(quote(option.GoName), ": ")...)
+				g.P("buffer.Write(", option.GoName, ".Specs())")
+				g.P(bufferWrite(",")...)
+			}
+			g.P(bufferWrite("}")...)
 		}
 		g.P(bufferWrite("}")...)
 
