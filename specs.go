@@ -3,16 +3,14 @@ package main
 import "google.golang.org/protobuf/compiler/protogen"
 
 func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
-	g.P()
-	g.P("// Specs ...")
-	g.P("func Specs() []byte {")
-	g.P("var buffer ", g.QualifiedGoIdent(bytesBuffer))
 	for _, message := range messages {
 		if message.Desc.IsMapEntry() {
 			continue
 		}
-		P(g, quote(string(message.Desc.Name())), ": {")
-		P(g, quote("fields"), ":{")
+		g.P()
+		g.P("// Specs ...")
+		g.P("func (*", message.GoIdent, ") Specs() []byte {")
+		g.P("var buffer ", g.QualifiedGoIdent(bytesBuffer))
 		for _, field := range message.Fields {
 			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 				continue
