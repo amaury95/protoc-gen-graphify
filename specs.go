@@ -21,6 +21,10 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 				continue
 			}
+			if field.Desc.IsMap() {
+				continue
+			}
+
 			if field.Desc.Kind() == protoreflect.MessageKind {
 				fieldName := "_" + field.GoName
 				g.P(bufferWrite(quote(field.Desc.JSONName()), ": ")...)
@@ -34,7 +38,9 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 				g.P(bufferWrite(quote("name"), ":", quote(field.Desc.JSONName()), ",")...)
 				if field.Desc.HasPresence() {
 					g.P(bufferWrite(quote("required"), ":true,")...)
-
+				}
+				if field.Desc.IsList() {
+					g.P(bufferWrite(quote("isList"), ":true,")...)
 				}
 				g.P(bufferWrite(quote("type"), ":", quote(field.Desc.Kind().String()))...)
 				g.P(bufferWrite("},")...)
