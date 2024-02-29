@@ -1,6 +1,9 @@
 package main
 
-import "google.golang.org/protobuf/compiler/protogen"
+import (
+	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/reflect/protoreflect"
+)
 
 func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
 	for _, message := range messages {
@@ -18,10 +21,24 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 				continue
 			}
-			g.P(bufferWrite(quote(field.Desc.JSONName()), ": {")...)
-			g.P(bufferWrite(quote("name"), ":", quote(field.Desc.JSONName()), ",")...)
-			g.P(bufferWrite(quote("type"), ":", quote(field.Desc.Kind().String()))...)
-			g.P(bufferWrite("},")...)
+			if field.Desc.Kind() == protoreflect.MessageKind {
+				fieldName := "_" + field.GoName
+				g.P(bufferWrite(quote(field.Desc.JSONName()), ": ")...)
+				g.P(fieldName, " := new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
+				g.P("if spec, ok := ", fieldName, ".(", g.QualifiedGoIdent(specs), "); ok {")
+				g.P("buffer.Write(spec.Specs())")
+				g.P("}")
+				g.P(bufferWrite(",")...)
+			} else {
+				g.P(bufferWrite(quote(field.Desc.JSONName()), ": {")...)
+				g.P(bufferWrite(quote("name"), ":", quote(field.Desc.JSONName()), ",")...)
+				if field.Desc.HasPresence() {
+					g.P(bufferWrite(quote("required"), ":true,")...)
+
+				}
+				g.P(bufferWrite(quote("type"), ":", quote(field.Desc.Kind().String()))...)
+				g.P(bufferWrite("},")...)
+			}
 		}
 		g.P(g.QualifiedGoIdent(trimTrailingComma), "(&buffer)")
 		g.P(bufferWrite("},")...)
@@ -34,7 +51,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			}
 			g.P(bufferWrite(quote(field.GoName), ": {")...)
 			for _, option := range field.Fields {
-				g.P(bufferWrite(quote(option.GoName), ": ")...)
+				g.P(bufferWrite(quote(option.Desc.JSONName()), ": ")...)
 				g.P("_", option.GoName, " := new(", g.QualifiedGoIdent(option.Message.GoIdent), ")")
 				g.P("buffer.Write(_", option.GoName, ".Specs())")
 				g.P(bufferWrite(",")...)
@@ -65,5 +82,10 @@ var bytesBuffer protogen.GoIdent = protogen.GoIdent{
 
 var trimTrailingComma protogen.GoIdent = protogen.GoIdent{
 	GoName:       "TrimTrailingComma",
+	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
+}
+
+var specs protogen.GoIdent = protogen.GoIdent{
+	GoName:       "ISpecs",
 	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
 }
