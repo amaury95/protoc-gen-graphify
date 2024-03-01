@@ -18,19 +18,20 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 		// fields
 		g.P(bufferWrite(quote("fields"), ": {")...)
 		for _, field := range message.Fields {
-			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
-				continue
-			}
+			// if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
+			// 	continue
+			// }
 
 			g.P(bufferWrite(quote(field.Desc.JSONName()), ": {")...)
 			g.P(bufferWrite(quote("name"), ":", quote(field.Desc.JSONName()), ",")...)
+			g.P(bufferWrite(quote("type"), ": ", quote(field.Desc.Kind().String()), ",")...)
 
 			if field.Desc.HasPresence() {
 				g.P(bufferWrite(quote("optional"), ": true,")...)
 			}
 
 			if field.Desc.IsList() {
-				g.P(bufferWrite(quote("kind"), ":", quote("list"))...)
+				g.P(bufferWrite(quote("kind"), ":", quote("list"), ",")...)
 			}
 
 			if field.Desc.IsMap() {
@@ -46,10 +47,9 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 				g.P("buffer.Write(spec.Specs())")
 				g.P("}")
 				g.P(bufferWrite(",")...)
-
 			}
 
-			g.P(bufferWrite(quote("type"), ": ", quote(field.Desc.Kind().String()))...)
+			g.P(g.QualifiedGoIdent(trimTrailingComma), "(&buffer)")
 
 			g.P(bufferWrite("},")...)
 
