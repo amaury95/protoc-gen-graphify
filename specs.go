@@ -87,7 +87,7 @@ func writeField(g *protogen.GeneratedFile, field *protogen.Field) {
 	if field.Desc.Kind() == protoreflect.EnumKind {
 		g.P(bufferWrite(quote("options"), ": {")...)
 		for index, option := range field.Enum.Values {
-			g.P(bufferWrite(quote(strconv.Itoa(index)), ":", quote(option.GoIdent.GoName), ",")...)
+			g.P(bufferWrite(quote(strconv.Itoa(index)), ":", quote(string(option.Desc.Name())), ",")...)
 		}
 		g.P(g.QualifiedGoIdent(trimTrailingComma), "(&buffer)")
 		g.P(bufferWrite("},")...)
