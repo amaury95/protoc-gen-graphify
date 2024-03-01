@@ -37,42 +37,16 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 
 				keyField := field.Message.Fields[0]
 				g.P(bufferWrite(quote("key"), ": {")...)
-				if keyField.Desc.Kind() == protoreflect.MessageKind {
-					keyFieldName := "_" + keyField.GoName
-					g.P("var ", keyFieldName, " interface{} = new(", g.QualifiedGoIdent(keyField.Message.GoIdent), ")")
-					g.P("if spec, ok := ", keyFieldName, ".(", g.QualifiedGoIdent(specs), "); ok {")
-					g.P(bufferWrite(quote("value"), ":")...)
-					g.P("buffer.Write(spec.Specs())")
-					g.P("}")
-					g.P(bufferWrite(",")...)
-				}
-				g.P(bufferWrite(quote("type"), ": ", quote(field.Desc.Kind().String()))...)
+				writeField(g, keyField)
 				g.P(bufferWrite("},")...)
 
 				valField := field.Message.Fields[1]
 				g.P(bufferWrite(quote("value"), ": {")...)
-				if valField.Desc.Kind() == protoreflect.MessageKind {
-					valFieldName := "_" + valField.GoName
-					g.P("var ", valFieldName, " interface{} = new(", g.QualifiedGoIdent(valField.Message.GoIdent), ")")
-					g.P("if spec, ok := ", valFieldName, ".(", g.QualifiedGoIdent(specs), "); ok {")
-					g.P(bufferWrite(quote("value"), ":")...)
-					g.P("buffer.Write(spec.Specs())")
-					g.P("}")
-					g.P(bufferWrite(",")...)
-				}
-				g.P(bufferWrite(quote("type"), ": ", quote(valField.Desc.Kind().String()))...)
+				writeField(g, valField)
 				g.P(bufferWrite("},")...)
 			} else {
-				if field.Desc.Kind() == protoreflect.MessageKind {
-					fieldName := "_" + field.GoName
-					g.P("var ", fieldName, " interface{} = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
-					g.P("if spec, ok := ", fieldName, ".(", g.QualifiedGoIdent(specs), "); ok {")
-					g.P(bufferWrite(quote("value"), ":")...)
-					g.P("buffer.Write(spec.Specs())")
-					g.P("}")
-					g.P(bufferWrite(",")...)
-				}
-				g.P(bufferWrite(quote("type"), ": ", quote(field.Desc.Kind().String()), ",")...)
+				writeField(g, field)
+				g.P(bufferWrite(",")...)
 			}
 
 			g.P(bufferWrite(quote("name"), ":", quote(field.Desc.JSONName()))...)
@@ -105,6 +79,19 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 		g.P("return buffer.Bytes()")
 		g.P("}")
 	}
+}
+
+func writeField(g *protogen.GeneratedFile, field *protogen.Field) {
+	if field.Desc.Kind() == protoreflect.MessageKind {
+		fieldName := "_" + field.GoName
+		g.P("var ", fieldName, " interface{} = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
+		g.P("if spec, ok := ", fieldName, ".(", g.QualifiedGoIdent(specs), "); ok {")
+		g.P(bufferWrite(quote("value"), ":")...)
+		g.P("buffer.Write(spec.Specs())")
+		g.P("}")
+		g.P(bufferWrite(",")...)
+	}
+	g.P(bufferWrite(quote("type"), ": ", quote(field.Desc.Kind().String()))...)
 }
 
 func bufferWrite(v ...interface{}) []interface{} {
