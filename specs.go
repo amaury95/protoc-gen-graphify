@@ -35,7 +35,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			}
 
 			if field.Desc.IsMap() {
-				g.P(bufferWrite(quote("kind"), ":", quote("map"))...)
+				// g.P(bufferWrite(quote("kind"), ":", quote("map"))...)
 				continue
 			}
 
