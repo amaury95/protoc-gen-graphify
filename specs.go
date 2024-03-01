@@ -1,6 +1,8 @@
 package main
 
 import (
+	"strconv"
+
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
@@ -82,6 +84,14 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 }
 
 func writeField(g *protogen.GeneratedFile, field *protogen.Field) {
+	if field.Desc.Kind() == protoreflect.EnumKind {
+		g.P(bufferWrite(quote("options"), ": {")...)
+		for index, option := range field.Enum.Values {
+			g.P(bufferWrite(quote(strconv.Itoa(index)), ":", quote(option.GoIdent.GoName), ",")...)
+		}
+		g.P(g.QualifiedGoIdent(trimTrailingComma), "(&buffer)")
+		g.P(bufferWrite("},")...)
+	}
 	if field.Desc.Kind() == protoreflect.MessageKind {
 		fieldName := "_" + field.GoName
 		g.P("var ", fieldName, " interface{} = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
