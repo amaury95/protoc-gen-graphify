@@ -18,9 +18,9 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 		// fields
 		g.P(bufferWrite(quote("fields"), ": {")...)
 		for _, field := range message.Fields {
-			// if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
-			// 	continue
-			// }
+			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
+				continue
+			}
 
 			g.P(bufferWrite(quote(field.Desc.JSONName()), ": {")...)
 			g.P(bufferWrite(quote("name"), ":", quote(field.Desc.JSONName()), ",")...)
@@ -33,7 +33,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			if field.Desc.IsList() {
 				g.P(bufferWrite(quote("kind"), ":", quote("list"), ",")...)
 			}
- 
+
 			if field.Desc.IsMap() {
 				g.P(bufferWrite(quote("kind"), ":", quote("map"))...)
 				continue
