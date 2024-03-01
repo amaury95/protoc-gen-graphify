@@ -46,7 +46,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 					g.P("}")
 					g.P(bufferWrite(",")...)
 				}
-				g.P(bufferWrite(quote("type"), ": ", quote(field.Desc.Kind().String()), ",")...)
+				g.P(bufferWrite(quote("type"), ": ", quote(field.Desc.Kind().String()))...)
 				g.P(bufferWrite("},")...)
 
 				valField := field.Message.Fields[1]
@@ -60,7 +60,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 					g.P("}")
 					g.P(bufferWrite(",")...)
 				}
-				g.P(bufferWrite(quote("type"), ": ", quote(valField.Desc.Kind().String()), ",")...)
+				g.P(bufferWrite(quote("type"), ": ", quote(valField.Desc.Kind().String()))...)
 				g.P(bufferWrite("},")...)
 			} else {
 				if field.Desc.Kind() == protoreflect.MessageKind {
