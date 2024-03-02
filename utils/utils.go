@@ -53,7 +53,7 @@ type IMapLoader interface {
 	LoadMap(m map[string]interface{})
 }
 
-// ISpecs
-type ISpecs interface {
-	Specs() []byte
+// ISchema
+type ISchema interface {
+	Schema() []byte
 }

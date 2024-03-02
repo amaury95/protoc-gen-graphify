@@ -50,7 +50,7 @@ func main() {
 				messages := walkMessages(f.Messages)
 				updateMessageNames(messages...)
 				g := gengo.GenerateFile(gen, f)
-				generateSpecs(g, f, messages...)
+				generateSchema(g, f, messages...)
 				exposeMapBuilders(g, f, messages...)
 			}
 		}

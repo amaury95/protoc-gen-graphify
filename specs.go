@@ -7,13 +7,13 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
+func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
 	for _, message := range messages {
 		if message.Desc.IsMapEntry() {
 			continue
 		}
 		g.P("\n// Specs ...")
-		g.P("func (*", message.GoIdent, ") Specs() []byte {")
+		g.P("func (*", message.GoIdent, ") Schema() []byte {")
 		g.P("var buffer ", g.QualifiedGoIdent(bytesBuffer))
 		g.P(bufferWrite("{")...)
 
@@ -69,7 +69,7 @@ func generateSpecs(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pro
 			for _, option := range field.Fields {
 				g.P(bufferWrite(quote(option.Desc.JSONName()), ": ")...)
 				g.P("_", option.GoName, " := new(", g.QualifiedGoIdent(option.Message.GoIdent), ")")
-				g.P("buffer.Write(_", option.GoName, ".Specs())")
+				g.P("buffer.Write(_", option.GoName, ".Schema())")
 				g.P(bufferWrite(",")...)
 			}
 			g.P(g.QualifiedGoIdent(trimTrailingComma), "(&buffer)")
@@ -95,9 +95,9 @@ func writeField(g *protogen.GeneratedFile, field *protogen.Field) {
 	if field.Desc.Kind() == protoreflect.MessageKind {
 		fieldName := "_" + field.GoName
 		g.P("var ", fieldName, " interface{} = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
-		g.P("if spec, ok := ", fieldName, ".(", g.QualifiedGoIdent(specs), "); ok {")
+		g.P("if spec, ok := ", fieldName, ".(", g.QualifiedGoIdent(schema), "); ok {")
 		g.P(bufferWrite(quote("value"), ":")...)
-		g.P("buffer.Write(spec.Specs())")
+		g.P("buffer.Write(spec.Schema())")
 		g.P("}")
 		g.P(bufferWrite(",")...)
 	}
@@ -122,7 +122,7 @@ var trimTrailingComma protogen.GoIdent = protogen.GoIdent{
 	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
 }
 
-var specs protogen.GoIdent = protogen.GoIdent{
-	GoName:       "ISpecs",
+var schema protogen.GoIdent = protogen.GoIdent{
+	GoName:       "ISchema",
 	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
 }
