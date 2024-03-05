@@ -49,9 +49,14 @@ func main() {
 			if f.Generate {
 				messages := walkMessages(f.Messages)
 				updateMessageNames(messages...)
-				g := gengo.GenerateFile(gen, f)
-				generateSchema(g, f, messages...)
-				exposeMapBuilders(g, f, messages...)
+
+				gengo.GenerateFile(gen, f)
+
+				schema := gen.NewGeneratedFile(f.GeneratedFilenamePrefix+".schema.pb.go", f.GoImportPath)
+				generateSchema(schema, f, messages...)
+
+				expose := gen.NewGeneratedFile(f.GeneratedFilenamePrefix+".expose.pb.go", f.GoImportPath)
+				exposeMapBuilders(expose, f, messages...)
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures
