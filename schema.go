@@ -30,7 +30,7 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 				continue
 			}
 
-			g.P("\"", field.Desc.Name, "\": map[string]interface{}{")
+			g.P("\"", field.Desc.Name(), "\": map[string]interface{}{")
 
 			// 	if field.Desc.HasPresence() {
 			// 		g.P(bufferWrite(quote("optional"), ": true,")...)
