@@ -124,10 +124,10 @@ var bytesBuffer protogen.GoIdent = protogen.GoIdent{
 
 var trimTrailingComma protogen.GoIdent = protogen.GoIdent{
 	GoName:       "TrimTrailingComma",
-	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
+	GoImportPath: "github.com/amaury95/protoc-gen-graphify/utils",
 }
 
 var schema protogen.GoIdent = protogen.GoIdent{
 	GoName:       "ISchema",
-	GoImportPath: "github.com/amaury95/protoc-gen-go-tag/utils",
+	GoImportPath: "github.com/amaury95/protoc-gen-graphify/utils",
 }
