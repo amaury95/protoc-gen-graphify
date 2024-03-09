@@ -16,7 +16,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/amaury95/protoc-gen-go-tag/internal/version"
+	"github.com/amaury95/protoc-gen-graphify/internal/version"
 	gengo "google.golang.org/protobuf/cmd/protoc-gen-go/internal_gengo"
 	"google.golang.org/protobuf/compiler/protogen"
 )
@@ -50,13 +50,10 @@ func main() {
 				messages := walkMessages(f.Messages)
 				updateMessageNames(messages...)
 
-				gengo.GenerateFile(gen, f)
+				g := gengo.GenerateFile(gen, f)
 
-				schema := gen.NewGeneratedFile(f.GeneratedFilenamePrefix+".schema.pb.go", f.GoImportPath)
-				generateSchema(schema, f, messages...)
-
-				expose := gen.NewGeneratedFile(f.GeneratedFilenamePrefix+".expose.pb.go", f.GoImportPath)
-				exposeMapBuilders(expose, f, messages...)
+				generateSchema(g, f, messages...)
+				exposeMapBuilders(g, f, messages...)
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures

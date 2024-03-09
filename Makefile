@@ -10,5 +10,5 @@ push:
 release: commit tag push
 
 install: release
-	@go install github.com/amaury95/protoc-gen-go-tag@$(version)
+	@go install github.com/amaury95/protoc-gen-graphify@$(version)
 

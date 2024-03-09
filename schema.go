@@ -24,7 +24,7 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 				continue
 			}
 
-			g.P(bufferWrite(quote(field.Desc.JSONName()), ": {")...)
+			g.P(bufferWrite(quote(string(field.Desc.Name())), ": {")...)
 
 			if field.Desc.HasPresence() {
 				g.P(bufferWrite(quote("optional"), ": true,")...)
@@ -51,7 +51,7 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 				g.P(bufferWrite(",")...)
 			}
 
-			g.P(bufferWrite(quote("name"), ":", quote(field.Desc.JSONName()))...)
+			g.P(bufferWrite(quote("name"), ":", quote(string(field.Desc.Name())))...)
 
 			g.P(bufferWrite("},")...)
 
@@ -67,7 +67,7 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			}
 			g.P(bufferWrite(quote(field.GoName), ": {")...)
 			for _, option := range field.Fields {
-				g.P(bufferWrite(quote(option.Desc.JSONName()), ": ")...)
+				g.P(bufferWrite(quote(string(option.Desc.Name())), ": ")...)
 				g.P("_", option.GoName, " := new(", g.QualifiedGoIdent(option.Message.GoIdent), ")")
 				g.P("buffer.Write(_", option.GoName, ".Schema())")
 				g.P(bufferWrite(",")...)

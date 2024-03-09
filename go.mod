@@ -1,4 +1,4 @@
-module github.com/amaury95/protoc-gen-go-tag
+module github.com/amaury95/protoc-gen-graphify
 
 go 1.20
 
