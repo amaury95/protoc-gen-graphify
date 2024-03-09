@@ -53,7 +53,7 @@ type IMapLoader interface {
 	LoadMap(m map[string]interface{})
 }
 
-// ISchema
+// ISchema ...
 type ISchema interface {
-	Schema() []byte
+	Schema() map[string]interface{}
 }

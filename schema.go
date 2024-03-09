@@ -94,35 +94,6 @@ func writeField(g *protogen.GeneratedFile, field *protogen.Field) {
 		g.P("},")
 	}
 	if field.Desc.Kind() == protoreflect.MessageKind {
-		// fieldName := "_" + field.GoName
-		// 	g.P("var ", fieldName, " interface{} = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
-		// 	g.P("if spec, ok := ", fieldName, ".(", g.QualifiedGoIdent(schema), "); ok {")
-		// 	g.P(bufferWrite(quote("schema"), ":")...)
-		// 	g.P("buffer.Write(spec.Schema())")
-		// 	g.P("}")
-		// 	g.P(bufferWrite(",")...)
+		g.P("\"schema\": new(", g.QualifiedGoIdent(field.GoIdent), ").Schema(),")
 	}
-}
-
-func bufferWrite(v ...interface{}) []interface{} {
-	return join("buffer.WriteString(\"", v, "\")")
-}
-
-func quote(val string) string {
-	return "\\\"" + val + "\\\""
-}
-
-var bytesBuffer protogen.GoIdent = protogen.GoIdent{
-	GoName:       "Buffer",
-	GoImportPath: "bytes",
-}
-
-var trimTrailingComma protogen.GoIdent = protogen.GoIdent{
-	GoName:       "TrimTrailingComma",
-	GoImportPath: "github.com/amaury95/protoc-gen-graphify/utils",
-}
-
-var schema protogen.GoIdent = protogen.GoIdent{
-	GoName:       "ISchema",
-	GoImportPath: "github.com/amaury95/protoc-gen-graphify/utils",
 }
