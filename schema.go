@@ -32,13 +32,15 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 
 			g.P("\"", field.Desc.Name(), "\": map[string]interface{}{")
 
-			// 	if field.Desc.HasPresence() {
-			// 		g.P(bufferWrite(quote("optional"), ": true,")...)
-			// 	}
+			g.P("\"name\": \"", field.Desc.Name(), "\",")
 
-			// 	if field.Desc.IsList() {
-			// 		g.P(bufferWrite(quote("kind"), ":", quote("list"), ",")...)
-			// 	}
+			if field.Desc.HasPresence() {
+				g.P("\"optional\": true,")
+			}
+
+			if field.Desc.IsList() {
+				g.P("\"kind\": \"list\",")
+			}
 
 			// 	if field.Desc.IsMap() {
 			// 		g.P(bufferWrite(quote("kind"), ":", quote("map"), ",")...)
@@ -57,33 +59,24 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			// 		g.P(bufferWrite(",")...)
 			// 	}
 
-			// 	g.P(bufferWrite(quote("name"), ":", quote(string(field.Desc.Name())))...)
-
-			// 	g.P(bufferWrite("},")...)
 			g.P("},")
-
 		}
-
 		g.P("},")
+
+		// oneofs
 		g.P("\"oneofs\": map[string] interface{} {")
 
-		// // oneofs
-		// g.P(bufferWrite(quote("oneofs"), ": {")...)
-		// for _, field := range message.Oneofs {
-		// 	if field.Desc.IsSynthetic() {
-		// 		continue
-		// 	}
-		// 	g.P(bufferWrite(quote(field.GoName), ": {")...)
-		// 	for _, option := range field.Fields {
-		// 		g.P(bufferWrite(quote(string(option.Desc.Name())), ": ")...)
-		// 		g.P("_", option.GoName, " := new(", g.QualifiedGoIdent(option.Message.GoIdent), ")")
-		// 		g.P("buffer.Write(_", option.GoName, ".Schema())")
-		// 		g.P(bufferWrite(",")...)
-		// 	}
-		// 	g.P(g.QualifiedGoIdent(trimTrailingComma), "(&buffer)")
-		// 	g.P(bufferWrite("}")...)
-		// }
-		// g.P(bufferWrite("}")...)
+		for _, field := range message.Oneofs {
+			if field.Desc.IsSynthetic() {
+				continue
+			}
+
+			g.P("\"", field.GoName, "\": map[string]interface{}{")
+			for _, option := range field.Fields {
+				g.P("\"", option.GoName, "\": new(", g.QualifiedGoIdent(option.Message.GoIdent), ").Schema(),")
+			}
+			g.P("},")
+		}
 		g.P("},")
 
 		g.P("}")
