@@ -25,43 +25,44 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 
 		// fields
 		// g.P(bufferWrite(quote("fields"), ": {")...)
-		// for _, field := range message.Fields {
-		// 	if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
-		// 		continue
-		// 	}
+		for _, field := range message.Fields {
+			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
+				continue
+			}
 
-		// 	g.P(bufferWrite(quote(string(field.Desc.Name())), ": {")...)
+			g.P("\"", field.Desc.Name, "\": map[string]interface{}{")
 
-		// 	if field.Desc.HasPresence() {
-		// 		g.P(bufferWrite(quote("optional"), ": true,")...)
-		// 	}
+			// 	if field.Desc.HasPresence() {
+			// 		g.P(bufferWrite(quote("optional"), ": true,")...)
+			// 	}
 
-		// 	if field.Desc.IsList() {
-		// 		g.P(bufferWrite(quote("kind"), ":", quote("list"), ",")...)
-		// 	}
+			// 	if field.Desc.IsList() {
+			// 		g.P(bufferWrite(quote("kind"), ":", quote("list"), ",")...)
+			// 	}
 
-		// 	if field.Desc.IsMap() {
-		// 		g.P(bufferWrite(quote("kind"), ":", quote("map"), ",")...)
+			// 	if field.Desc.IsMap() {
+			// 		g.P(bufferWrite(quote("kind"), ":", quote("map"), ",")...)
 
-		// 		keyField := field.Message.Fields[0]
-		// 		g.P(bufferWrite(quote("key"), ": {")...)
-		// 		writeField(g, keyField)
-		// 		g.P(bufferWrite("},")...)
+			// 		keyField := field.Message.Fields[0]
+			// 		g.P(bufferWrite(quote("key"), ": {")...)
+			// 		writeField(g, keyField)
+			// 		g.P(bufferWrite("},")...)
 
-		// 		valField := field.Message.Fields[1]
-		// 		g.P(bufferWrite(quote("value"), ": {")...)
-		// 		writeField(g, valField)
-		// 		g.P(bufferWrite("},")...)
-		// 	} else {
-		// 		writeField(g, field)
-		// 		g.P(bufferWrite(",")...)
-		// 	}
+			// 		valField := field.Message.Fields[1]
+			// 		g.P(bufferWrite(quote("value"), ": {")...)
+			// 		writeField(g, valField)
+			// 		g.P(bufferWrite("},")...)
+			// 	} else {
+			// 		writeField(g, field)
+			// 		g.P(bufferWrite(",")...)
+			// 	}
 
-		// 	g.P(bufferWrite(quote("name"), ":", quote(string(field.Desc.Name())))...)
+			// 	g.P(bufferWrite(quote("name"), ":", quote(string(field.Desc.Name())))...)
 
-		// 	g.P(bufferWrite("},")...)
+			// 	g.P(bufferWrite("},")...)
+			g.P("},")
 
-		// }
+		}
 
 		g.P("},")
 		g.P("\"oneofs\": map[string] interface{} {")
