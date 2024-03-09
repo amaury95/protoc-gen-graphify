@@ -94,6 +94,6 @@ func writeField(g *protogen.GeneratedFile, field *protogen.Field) {
 		g.P("},")
 	}
 	if field.Desc.Kind() == protoreflect.MessageKind {
-		g.P("\"schema\": new(", g.QualifiedGoIdent(field.GoIdent), ").Schema(),")
+		g.P("\"schema\": new(", g.QualifiedGoIdent(field.Message.GoIdent), ").Schema(),")
 	}
 }
