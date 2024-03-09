@@ -84,24 +84,24 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 }
 
 func writeField(g *protogen.GeneratedFile, field *protogen.Field) {
-	if field.Desc.Kind() == protoreflect.EnumKind {
-		g.P(bufferWrite(quote("options"), ": {")...)
-		for index, option := range field.Enum.Values {
-			g.P(bufferWrite(quote(strconv.Itoa(index)), ":", quote(string(option.Desc.Name())), ",")...)
-		}
-		g.P(g.QualifiedGoIdent(trimTrailingComma), "(&buffer)")
-		g.P(bufferWrite("},")...)
-	}
-	if field.Desc.Kind() == protoreflect.MessageKind {
-		fieldName := "_" + field.GoName
-		g.P("var ", fieldName, " interface{} = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
-		g.P("if spec, ok := ", fieldName, ".(", g.QualifiedGoIdent(schema), "); ok {")
-		g.P(bufferWrite(quote("schema"), ":")...)
-		g.P("buffer.Write(spec.Schema())")
-		g.P("}")
-		g.P(bufferWrite(",")...)
-	}
-	g.P(bufferWrite(quote("type"), ": ", quote(field.Desc.Kind().String()))...)
+	// if field.Desc.Kind() == protoreflect.EnumKind {
+	// 	g.P(bufferWrite(quote("options"), ": {")...)
+	// 	for index, option := range field.Enum.Values {
+	// 		g.P(bufferWrite(quote(strconv.Itoa(index)), ":", quote(string(option.Desc.Name())), ",")...)
+	// 	}
+	// 	g.P(g.QualifiedGoIdent(trimTrailingComma), "(&buffer)")
+	// 	g.P(bufferWrite("},")...)
+	// }
+	// if field.Desc.Kind() == protoreflect.MessageKind {
+	// 	fieldName := "_" + field.GoName
+	// 	g.P("var ", fieldName, " interface{} = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
+	// 	g.P("if spec, ok := ", fieldName, ".(", g.QualifiedGoIdent(schema), "); ok {")
+	// 	g.P(bufferWrite(quote("schema"), ":")...)
+	// 	g.P("buffer.Write(spec.Schema())")
+	// 	g.P("}")
+	// 	g.P(bufferWrite(",")...)
+	// }
+	// g.P(bufferWrite(quote("type"), ": ", quote(field.Desc.Kind().String()))...)
 }
 
 func bufferWrite(v ...interface{}) []interface{} {
