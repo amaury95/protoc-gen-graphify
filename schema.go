@@ -1,10 +1,10 @@
 package main
 
 import (
-	// "strconv"
+	"strconv"
 
 	"google.golang.org/protobuf/compiler/protogen"
-	// "google.golang.org/protobuf/reflect/protoreflect"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
@@ -84,24 +84,24 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 }
 
 func writeField(g *protogen.GeneratedFile, field *protogen.Field) {
-	// if field.Desc.Kind() == protoreflect.EnumKind {
-	// 	g.P(bufferWrite(quote("options"), ": {")...)
-	// 	for index, option := range field.Enum.Values {
-	// 		g.P(bufferWrite(quote(strconv.Itoa(index)), ":", quote(string(option.Desc.Name())), ",")...)
-	// 	}
-	// 	g.P(g.QualifiedGoIdent(trimTrailingComma), "(&buffer)")
-	// 	g.P(bufferWrite("},")...)
-	// }
-	// if field.Desc.Kind() == protoreflect.MessageKind {
-	// 	fieldName := "_" + field.GoName
-	// 	g.P("var ", fieldName, " interface{} = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
-	// 	g.P("if spec, ok := ", fieldName, ".(", g.QualifiedGoIdent(schema), "); ok {")
-	// 	g.P(bufferWrite(quote("schema"), ":")...)
-	// 	g.P("buffer.Write(spec.Schema())")
-	// 	g.P("}")
-	// 	g.P(bufferWrite(",")...)
-	// }
-	// g.P(bufferWrite(quote("type"), ": ", quote(field.Desc.Kind().String()))...)
+	g.P("\"type\": \"", field.Desc.Kind().String(), "\",")
+	if field.Desc.Kind() == protoreflect.EnumKind {
+
+		g.P("\"options\": map[string]interface{}{")
+		for index, option := range field.Enum.Values {
+			g.P("\"", strconv.Itoa(index), "\": \"", option.Desc.Name(), "\",")
+		}
+		g.P("},")
+	}
+	if field.Desc.Kind() == protoreflect.MessageKind {
+		// fieldName := "_" + field.GoName
+		// 	g.P("var ", fieldName, " interface{} = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
+		// 	g.P("if spec, ok := ", fieldName, ".(", g.QualifiedGoIdent(schema), "); ok {")
+		// 	g.P(bufferWrite(quote("schema"), ":")...)
+		// 	g.P("buffer.Write(spec.Schema())")
+		// 	g.P("}")
+		// 	g.P(bufferWrite(",")...)
+	}
 }
 
 func bufferWrite(v ...interface{}) []interface{} {
