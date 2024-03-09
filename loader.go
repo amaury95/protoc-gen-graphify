@@ -9,9 +9,9 @@ import (
 
 func exposeMapBuilders(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
 	g.P(`
-	\*
+	/*
 		Graphify loader module
-	*\
+	*/
 	`)
 	for _, message := range messages {
 		if message.Desc.IsMapEntry() {
