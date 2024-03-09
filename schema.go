@@ -21,6 +21,7 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		g.P("func (*", message.GoIdent, ") Schema() map[string]interface{} {")
 		g.P("return map[string]interface{} {")
 
+		g.P("\"fields\": map[string] interface{} {")
 
 		// fields
 		// g.P(bufferWrite(quote("fields"), ": {")...)
@@ -61,8 +62,9 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		// 	g.P(bufferWrite("},")...)
 
 		// }
-		 
-		// g.P(bufferWrite("},")...)
+
+		g.P("},")
+		g.P("\"oneofs\": map[string] interface{} {")
 
 		// // oneofs
 		// g.P(bufferWrite(quote("oneofs"), ": {")...)
@@ -81,8 +83,8 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		// 	g.P(bufferWrite("}")...)
 		// }
 		// g.P(bufferWrite("}")...)
+		g.P("},")
 
-		
 		g.P("}")
 		g.P("}")
 	}
