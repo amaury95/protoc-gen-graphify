@@ -1,10 +1,10 @@
 package main
 
 import (
-	"strconv"
+	// "strconv"
 
 	"google.golang.org/protobuf/compiler/protogen"
-	"google.golang.org/protobuf/reflect/protoreflect"
+	// "google.golang.org/protobuf/reflect/protoreflect"
 )
 
 func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
