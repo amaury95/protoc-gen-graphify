@@ -18,72 +18,72 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			continue
 		}
 		g.P("\n// Specs ...")
-		g.P("func (*", message.GoIdent, ") Schema() []byte {")
-		g.P("var buffer ", g.QualifiedGoIdent(bytesBuffer))
-		g.P(bufferWrite("{")...)
+		g.P("func (*", message.GoIdent, ") Schema() map[string]interface{} {")
+		g.P("return map[string]interface{} {")
+
 
 		// fields
-		g.P(bufferWrite(quote("fields"), ": {")...)
-		for _, field := range message.Fields {
-			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
-				continue
-			}
+		// g.P(bufferWrite(quote("fields"), ": {")...)
+		// for _, field := range message.Fields {
+		// 	if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
+		// 		continue
+		// 	}
 
-			g.P(bufferWrite(quote(string(field.Desc.Name())), ": {")...)
+		// 	g.P(bufferWrite(quote(string(field.Desc.Name())), ": {")...)
 
-			if field.Desc.HasPresence() {
-				g.P(bufferWrite(quote("optional"), ": true,")...)
-			}
+		// 	if field.Desc.HasPresence() {
+		// 		g.P(bufferWrite(quote("optional"), ": true,")...)
+		// 	}
 
-			if field.Desc.IsList() {
-				g.P(bufferWrite(quote("kind"), ":", quote("list"), ",")...)
-			}
+		// 	if field.Desc.IsList() {
+		// 		g.P(bufferWrite(quote("kind"), ":", quote("list"), ",")...)
+		// 	}
 
-			if field.Desc.IsMap() {
-				g.P(bufferWrite(quote("kind"), ":", quote("map"), ",")...)
+		// 	if field.Desc.IsMap() {
+		// 		g.P(bufferWrite(quote("kind"), ":", quote("map"), ",")...)
 
-				keyField := field.Message.Fields[0]
-				g.P(bufferWrite(quote("key"), ": {")...)
-				writeField(g, keyField)
-				g.P(bufferWrite("},")...)
+		// 		keyField := field.Message.Fields[0]
+		// 		g.P(bufferWrite(quote("key"), ": {")...)
+		// 		writeField(g, keyField)
+		// 		g.P(bufferWrite("},")...)
 
-				valField := field.Message.Fields[1]
-				g.P(bufferWrite(quote("value"), ": {")...)
-				writeField(g, valField)
-				g.P(bufferWrite("},")...)
-			} else {
-				writeField(g, field)
-				g.P(bufferWrite(",")...)
-			}
+		// 		valField := field.Message.Fields[1]
+		// 		g.P(bufferWrite(quote("value"), ": {")...)
+		// 		writeField(g, valField)
+		// 		g.P(bufferWrite("},")...)
+		// 	} else {
+		// 		writeField(g, field)
+		// 		g.P(bufferWrite(",")...)
+		// 	}
 
-			g.P(bufferWrite(quote("name"), ":", quote(string(field.Desc.Name())))...)
+		// 	g.P(bufferWrite(quote("name"), ":", quote(string(field.Desc.Name())))...)
 
-			g.P(bufferWrite("},")...)
+		// 	g.P(bufferWrite("},")...)
 
-		}
-		g.P(g.QualifiedGoIdent(trimTrailingComma), "(&buffer)")
-		g.P(bufferWrite("},")...)
+		// }
+		 
+		// g.P(bufferWrite("},")...)
 
-		// oneofs
-		g.P(bufferWrite(quote("oneofs"), ": {")...)
-		for _, field := range message.Oneofs {
-			if field.Desc.IsSynthetic() {
-				continue
-			}
-			g.P(bufferWrite(quote(field.GoName), ": {")...)
-			for _, option := range field.Fields {
-				g.P(bufferWrite(quote(string(option.Desc.Name())), ": ")...)
-				g.P("_", option.GoName, " := new(", g.QualifiedGoIdent(option.Message.GoIdent), ")")
-				g.P("buffer.Write(_", option.GoName, ".Schema())")
-				g.P(bufferWrite(",")...)
-			}
-			g.P(g.QualifiedGoIdent(trimTrailingComma), "(&buffer)")
-			g.P(bufferWrite("}")...)
-		}
-		g.P(bufferWrite("}")...)
+		// // oneofs
+		// g.P(bufferWrite(quote("oneofs"), ": {")...)
+		// for _, field := range message.Oneofs {
+		// 	if field.Desc.IsSynthetic() {
+		// 		continue
+		// 	}
+		// 	g.P(bufferWrite(quote(field.GoName), ": {")...)
+		// 	for _, option := range field.Fields {
+		// 		g.P(bufferWrite(quote(string(option.Desc.Name())), ": ")...)
+		// 		g.P("_", option.GoName, " := new(", g.QualifiedGoIdent(option.Message.GoIdent), ")")
+		// 		g.P("buffer.Write(_", option.GoName, ".Schema())")
+		// 		g.P(bufferWrite(",")...)
+		// 	}
+		// 	g.P(g.QualifiedGoIdent(trimTrailingComma), "(&buffer)")
+		// 	g.P(bufferWrite("}")...)
+		// }
+		// g.P(bufferWrite("}")...)
 
-		g.P(bufferWrite("}")...)
-		g.P("return buffer.Bytes()")
+		
+		g.P("}")
 		g.P("}")
 	}
 }
