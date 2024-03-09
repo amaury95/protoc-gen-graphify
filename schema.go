@@ -42,22 +42,21 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 				g.P("\"kind\": \"list\",")
 			}
 
-			// 	if field.Desc.IsMap() {
-			// 		g.P(bufferWrite(quote("kind"), ":", quote("map"), ",")...)
+			if field.Desc.IsMap() {
+				g.P("\"kind\": \"map\",")
 
-			// 		keyField := field.Message.Fields[0]
-			// 		g.P(bufferWrite(quote("key"), ": {")...)
-			// 		writeField(g, keyField)
-			// 		g.P(bufferWrite("},")...)
+				keyField := field.Message.Fields[0]
+				g.P("\"key\": map[string]interface{}{")
+				writeField(g, keyField)
+				g.P("},")
 
-			// 		valField := field.Message.Fields[1]
-			// 		g.P(bufferWrite(quote("value"), ": {")...)
-			// 		writeField(g, valField)
-			// 		g.P(bufferWrite("},")...)
-			// 	} else {
-			// 		writeField(g, field)
-			// 		g.P(bufferWrite(",")...)
-			// 	}
+				valField := field.Message.Fields[1]
+				g.P("\"value\": map[string]interface{}{")
+				writeField(g, valField)
+				g.P("},")
+			} else {
+				writeField(g, field)
+			}
 
 			g.P("},")
 		}
