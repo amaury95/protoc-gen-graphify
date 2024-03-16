@@ -17,6 +17,15 @@ func exposeMapBuilders(g *protogen.GeneratedFile, _ *protogen.File, messages ...
 		if message.Desc.IsMapEntry() {
 			continue
 		}
+
+		g.P("\n/* UnmarshalJSON unmarshaler for this. */")
+		g.P("func (o *", message.GoIdent, ") UnmarshalJSON(b []byte) error {")
+		g.P("var values map[string]interface{}")
+		g.P("if err := ", g.QualifiedGoIdent(json), ".Unmarshal(b, &values);err != nil {return err}")
+		g.P("o.LoadMap(values)")
+		g.P("return nil")
+		g.P("}")
+
 		g.P("\n/* LoadMap populates struct fields from a map, handling decoding for special fields. */")
 		g.P("func (o *", message.GoIdent, ") LoadMap(values map[string]interface{}) {")
 		for _, field := range message.Fields {
@@ -212,4 +221,9 @@ var makeSlice protogen.GoIdent = protogen.GoIdent{
 var parseFloat protogen.GoIdent = protogen.GoIdent{
 	GoName:       "ParseFloat",
 	GoImportPath: "github.com/amaury95/protoc-gen-graphify/utils",
+}
+
+var json protogen.GoIdent = protogen.GoIdent{
+	GoName:       "json",
+	GoImportPath: "encoding/json",
 }
