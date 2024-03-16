@@ -205,25 +205,25 @@ func (*ignoreDesc) IsList() bool {
 
 var decodeBytes protogen.GoIdent = protogen.GoIdent{
 	GoName:       "DecodeBytes",
-	GoImportPath: "github.com/amaury95/protoc-gen-graphify/utils",
+	GoImportPath: protogen.GoImportPath("github.com/amaury95/protoc-gen-graphify/utils"),
 }
 
 var makeMap protogen.GoIdent = protogen.GoIdent{
 	GoName:       "MakeMap",
-	GoImportPath: "github.com/amaury95/protoc-gen-graphify/utils",
+	GoImportPath: protogen.GoImportPath("github.com/amaury95/protoc-gen-graphify/utils"),
 }
 
 var makeSlice protogen.GoIdent = protogen.GoIdent{
 	GoName:       "MakeSlice",
-	GoImportPath: "github.com/amaury95/protoc-gen-graphify/utils",
+	GoImportPath: protogen.GoImportPath("github.com/amaury95/protoc-gen-graphify/utils"),
 }
 
 var parseFloat protogen.GoIdent = protogen.GoIdent{
 	GoName:       "ParseFloat",
-	GoImportPath: "github.com/amaury95/protoc-gen-graphify/utils",
+	GoImportPath: protogen.GoImportPath("github.com/amaury95/protoc-gen-graphify/utils"),
 }
 
 var json protogen.GoIdent = protogen.GoIdent{
 	GoName:       "json",
-	// GoImportPath: "encoding/json",
+	GoImportPath: protogen.GoImportPath("encoding/json"),
 }
