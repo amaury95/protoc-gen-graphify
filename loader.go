@@ -10,7 +10,7 @@ import (
 func exposeMapBuilders(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
 	g.P(`
 	/*
-		Graphify loader module
+		Graphify unmarshaler
 	*/
 	`)
 	for _, message := range messages {
