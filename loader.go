@@ -20,7 +20,7 @@ func exposeMapBuilders(g *protogen.GeneratedFile, _ *protogen.File, messages ...
 
 		g.P("\n/* UnmarshalJSON unmarshaler for this. */")
 		g.P("func (o *", message.GoIdent, ") UnmarshalJSON(b []byte) error {")
-		g.P("if values, err := ", g.QualifiedGoIdent(unmarshalMap), ".Unmarshal(b, &values);err != nil {return err} else {o.LoadMap(values)}")
+		g.P("if values, err := ", g.QualifiedGoIdent(unmarshalMap), "(b);err != nil {return err} else {o.LoadMap(values)}")
 		g.P("return nil")
 		g.P("}")
 
