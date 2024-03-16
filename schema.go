@@ -17,7 +17,7 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		if message.Desc.IsMapEntry() {
 			continue
 		}
-		g.P("\n/* Specs ... */")
+		g.P("\n/* Schema ... */")
 		g.P("func (*", message.GoIdent, ") Schema() map[string]interface{} {")
 		g.P("return map[string]interface{} {")
 

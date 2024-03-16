@@ -49,18 +49,18 @@ func TrimTrailingComma(bb *bytes.Buffer) {
 	}
 }
 
-// UnmarshalMap ...
-func UnmarshalMap(data []byte) (res map[string]interface{}, err error) {
+// MapFromBytes ...
+func MapFromBytes(data []byte) (res map[string]interface{}, err error) {
 	err = json.Unmarshal(data, &res)
 	return
 }
 
-// IMapLoader ...
-type IMapLoader interface {
-	LoadMap(m map[string]interface{})
+// Unmarshaler ...
+type Unmarshaler interface {
+	UnmarshalMap(m map[string]interface{})
 }
 
-// ISchema ...
-type ISchema interface {
+// Message ...
+type Message interface {
 	Schema() map[string]interface{}
 }

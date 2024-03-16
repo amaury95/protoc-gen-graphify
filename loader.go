@@ -20,12 +20,12 @@ func exposeMapBuilders(g *protogen.GeneratedFile, _ *protogen.File, messages ...
 
 		g.P("\n/* UnmarshalJSON ...*/")
 		g.P("func (o *", message.GoIdent, ") UnmarshalJSON(b []byte) error {")
-		g.P("if values, err := ", g.QualifiedGoIdent(unmarshalMap), "(b);err != nil {return err} else {o.LoadMap(values)}")
+		g.P("if values, err := ", g.QualifiedGoIdent(toMap), "(b);err != nil {return err} else {o.UnmarshalMap(values)}")
 		g.P("return nil")
 		g.P("}")
 
-		g.P("\n/* LoadMap populates struct fields from a map, handling decoding for special fields. */")
-		g.P("func (o *", message.GoIdent, ") LoadMap(values map[string]interface{}) {")
+		g.P("\n/* UnmarshalMap populates struct fields from a map, handling decoding for special fields. */")
+		g.P("func (o *", message.GoIdent, ") UnmarshalMap(values map[string]interface{}) {")
 		for _, field := range message.Fields {
 			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 				continue
@@ -50,7 +50,7 @@ func fetchOneof(g *protogen.GeneratedFile, field *protogen.Oneof, recipient, ass
 		}
 		g.P("if val , ok := _opt[\"", oneofField.GoName, "\"].(map[string]interface{}); ok {")
 		g.P("field := new(", g.QualifiedGoIdent(oneofField.Message.GoIdent), ")")
-		g.P("field.LoadMap(val)")
+		g.P("field.UnmarshalMap(val)")
 		g.P(recipient, assign, "&", oneofField.GoIdent, "{", oneofField.GoName, ":field}")
 		g.P("}")
 	}
@@ -122,7 +122,7 @@ func fetchField_Exportable(export bool, g *protogen.GeneratedFile, field *protog
 func assignMessage(_ bool, g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
 	g.P(join("if val , ok := ", identifier, ".(map[string]interface{}); ok {")...)
 	g.P("field := new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
-	g.P("field.LoadMap(val)")
+	g.P("field.UnmarshalMap(val)")
 	g.P(recipient, assign, "field")
 	g.P("}")
 }
@@ -221,7 +221,7 @@ var parseFloat protogen.GoIdent = protogen.GoIdent{
 	GoImportPath: protogen.GoImportPath("github.com/amaury95/protoc-gen-graphify/utils"),
 }
 
-var unmarshalMap protogen.GoIdent = protogen.GoIdent{
-	GoName:       "UnmarshalMap",
+var toMap protogen.GoIdent = protogen.GoIdent{
+	GoName:       "MapFromBytes",
 	GoImportPath: protogen.GoImportPath("github.com/amaury95/protoc-gen-graphify/utils"),
 }
