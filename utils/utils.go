@@ -3,6 +3,7 @@ package utils
 import (
 	"bytes"
 	"encoding/base64"
+	"encoding/json"
 	"reflect"
 	"strconv"
 )
@@ -46,6 +47,12 @@ func TrimTrailingComma(bb *bytes.Buffer) {
 		// Remove the last byte
 		bb.Truncate(bb.Len() - 1)
 	}
+}
+
+// UnmarshalMap ...
+func UnmarshalMap(data []byte) (res map[string]interface{}, err error) {
+	err = json.Unmarshal(data, &res)
+	return
 }
 
 // IMapLoader ...

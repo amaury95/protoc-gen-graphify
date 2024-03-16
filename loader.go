@@ -20,9 +20,7 @@ func exposeMapBuilders(g *protogen.GeneratedFile, _ *protogen.File, messages ...
 
 		g.P("\n/* UnmarshalJSON unmarshaler for this. */")
 		g.P("func (o *", message.GoIdent, ") UnmarshalJSON(b []byte) error {")
-		g.P("var values map[string]interface{}")
-		g.P("if err := ", g.QualifiedGoIdent(json), ".Unmarshal(b, &values);err != nil {return err}")
-		g.P("o.LoadMap(values)")
+		g.P("if values, err := ", g.QualifiedGoIdent(unmarshalMap), ".Unmarshal(b, &values);err != nil {return err} else {o.LoadMap(values)}")
 		g.P("return nil")
 		g.P("}")
 
@@ -223,7 +221,7 @@ var parseFloat protogen.GoIdent = protogen.GoIdent{
 	GoImportPath: protogen.GoImportPath("github.com/amaury95/protoc-gen-graphify/utils"),
 }
 
-var json protogen.GoIdent = protogen.GoIdent{
-	GoName:       "json",
-	GoImportPath: protogen.GoImportPath("encoding/json"),
+var unmarshalMap protogen.GoIdent = protogen.GoIdent{
+	GoName:       "UnmarshalMap",
+	GoImportPath: protogen.GoImportPath("github.com/amaury95/protoc-gen-graphify/utils"),
 }
