@@ -225,5 +225,5 @@ var parseFloat protogen.GoIdent = protogen.GoIdent{
 
 var json protogen.GoIdent = protogen.GoIdent{
 	GoName:       "json",
-	GoImportPath: "encoding/json",
+	// GoImportPath: "encoding/json",
 }
