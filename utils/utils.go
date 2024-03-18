@@ -64,3 +64,24 @@ type Unmarshaler interface {
 type Message interface {
 	Schema() map[string]interface{}
 }
+
+// Map ...
+type Map struct {
+	values map[string]interface{}
+	bytes  []byte
+}
+
+// Values ...
+func (m *Map) Values() map[string]interface{} { return m.values }
+
+// Bytes ...
+func (m *Map) Bytes() []byte { return m.bytes }
+
+func (m *Map) UnmarshalJSON(b []byte) error {
+	m.bytes = b
+	return json.Unmarshal(b, &m.values)
+}
+
+func (m *Map) MarshalJSON() ([]byte, error) {
+	return json.Marshal(m.values)
+}
