@@ -72,6 +72,33 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		g.P("Description: \"\",")
 		g.P("})")
 	}
+
+	for _, field := range walkEnums(messages) {
+		if field.Desc.Kind() != protoreflect.EnumKind {
+			continue
+		}
+		g.P(`
+		
+		`)
+		g.P("var ",field.GoName," = ",g.QualifiedGoIdent(NewEnum),"(",g.QualifiedGoIdent(EnumConfig),"{")
+			// g.P("Name: \"PetType\",")
+			// g.P("Values: graphql.EnumValueConfigMap{")
+			// 	g.P("\"DOG\": &graphql.EnumValueConfig{")
+			// 		g.P("Value: \"DOG\",")
+			// 	g.P("},")
+			// 	g.P("\"CAT\": &graphql.EnumValueConfig{")
+			// 		g.P("Value: \"CAT\",")
+			// 	g.P("},")
+			// g.P("},")
+		g.P("})")
+		// for index, option := range field.Enum.Values {
+
+		// }
+	}
+}
+
+func walkEnums(messages []*protogen.Message) []*protogen.Field {
+	panic("unimplemented")
 }
 
 func getFieldType(g *protogen.GeneratedFile, field *protogen.Field) string {
@@ -174,6 +201,26 @@ var NewScalar protogen.GoIdent = protogen.GoIdent{
 
 var ScalarConfig protogen.GoIdent = protogen.GoIdent{
 	GoName:       "ScalarConfig",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var NewEnum protogen.GoIdent = protogen.GoIdent{
+	GoName:       "NewEnum",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var EnumConfig protogen.GoIdent = protogen.GoIdent{
+	GoName:       "EnumConfig",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var EnumValueConfigMap protogen.GoIdent = protogen.GoIdent{
+	GoName:       "EnumValueConfigMap",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var EnumValueConfig protogen.GoIdent = protogen.GoIdent{
+	GoName:       "EnumValueConfig",
 	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
 }
 
