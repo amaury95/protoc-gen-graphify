@@ -14,12 +14,12 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		}
 
 		g.P("\n/* Query ... */")
-		g.P("func (*", message.GoIdent, ") Query(name string) *", g.QualifiedGoIdent(Object), " {")
+		g.P("func (*", message.GoIdent, ") Query() *", g.QualifiedGoIdent(Object), " {")
 		g.P("return ", message.GoIdent, "Object")
 		g.P("}")
 
 		g.P("var ", message.GoIdent, "Object = ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
-		g.P("Name: name,")
+		g.P("Name: ", message.GoIdent, ",")
 		g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
 		for _, field := range message.Fields {
 			g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(Field), "{")
@@ -38,7 +38,7 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			g.P("Type: ", g.QualifiedGoIdent(NewUnion), "(", g.QualifiedGoIdent(UnionConfig), "{")
 			g.P("Types: []*graphql.Object{")
 			for _, option := range field.Fields {
-				g.P("new(", g.QualifiedGoIdent(option.Message.GoIdent), ").Query(name+\"", option.GoName, "\"),")
+				g.P(g.QualifiedGoIdent(option.Message.GoIdent), "Object,")
 			}
 			g.P("},")
 			g.P("ResolveType: func(p ", g.QualifiedGoIdent(ResolveTypeParams), ") *", g.QualifiedGoIdent(Object), " {")
