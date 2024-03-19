@@ -15,7 +15,10 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 
 		g.P("\n/* Query ... */")
 		g.P("func (*", message.GoIdent, ") Query(name string) *", g.QualifiedGoIdent(Object), " {")
-		g.P("return ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
+		g.P("return ", message.GoIdent, "Object")
+		g.P("}")
+
+		g.P("var ", message.GoIdent, "Object = ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
 		g.P("Name: name,")
 		g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
 		for _, field := range message.Fields {
@@ -54,7 +57,6 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		g.P("},")
 		g.P("Description: \"\",")
 		g.P("})")
-		g.P("}")
 	}
 }
 
