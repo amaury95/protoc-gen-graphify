@@ -35,7 +35,7 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			g.P("Type: ", g.QualifiedGoIdent(NewUnion), "(", g.QualifiedGoIdent(UnionConfig), "{")
 			g.P("Types: []*graphql.Object{")
 			for _, option := range field.Fields {
-				g.P("new(", option.GoName, ").Query(name+", option.GoName, "),")
+				g.P("new(", option.Desc.Name(), ").Query(name+\"", option.GoName, "\"),")
 			}
 			g.P("},")
 			// g.P("ResolveType: func(p graphql.ResolveTypeParams) *graphql.Object {")
