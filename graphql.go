@@ -39,11 +39,11 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			}
 			g.P("},")
 			g.P("ResolveType: func(p ", g.QualifiedGoIdent(ResolveTypeParams), ") *", g.QualifiedGoIdent(Object), " {")
-			g.P("switch p.Value.(type) {")
-			// 	g.P("case Dog:")
-			// 		g.P("return dogType")
-			// 	g.P("case Cat:")
-			// 		g.P("return catType")
+			g.P("switch v := p.Value.(type) {")
+			for _, option := range field.Fields {
+				g.P("case ", g.QualifiedGoIdent(option.Message.GoIdent), ":")
+				g.P("return nil")
+			}
 			g.P("default:")
 			g.P("return nil")
 			g.P("}")
