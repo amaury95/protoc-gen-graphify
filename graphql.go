@@ -79,7 +79,7 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 func getFieldType(g *protogen.GeneratedFile, field *protogen.Field) string {
 	switch field.Desc.Kind() {
 	case protoreflect.MessageKind:
-		// return g.QualifiedGoIdent()
+		return field.GoName + "_Object"
 	case protoreflect.BoolKind:
 		return g.QualifiedGoIdent(Boolean)
 	case protoreflect.EnumKind:
