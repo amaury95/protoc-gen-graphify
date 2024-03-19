@@ -49,7 +49,7 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 				continue
 			}
 			g.P("\"", field.GoName, "\":&", g.QualifiedGoIdent(Field), "{")
-			g.P("Name: \"", g.QualifiedGoIdent(field.GoIdent), "\"")
+			g.P("Name: \"", g.QualifiedGoIdent(field.GoIdent), "\",")
 			g.P("Type: ", g.QualifiedGoIdent(NewUnion), "(", g.QualifiedGoIdent(UnionConfig), "{")
 			g.P("Types: []*", g.QualifiedGoIdent(Object), "{")
 			for _, option := range field.Fields {
