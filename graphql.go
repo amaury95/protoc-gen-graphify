@@ -85,7 +85,7 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		g.P(`
 		
 		`)
-		g.P("var ", field.GoName, "_Enum = ", g.QualifiedGoIdent(NewEnum), "(", g.QualifiedGoIdent(EnumConfig), "{")
+		g.P("var ", g.QualifiedGoIdent(field.GoIdent), "_Enum = ", g.QualifiedGoIdent(NewEnum), "(", g.QualifiedGoIdent(EnumConfig), "{")
 		// g.P("Name: \"PetType\",")
 		// g.P("Values: graphql.EnumValueConfigMap{")
 		// 	g.P("\"DOG\": &graphql.EnumValueConfig{")
@@ -118,10 +118,10 @@ func getFieldType(g *protogen.GeneratedFile, field *protogen.Field) string {
 	switch field.Desc.Kind() {
 	case protoreflect.MessageKind:
 		return g.QualifiedGoIdent(field.Message.GoIdent) + "_Object"
+	case protoreflect.EnumKind:
+		return g.QualifiedGoIdent(field.GoIdent) + "_Enum"
 	case protoreflect.BoolKind:
 		return g.QualifiedGoIdent(Boolean)
-	case protoreflect.EnumKind:
-		// assignEnum(export, g, field, recipient, assign, identifier...)
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
 		return g.QualifiedGoIdent(Int)
 	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
