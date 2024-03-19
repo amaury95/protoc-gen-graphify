@@ -13,7 +13,7 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			continue
 		}
 		g.P("\n/* Object ... */")
-		g.P("func (*", message.GoIdent, ") Object() *", g.QualifiedGoIdent(Object), " {")
+		g.P("func (*", message.GoIdent, ") Object(name string) *", g.QualifiedGoIdent(Object), " {")
 		g.P("return ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{})")
 		g.P("}")
 	}
