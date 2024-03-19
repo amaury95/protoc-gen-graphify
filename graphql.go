@@ -22,6 +22,18 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			g.P("\"", field.Desc.Name(), "\":&graphql.Field{")
 			g.P("},")
 		}
+		for _, field := range message.Oneofs {
+			if field.Desc.IsSynthetic() {
+				continue
+			}
+			g.P("\"", field.GoName, "\":&graphql.Field{")
+			g.P("},")
+			// g.P("\"", field.GoName, "\": map[string]interface{}{")
+			// for _, option := range field.Fields {
+			// 	g.P("\"", option.GoName, "\": new(", g.QualifiedGoIdent(option.Message.GoIdent), ").Schema(),")
+			// }
+			// g.P("},")
+		}
 		g.P("},")
 		g.P("Description: \"\",")
 		g.P("})")
