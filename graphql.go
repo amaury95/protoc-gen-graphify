@@ -33,6 +33,7 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 					g.P("Type: ", g.QualifiedGoIdent(NewList), "(", fieldType, "),")
 				} else {
 					g.P("Type: ", fieldType, ",")
+					
 				}
 			}
 			g.P()
