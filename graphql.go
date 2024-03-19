@@ -13,8 +13,8 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			continue
 		}
 
-		g.P("\n/* Object ... */")
-		g.P("func (*", message.GoIdent, ") Object(name string) *", g.QualifiedGoIdent(Object), " {")
+		g.P("\n/* Query ... */")
+		g.P("func (*", message.GoIdent, ") Query(name string) *", g.QualifiedGoIdent(Object), " {")
 		g.P("return ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
 		g.P("Name: name,")
 		g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
@@ -33,10 +33,11 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			// }
 			// g.P("},")
 			g.P("Type: ", g.QualifiedGoIdent(NewUnion), "(", g.QualifiedGoIdent(UnionConfig), "{")
-			// g.P("Types: []*graphql.Object{")
-			// 	g.P("dogType,")
-			// 	g.P("catType,")
-			// g.P("},")
+			g.P("Types: []*graphql.Object{")
+			for _, option := range field.Fields {
+				g.P("new(", option.GoName, ").Query(name+", option.GoName, "),")
+			}
+			g.P("},")
 			// g.P("ResolveType: func(p graphql.ResolveTypeParams) *graphql.Object {")
 			// 	g.P("switch p.Value.(type) {")
 			// 	g.P("case Dog:")
@@ -99,6 +100,16 @@ var NewUnion protogen.GoIdent = protogen.GoIdent{
 
 var UnionConfig protogen.GoIdent = protogen.GoIdent{
 	GoName:       "UnionConfig",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var NewScalar protogen.GoIdent = protogen.GoIdent{
+	GoName:       "NewScalar",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var ScalarConfig protogen.GoIdent = protogen.GoIdent{
+	GoName:       "ScalarConfig",
 	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
 }
 
