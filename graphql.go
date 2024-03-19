@@ -47,7 +47,7 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 				// 		g.P("return nil")
 				// 	g.P("}")
 				// g.P("},")
-			g.P("},")
+			g.P("}),")
 			g.P("},")
 		}
 		g.P("},")
