@@ -38,16 +38,16 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 				g.P("new(", g.QualifiedGoIdent(option.Message.GoIdent), ").Query(name+\"", option.GoName, "\"),")
 			}
 			g.P("},")
-			// g.P("ResolveType: func(p graphql.ResolveTypeParams) *graphql.Object {")
+			g.P("ResolveType: func(p ", g.QualifiedGoIdent(ResolveTypeParams), ") *", g.QualifiedGoIdent(Object), " {")
 			// 	g.P("switch p.Value.(type) {")
 			// 	g.P("case Dog:")
 			// 		g.P("return dogType")
 			// 	g.P("case Cat:")
 			// 		g.P("return catType")
 			// 	g.P("default:")
-			// 		g.P("return nil")
+			g.P("return nil")
 			// 	g.P("}")
-			// g.P("},")
+			g.P("},")
 			g.P("}),")
 			g.P("},")
 		}
@@ -115,5 +115,10 @@ var ScalarConfig protogen.GoIdent = protogen.GoIdent{
 
 var NewList protogen.GoIdent = protogen.GoIdent{
 	GoName:       "NewList",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var ResolveTypeParams protogen.GoIdent = protogen.GoIdent{
+	GoName:       "ResolveTypeParams",
 	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
 }
