@@ -25,7 +25,9 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		g.P("Name: \"", message.GoIdent, "\",")
 		g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
 		for _, field := range message.Fields {
-
+			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
+				continue
+			}
 			g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(Field), "{")
 			fieldType := getFieldType(g, field)
 			if fieldType != "" {
@@ -33,7 +35,7 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 					g.P("Type: ", g.QualifiedGoIdent(NewList), "(", fieldType, "),")
 				} else {
 					g.P("Type: ", fieldType, ",")
-					
+
 				}
 			}
 			g.P()
