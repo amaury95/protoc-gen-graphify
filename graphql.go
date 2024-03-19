@@ -49,6 +49,7 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 				continue
 			}
 			g.P("\"", field.GoName, "\":&", g.QualifiedGoIdent(Field), "{")
+			g.P("Name: \"", g.QualifiedGoIdent(field.GoIdent), "\"")
 			g.P("Type: ", g.QualifiedGoIdent(NewUnion), "(", g.QualifiedGoIdent(UnionConfig), "{")
 			g.P("Types: []*", g.QualifiedGoIdent(Object), "{")
 			for _, option := range field.Fields {
@@ -89,7 +90,7 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		g.P("Name: \"", field.GoName, "\",")
 		g.P("Values: ", g.QualifiedGoIdent(EnumValueConfigMap), "{")
 		for index, option := range field.Enum.Values {
-			g.P("\"", index, "\": &", g.QualifiedGoIdent(EnumValueConfig), "{ Value: \"", option.Desc.Name(), "\" },")
+			g.P("\"", option.Desc.Name(), "\": &", g.QualifiedGoIdent(EnumValueConfig), "{ Value: \"", index, "\" },")
 		}
 		g.P("},")
 		g.P("})")
