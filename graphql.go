@@ -19,34 +19,34 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		g.P("Name: name,")
 		g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
 		for _, field := range message.Fields {
-			g.P("\"", field.Desc.Name(), "\":&graphql.Field{")
+			g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(Field), "{")
 			g.P("},")
 		}
 		for _, field := range message.Oneofs {
 			if field.Desc.IsSynthetic() {
 				continue
 			}
-			g.P("\"", field.GoName, "\":&graphql.Field{")
+			g.P("\"", field.GoName, "\":&", g.QualifiedGoIdent(Field), "{")
 			// g.P("\"", field.GoName, "\": map[string]interface{}{")
 			// for _, option := range field.Fields {
 			// 	g.P("\"", option.GoName, "\": new(", g.QualifiedGoIdent(option.Message.GoIdent), ").Schema(),")
 			// }
 			// g.P("},")
-			g.P("Type: graphql.NewUnion(graphql.UnionConfig{")
-				// g.P("Types: []*graphql.Object{")
-				// 	g.P("dogType,")
-				// 	g.P("catType,")
-				// g.P("},")
-				// g.P("ResolveType: func(p graphql.ResolveTypeParams) *graphql.Object {")
-				// 	g.P("switch p.Value.(type) {")
-				// 	g.P("case Dog:")
-				// 		g.P("return dogType")
-				// 	g.P("case Cat:")
-				// 		g.P("return catType")
-				// 	g.P("default:")
-				// 		g.P("return nil")
-				// 	g.P("}")
-				// g.P("},")
+			g.P("Type: ", g.QualifiedGoIdent(NewUnion), "(", g.QualifiedGoIdent(UnionConfig), "{")
+			// g.P("Types: []*graphql.Object{")
+			// 	g.P("dogType,")
+			// 	g.P("catType,")
+			// g.P("},")
+			// g.P("ResolveType: func(p graphql.ResolveTypeParams) *graphql.Object {")
+			// 	g.P("switch p.Value.(type) {")
+			// 	g.P("case Dog:")
+			// 		g.P("return dogType")
+			// 	g.P("case Cat:")
+			// 		g.P("return catType")
+			// 	g.P("default:")
+			// 		g.P("return nil")
+			// 	g.P("}")
+			// g.P("},")
 			g.P("}),")
 			g.P("},")
 		}
