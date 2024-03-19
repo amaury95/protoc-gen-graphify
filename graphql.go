@@ -73,23 +73,28 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		g.P("})")
 	}
 
+	usedEnums := map[string]bool{}
 	for _, field := range walkEnums(messages) {
-		if field.Desc.Kind() != protoreflect.EnumKind {
+		// avoid repeated enums
+		if usedEnums[field.GoName] {
 			continue
 		}
+		usedEnums[field.GoName] = true
+
+		// generate enum field
 		g.P(`
 		
 		`)
-		g.P("var ",field.GoName," = ",g.QualifiedGoIdent(NewEnum),"(",g.QualifiedGoIdent(EnumConfig),"{")
-			// g.P("Name: \"PetType\",")
-			// g.P("Values: graphql.EnumValueConfigMap{")
-			// 	g.P("\"DOG\": &graphql.EnumValueConfig{")
-			// 		g.P("Value: \"DOG\",")
-			// 	g.P("},")
-			// 	g.P("\"CAT\": &graphql.EnumValueConfig{")
-			// 		g.P("Value: \"CAT\",")
-			// 	g.P("},")
-			// g.P("},")
+		g.P("var ", field.GoName, " = ", g.QualifiedGoIdent(NewEnum), "(", g.QualifiedGoIdent(EnumConfig), "{")
+		// g.P("Name: \"PetType\",")
+		// g.P("Values: graphql.EnumValueConfigMap{")
+		// 	g.P("\"DOG\": &graphql.EnumValueConfig{")
+		// 		g.P("Value: \"DOG\",")
+		// 	g.P("},")
+		// 	g.P("\"CAT\": &graphql.EnumValueConfig{")
+		// 		g.P("Value: \"CAT\",")
+		// 	g.P("},")
+		// g.P("},")
 		g.P("})")
 		// for index, option := range field.Enum.Values {
 
@@ -97,8 +102,16 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 	}
 }
 
-func walkEnums(messages []*protogen.Message) []*protogen.Field {
-	panic("unimplemented")
+func walkEnums(messages []*protogen.Message) (result []*protogen.Field) {
+	for _, message := range messages {
+		for _, field := range message.Fields {
+			if field.Desc.Kind() == protoreflect.EnumKind {
+				result = append(result, field)
+			}
+		}
+		result = append(result, walkEnums(message.Messages)...)
+	}
+	return
 }
 
 func getFieldType(g *protogen.GeneratedFile, field *protogen.Field) string {
