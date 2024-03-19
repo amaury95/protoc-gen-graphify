@@ -18,6 +18,10 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		g.P("return ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
 		g.P("Name: name,")
 		g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
+		for _, field := range message.Fields {
+			g.P("\"", field.Desc.Name(), "\":&graphql.Field{")
+			g.P("},")
+		}
 		g.P("},")
 		g.P("Description: \"\",")
 		g.P("})")
