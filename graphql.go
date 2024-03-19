@@ -36,16 +36,16 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			// }
 			// g.P("},")
 			g.P("Type: ", g.QualifiedGoIdent(NewUnion), "(", g.QualifiedGoIdent(UnionConfig), "{")
-			g.P("Types: []*",g.QualifiedGoIdent(Object),"{")
+			g.P("Types: []*", g.QualifiedGoIdent(Object), "{")
 			for _, option := range field.Fields {
 				g.P(g.QualifiedGoIdent(option.Message.GoIdent), "_Object,")
 			}
 			g.P("},")
 			g.P("ResolveType: func(p ", g.QualifiedGoIdent(ResolveTypeParams), ") *", g.QualifiedGoIdent(Object), " {")
-			g.P("switch v := p.Value.(type) {")
+			g.P("switch   p.Value.(type) {")
 			for _, option := range field.Fields {
 				g.P("case ", g.QualifiedGoIdent(option.Message.GoIdent), ":")
-				g.P("return nil")
+				g.P("return ", g.QualifiedGoIdent(option.Message.GoIdent), "_Object")
 			}
 			g.P("default:")
 			g.P("return nil")
