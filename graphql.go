@@ -12,9 +12,15 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		if message.Desc.IsMapEntry() {
 			continue
 		}
+
 		g.P("\n/* Object ... */")
 		g.P("func (*", message.GoIdent, ") Object(name string) *", g.QualifiedGoIdent(Object), " {")
-		g.P("return ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{})")
+		g.P("return ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
+		g.P("Name: name,")
+		g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
+		g.P("},")
+		g.P("Description: \"\",")
+		g.P("})")
 		g.P("}")
 	}
 }
