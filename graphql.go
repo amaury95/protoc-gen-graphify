@@ -28,6 +28,9 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 				continue
 			}
+			if field.Desc.IsMap() {
+				continue // todo:
+			}
 			g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(Field), "{")
 			fieldType := getFieldType(g, field)
 			if fieldType != "" {
@@ -46,11 +49,6 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 				continue
 			}
 			g.P("\"", field.GoName, "\":&", g.QualifiedGoIdent(Field), "{")
-			// g.P("\"", field.GoName, "\": map[string]interface{}{")
-			// for _, option := range field.Fields {
-			// 	g.P("\"", option.GoName, "\": new(", g.QualifiedGoIdent(option.Message.GoIdent), ").Schema(),")
-			// }
-			// g.P("},")
 			g.P("Type: ", g.QualifiedGoIdent(NewUnion), "(", g.QualifiedGoIdent(UnionConfig), "{")
 			g.P("Types: []*", g.QualifiedGoIdent(Object), "{")
 			for _, option := range field.Fields {
