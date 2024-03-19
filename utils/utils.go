@@ -93,8 +93,8 @@ func (m *Map) MarshalJSON() ([]byte, error) {
 // GraphqlObject ...
 type GraphqlObject interface {
 	// Query ...
-	Query(name string) *graphql.Object
+	QueryObject() *graphql.Object
 
 	// Mutation ...
-	Mutation(name string) *graphql.Object
+	MutationObject() *graphql.Object
 }

@@ -16,8 +16,8 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			continue
 		}
 
-		g.P("\n/* Query ... */")
-		g.P("func (*", message.GoIdent, ") Query() *", g.QualifiedGoIdent(Object), " {")
+		g.P("\n/* QueryObject ... */")
+		g.P("func (*", message.GoIdent, ") QueryObject() *", g.QualifiedGoIdent(Object), " {")
 		g.P("return ", message.GoIdent, "_Object")
 		g.P("}")
 
