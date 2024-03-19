@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"reflect"
 	"strconv"
+
+	"github.com/graphql-go/graphql"
 )
 
 // ParseFloat ...
@@ -77,11 +79,18 @@ func (m *Map) Values() map[string]interface{} { return m.values }
 // Bytes ...
 func (m *Map) Bytes() []byte { return m.bytes }
 
+// UnmarshalJSON ...
 func (m *Map) UnmarshalJSON(b []byte) error {
 	m.bytes = b
 	return json.Unmarshal(b, &m.values)
 }
 
+// MarshalJSON ...
 func (m *Map) MarshalJSON() ([]byte, error) {
 	return json.Marshal(m.values)
+}
+
+// GraphqlObject ...
+type GraphqlObject interface {
+	Object(name string) *graphql.Object
 }
