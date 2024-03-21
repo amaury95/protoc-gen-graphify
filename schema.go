@@ -20,7 +20,7 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		g.P("\n/* Schema ... */")
 		g.P("func (*", message.GoIdent, ") Schema() map[string]interface{} {")
 		g.P("return map[string]interface{} {")
-
+		g.P("\"name\": \"", message.GoIdent, "\"")
 		g.P("\"fields\": map[string] interface{} {")
 
 		// fields
