@@ -29,16 +29,7 @@ func generateObjects(g *protogen.GeneratedFile, _ *protogen.File, messages ...*p
 				continue
 			}
 			g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(Field), "{")
-			fieldType := getFieldType(g, field)
-			if fieldType != "" {
-				if field.Desc.IsMap() {
-					g.P("Type: ", g.QualifiedGoIdent(JSON), ",")
-				} else if field.Desc.IsList() {
-					g.P("Type: ", g.QualifiedGoIdent(NewList), "(", fieldType, "),")
-				} else {
-					g.P("Type: ", fieldType, ",")
-				}
-			}
+			fieldType(g, field)
 			g.P()
 			g.P("},")
 		}
@@ -83,11 +74,13 @@ func generateObjects(g *protogen.GeneratedFile, _ *protogen.File, messages ...*p
 				g.P("var ", g.QualifiedGoIdent(field.GoIdent), "Option = ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
 				g.P("Name: \"", g.QualifiedGoIdent(field.GoIdent), "\",")
 				g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
+				g.P("\"", field.GoName, "\": &", g.QualifiedGoIdent(Field), "{")
 				if field.Message != nil {
-					g.P("\"", field.GoName, "\": &", g.QualifiedGoIdent(Field), "{")
 					g.P("Type: ", g.QualifiedGoIdent(field.Message.GoIdent), "_Object,")
-					g.P("},")
+				} else {
+					fieldType(g, field)
 				}
+				g.P("},")
 				g.P("},")
 				g.P("})")
 			}
@@ -127,6 +120,19 @@ func walkEnums(messages []*protogen.Message) (result []*protogen.Field) {
 		result = append(result, walkEnums(message.Messages)...)
 	}
 	return
+}
+
+func fieldType(g *protogen.GeneratedFile, field *protogen.Field) {
+	fT := getFieldType(g, field)
+	if fT != "" {
+		if field.Desc.IsMap() {
+			g.P("Type: ", g.QualifiedGoIdent(JSON), ",")
+		} else if field.Desc.IsList() {
+			g.P("Type: ", g.QualifiedGoIdent(NewList), "(", fT, "),")
+		} else {
+			g.P("Type: ", fT, ",")
+		}
+	}
 }
 
 func getFieldType(g *protogen.GeneratedFile, field *protogen.Field) string {
