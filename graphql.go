@@ -43,19 +43,14 @@ func generateObjects(g *protogen.GeneratedFile, _ *protogen.File, messages ...*p
 			g.P("Name: \"", g.QualifiedGoIdent(field.GoIdent), "\",")
 			g.P("Types: []*", g.QualifiedGoIdent(Object), "{")
 			for _, option := range field.Fields {
-				if option.Message != nil {
-
-					g.P(g.QualifiedGoIdent(option.Message.GoIdent), "_Object,")
-				}
+				g.P("option_", g.QualifiedGoIdent(option.GoIdent), "_Object,")
 			}
 			g.P("},")
 			g.P("ResolveType: func(p ", g.QualifiedGoIdent(ResolveTypeParams), ") *", g.QualifiedGoIdent(Object), " {")
 			g.P("switch   p.Value.(type) {")
 			for _, option := range field.Fields {
-				if option.Message != nil {
-					g.P("case ", g.QualifiedGoIdent(option.Message.GoIdent), ":")
-					g.P("return ", g.QualifiedGoIdent(option.Message.GoIdent), "_Object")
-				}
+				g.P("case ", g.QualifiedGoIdent(option.GoIdent), ":")
+				g.P("return option_", g.QualifiedGoIdent(option.GoIdent))
 			}
 			g.P("default:")
 			g.P("return nil")
@@ -69,16 +64,16 @@ func generateObjects(g *protogen.GeneratedFile, _ *protogen.File, messages ...*p
 		g.P("})")
 
 		for _, oneof := range message.Oneofs {
-			for _, field := range oneof.Fields {
+			for _, option := range oneof.Fields {
 				g.P()
-				g.P("var option_", g.QualifiedGoIdent(field.GoIdent), " = ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
-				g.P("Name: \"", g.QualifiedGoIdent(field.GoIdent), "\",")
+				g.P("var option_", g.QualifiedGoIdent(option.GoIdent), " = ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
+				g.P("Name: \"", g.QualifiedGoIdent(option.GoIdent), "\",")
 				g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
-				g.P("\"", field.GoName, "\": &", g.QualifiedGoIdent(Field), "{")
-				if field.Message != nil {
-					g.P("Type: ", g.QualifiedGoIdent(field.Message.GoIdent), "_Object,")
+				g.P("\"", option.GoName, "\": &", g.QualifiedGoIdent(Field), "{")
+				if option.Message != nil {
+					g.P("Type: ", g.QualifiedGoIdent(option.Message.GoIdent), "_Object,")
 				} else {
-					fieldType(g, field)
+					fieldType(g, option)
 				}
 				g.P("},")
 				g.P("},")
