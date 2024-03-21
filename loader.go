@@ -140,7 +140,7 @@ func assignField(export bool, g *protogen.GeneratedFile, field *protogen.Field, 
 	if export {
 		g.P("var ", recipient, " ", typeTo)
 	}
-	if field.Desc.HasPresence() {
+	if field.Desc.HasPresence() && !export {
 		g.P(join("if val, ok := ", identifier, ".(", typeTo, "); ok {")...)
 		g.P(recipient, assign, "&val")
 		g.P("}")
@@ -155,7 +155,7 @@ func parseField(export bool, g *protogen.GeneratedFile, field *protogen.Field, t
 	if export {
 		g.P("var ", recipient, " ", typeTo)
 	}
-	if field.Desc.HasPresence() {
+	if field.Desc.HasPresence() && !export {
 		g.P(join("if val, ok := ", identifier, ".(", typeFrom, "); ok {")...)
 		g.P("tmp := ", typeTo, "(val)")
 		g.P(recipient, assign, "&tmp")
