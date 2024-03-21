@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"reflect"
@@ -45,14 +44,6 @@ func DecodeBytes(input string) []byte {
 	return []byte(input)
 }
 
-// TrimTrailingComma ...
-func TrimTrailingComma(bb *bytes.Buffer) {
-	if bb.Len() > 0 && bb.Bytes()[bb.Len()-1] == ',' {
-		// Remove the last byte
-		bb.Truncate(bb.Len() - 1)
-	}
-}
-
 // MapFromBytes ...
 func MapFromBytes(data []byte) (res map[string]interface{}, err error) {
 	err = json.Unmarshal(data, &res)
@@ -67,29 +58,6 @@ type Unmarshaler interface {
 // Message ...
 type Message interface {
 	Schema() map[string]interface{}
-}
-
-// Map ...
-type Map struct {
-	values map[string]interface{}
-	bytes  []byte
-}
-
-// Values ...
-func (m *Map) Values() map[string]interface{} { return m.values }
-
-// Bytes ...
-func (m *Map) Bytes() []byte { return m.bytes }
-
-// UnmarshalJSON ...
-func (m *Map) UnmarshalJSON(b []byte) error {
-	m.bytes = b
-	return json.Unmarshal(b, &m.values)
-}
-
-// MarshalJSON ...
-func (m *Map) MarshalJSON() ([]byte, error) {
-	return json.Marshal(m.values)
 }
 
 // GraphqlQuery ...
@@ -163,10 +131,7 @@ var Bytes = graphql.NewScalar(graphql.ScalarConfig{
 	ParseValue: func(value interface{}) interface{} {
 		switch value := value.(type) {
 		case string:
-			if decoded, err := base64.StdEncoding.DecodeString(value); err == nil {
-				return decoded
-			}
-			return []byte(value)
+			return DecodeBytes(value)
 		default:
 			return nil
 		}
