@@ -155,16 +155,16 @@ func parseField(export bool, g *protogen.GeneratedFile, field *protogen.Field, t
 	if export {
 		g.P("var ", recipient, " ", typeTo)
 	}
-	if field.Desc.HasPresence() {
-		g.P(join("if val, ok := ", identifier, ".(", typeFrom, "); ok {")...)
-		g.P("tmp := ", typeTo, "(val)")
-		g.P(recipient, assign, "&tmp")
-		g.P("}")
-	} else {
+	// if field.Desc.HasPresence() {
+	// 	g.P(join("if val, ok := ", identifier, ".(", typeFrom, "); ok {")...)
+	// 	g.P("tmp := ", typeTo, "(val)")
+	// 	g.P(recipient, assign, "&tmp")
+	// 	g.P("}")
+	// } else {
 		g.P(join("if val, ok := ", identifier, ".(", typeFrom, "); ok {")...)
 		g.P(recipient, assign, typeTo, "(val)")
 		g.P("}")
-	}
+	// }
 }
 func parseBytes(export bool, g *protogen.GeneratedFile, _ *protogen.Field, recipient, assign string, identifier ...interface{}) {
 	if export {
