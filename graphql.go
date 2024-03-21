@@ -34,11 +34,12 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(Field), "{")
 			fieldType := getFieldType(g, field)
 			if fieldType != "" {
-				if field.Desc.IsList() {
+				if field.Desc.IsMap() {
+					g.P("Type: ", g.QualifiedGoIdent(JSON), ",")
+				} else if field.Desc.IsList() {
 					g.P("Type: ", g.QualifiedGoIdent(NewList), "(", fieldType, "),")
 				} else {
 					g.P("Type: ", fieldType, ",")
-
 				}
 			}
 			g.P()
@@ -175,6 +176,11 @@ var ID protogen.GoIdent = protogen.GoIdent{
 var DateTime protogen.GoIdent = protogen.GoIdent{
 	GoName:       "DateTime",
 	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var JSON protogen.GoIdent = protogen.GoIdent{
+	GoName:       "JSON",
+	GoImportPath: protogen.GoImportPath("github.com/amaury95/protoc-gen-graphify/utils"),
 }
 
 var Object protogen.GoIdent = protogen.GoIdent{
