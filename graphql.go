@@ -131,6 +131,9 @@ func fieldType(g *protogen.GeneratedFile, field *protogen.Field) {
 }
 
 func getFieldType(g *protogen.GeneratedFile, field *protogen.Field) string {
+	if field.Desc.Name() == "_key" {
+		return g.QualifiedGoIdent(ID)
+	}
 	switch field.Desc.Kind() {
 	case protoreflect.MessageKind:
 		return g.QualifiedGoIdent(field.Message.GoIdent) + "_Object"
@@ -168,6 +171,10 @@ var Field protogen.GoIdent = protogen.GoIdent{
 	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
 }
 
+var ID protogen.GoIdent = protogen.GoIdent{
+	GoName:       "ID",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
 var String protogen.GoIdent = protogen.GoIdent{
 	GoName:       "String",
 	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
@@ -185,11 +192,6 @@ var Float protogen.GoIdent = protogen.GoIdent{
 
 var Boolean protogen.GoIdent = protogen.GoIdent{
 	GoName:       "Boolean",
-	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
-}
-
-var ID protogen.GoIdent = protogen.GoIdent{
-	GoName:       "ID",
 	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
 }
 
