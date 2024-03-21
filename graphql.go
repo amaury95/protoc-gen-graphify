@@ -49,7 +49,7 @@ func generateObjects(g *protogen.GeneratedFile, _ *protogen.File, messages ...*p
 			g.P("ResolveType: func(p ", g.QualifiedGoIdent(ResolveTypeParams), ") *", g.QualifiedGoIdent(Object), " {")
 			g.P("switch   p.Value.(type) {")
 			for _, option := range field.Fields {
-				g.P("case ", g.QualifiedGoIdent(option.GoIdent), ":")
+				g.P("case *", g.QualifiedGoIdent(option.GoIdent), ":")
 				g.P("return option_", g.QualifiedGoIdent(option.GoIdent))
 			}
 			g.P("default:")
