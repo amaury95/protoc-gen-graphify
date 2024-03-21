@@ -72,8 +72,8 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 
 			g.P("\"", field.GoName, "\": map[string]interface{}{")
 			for _, option := range field.Fields {
+				g.P("\"__typename\": \"", g.QualifiedGoIdent(option.GoIdent), "\",")
 				if option.Message != nil {
-
 					g.P("\"", option.GoName, "\": new(", g.QualifiedGoIdent(option.Message.GoIdent), ").Schema(),")
 				} else {
 					g.P("\"", option.GoName, "\": map[string]interface{} {")
