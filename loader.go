@@ -52,7 +52,7 @@ func fetchOneof(g *protogen.GeneratedFile, field *protogen.Oneof, recipient, ass
 			g.P(recipient, assign, "&", oneofField.GoIdent, "{", oneofField.GoName, ":field}")
 			g.P("}")
 		} else {
-			g.P(recipient, assign, g.QualifiedGoIdent(oneofField.Message.GoIdent))
+			// g.P(recipient, assign, g.QualifiedGoIdent(oneofField.Message.GoIdent))
 		}
 
 	}
