@@ -78,7 +78,7 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 				} else {
 					g.P("\"", option.GoName, "\": map[string]interface{} {")
 					writeField(g, option)
-					g.P("}")
+					g.P("},")
 				}
 			}
 			g.P("},")
