@@ -84,7 +84,7 @@ func generateObjects(g *protogen.GeneratedFile, _ *protogen.File, messages ...*p
 				g.P("Name: \"", g.QualifiedGoIdent(field.GoIdent), "\",")
 				g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
 				if field.Message != nil {
-					g.P("\"Novel\": &", g.QualifiedGoIdent(Field), "{Type: ", g.QualifiedGoIdent(field.Message.GoIdent), "_Object},")
+					g.P("\"",field.GoName,"\": &", g.QualifiedGoIdent(Field), "{Type: ", g.QualifiedGoIdent(field.Message.GoIdent), "_Object},")
 				}
 				g.P("},")
 				g.P("})")
