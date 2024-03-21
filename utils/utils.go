@@ -163,11 +163,10 @@ var Bytes = graphql.NewScalar(graphql.ScalarConfig{
 	ParseValue: func(value interface{}) interface{} {
 		switch value := value.(type) {
 		case string:
-			decoded, err := base64.StdEncoding.DecodeString(value)
-			if err != nil {
-				return nil
+			if decoded, err := base64.StdEncoding.DecodeString(value); err == nil {
+				return decoded
 			}
-			return decoded
+			return []byte(value)
 		default:
 			return nil
 		}
