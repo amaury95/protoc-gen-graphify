@@ -52,8 +52,8 @@ func main() {
 
 				g := gengo.GenerateFile(gen, f)
 
-				generateObject(g, f, messages...)
-				generateSchema(g, f, messages...)
+				// generateObject(g, f, messages...)
+				// generateSchema(g, f, messages...)
 				exposeMapBuilders(g, f, messages...)
 			}
 		}
