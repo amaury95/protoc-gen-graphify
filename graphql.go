@@ -153,7 +153,7 @@ func getFieldType(g *protogen.GeneratedFile, field *protogen.Field) string {
 	case protoreflect.StringKind:
 		return g.QualifiedGoIdent(String)
 	case protoreflect.BytesKind:
-		return g.QualifiedGoIdent(String)
+		return g.QualifiedGoIdent(Bytes)
 	}
 	return ""
 }
@@ -200,6 +200,11 @@ var DateTime protogen.GoIdent = protogen.GoIdent{
 
 var JSON protogen.GoIdent = protogen.GoIdent{
 	GoName:       "JSON",
+	GoImportPath: protogen.GoImportPath("github.com/amaury95/protoc-gen-graphify/utils"),
+}
+
+var Bytes protogen.GoIdent = protogen.GoIdent{
+	GoName:       "Bytes",
 	GoImportPath: protogen.GoImportPath("github.com/amaury95/protoc-gen-graphify/utils"),
 }
 

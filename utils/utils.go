@@ -115,11 +115,11 @@ var JSON = graphql.NewScalar(
 		ParseValue: func(value interface{}) interface{} {
 			return value
 		},
-		ParseLiteral: parseLiteral,
+		ParseLiteral: parseLiteralJSON,
 	},
 )
 
-func parseLiteral(astValue ast.Value) interface{} {
+func parseLiteralJSON(astValue ast.Value) interface{} {
 	kind := astValue.GetKind()
 
 	switch kind {
@@ -134,16 +134,45 @@ func parseLiteral(astValue ast.Value) interface{} {
 	case kinds.ObjectValue:
 		obj := make(map[string]interface{})
 		for _, v := range astValue.GetValue().([]*ast.ObjectField) {
-			obj[v.Name.Value] = parseLiteral(v.Value)
+			obj[v.Name.Value] = parseLiteralJSON(v.Value)
 		}
 		return obj
 	case kinds.ListValue:
 		list := make([]interface{}, 0)
 		for _, v := range astValue.GetValue().([]ast.Value) {
-			list = append(list, parseLiteral(v))
+			list = append(list, parseLiteralJSON(v))
 		}
 		return list
 	default:
 		return nil
 	}
 }
+
+// Custom scalar type for []byte to base64 string and vice versa
+var Bytes = graphql.NewScalar(graphql.ScalarConfig{
+	Name:        "Bytes",
+	Description: "Bytes scalar to encode []byte to base64 string and decode base64 string to []byte",
+	Serialize: func(value interface{}) interface{} {
+		switch value := value.(type) {
+		case []byte:
+			return base64.StdEncoding.EncodeToString(value)
+		default:
+			return nil
+		}
+	},
+	ParseValue: func(value interface{}) interface{} {
+		switch value := value.(type) {
+		case string:
+			decoded, err := base64.StdEncoding.DecodeString(value)
+			if err != nil {
+				return nil
+			}
+			return decoded
+		default:
+			return nil
+		}
+	},
+	ParseLiteral: func(valueAST ast.Value) interface{} {
+		return nil
+	},
+})
