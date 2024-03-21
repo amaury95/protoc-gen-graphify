@@ -46,19 +46,25 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			if field.Desc.IsSynthetic() {
 				continue
 			}
+
 			g.P("\"", field.GoName, "\":&", g.QualifiedGoIdent(Field), "{")
 			g.P("Type: ", g.QualifiedGoIdent(NewUnion), "(", g.QualifiedGoIdent(UnionConfig), "{")
 			g.P("Name: \"", g.QualifiedGoIdent(field.GoIdent), "\",")
 			g.P("Types: []*", g.QualifiedGoIdent(Object), "{")
 			for _, option := range field.Fields {
-				g.P(g.QualifiedGoIdent(option.Message.GoIdent), "_Object,")
+				if option.Message != nil {
+
+					g.P(g.QualifiedGoIdent(option.Message.GoIdent), "_Object,")
+				}
 			}
 			g.P("},")
 			g.P("ResolveType: func(p ", g.QualifiedGoIdent(ResolveTypeParams), ") *", g.QualifiedGoIdent(Object), " {")
 			g.P("switch   p.Value.(type) {")
 			for _, option := range field.Fields {
-				g.P("case ", g.QualifiedGoIdent(option.Message.GoIdent), ":")
-				g.P("return ", g.QualifiedGoIdent(option.Message.GoIdent), "_Object")
+				if option.Message != nil {
+					g.P("case ", g.QualifiedGoIdent(option.Message.GoIdent), ":")
+					g.P("return ", g.QualifiedGoIdent(option.Message.GoIdent), "_Object")
+				}
 			}
 			g.P("default:")
 			g.P("return nil")
