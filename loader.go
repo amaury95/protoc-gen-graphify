@@ -33,9 +33,9 @@ func exposeMapBuilders(g *protogen.GeneratedFile, _ *protogen.File, messages ...
 			fetchField(g, field, "o."+field.GoName, " = ", "values[\"", field.Desc.Name(), "\"]")
 		}
 		for _, field := range message.Oneofs {
-			if field.Desc.IsSynthetic() {
-				continue
-			}
+			// if field.Desc.IsSynthetic() {
+			// 	continue
+			// }
 			fetchOneof(g, field, "o."+field.GoName, " = ", "values[\"", field.GoName, "\"]")
 		}
 		g.P("}")
