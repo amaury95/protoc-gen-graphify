@@ -5,7 +5,7 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
+func generateObjects(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
 	g.P(`
 	/*
 		Graphql object
@@ -76,6 +76,10 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		g.P("},")
 		g.P("Description: \"\",")
 		g.P("})")
+
+		for _, oneof := range message.Oneofs {
+			g.P("var ", oneof.GoName, "__Object = ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{})")
+		}
 	}
 
 	usedEnums := map[string]bool{}
