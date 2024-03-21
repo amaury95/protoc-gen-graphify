@@ -20,7 +20,7 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		g.P("\n/* Schema ... */")
 		g.P("func (*", message.GoIdent, ") Schema() map[string]interface{} {")
 		g.P("return map[string]interface{} {")
-		g.P("\"name\": \"", message.GoIdent, "\",")
+		g.P("\"name\": \"", message.GoIdent, "\"")
 		g.P("\"fields\": map[string] interface{} {")
 
 		// fields
@@ -72,16 +72,14 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 
 			g.P("\"", field.GoName, "\": map[string]interface{}{")
 			for _, option := range field.Fields {
-				g.P("\"", option.GoName, "\": map[string]interface{}{")
-				g.P("\"__typename\": \"", g.QualifiedGoIdent(option.GoIdent), "\",")
 				if option.Message != nil {
-					g.P("\"schema\": new(", g.QualifiedGoIdent(option.Message.GoIdent), ").Schema(),")
+
+					g.P("\"", option.GoName, "\": new(", g.QualifiedGoIdent(option.Message.GoIdent), ").Schema(),")
 				} else {
-					g.P("\"schema\": map[string]interface{} {")
+					g.P("\"", option.GoName, "\": map[string]interface{} {")
 					writeField(g, option)
 					g.P("},")
 				}
-				g.P("},")
 			}
 			g.P("},")
 		}
