@@ -28,9 +28,6 @@ func generateObject(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 				continue
 			}
-			if field.Desc.IsMap() {
-				continue // todo:
-			}
 			g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(Field), "{")
 			fieldType := getFieldType(g, field)
 			if fieldType != "" {
