@@ -78,7 +78,10 @@ func generateObjects(g *protogen.GeneratedFile, _ *protogen.File, messages ...*p
 		g.P("})")
 
 		for _, oneof := range message.Oneofs {
-			g.P("var ", oneof.GoName, "__Object = ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{})")
+			for _, field := range oneof.Fields {
+
+				g.P("var ", field.GoName, "__Object = ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{})")
+			}
 		}
 	}
 
