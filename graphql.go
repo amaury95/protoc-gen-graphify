@@ -43,7 +43,7 @@ func generateObjects(g *protogen.GeneratedFile, _ *protogen.File, messages ...*p
 			g.P("Name: \"", g.QualifiedGoIdent(field.GoIdent), "\",")
 			g.P("Types: []*", g.QualifiedGoIdent(Object), "{")
 			for _, option := range field.Fields {
-				g.P("option_", g.QualifiedGoIdent(option.GoIdent))
+				g.P("option_", g.QualifiedGoIdent(option.GoIdent), ",")
 			}
 			g.P("},")
 			g.P("ResolveType: func(p ", g.QualifiedGoIdent(ResolveTypeParams), ") *", g.QualifiedGoIdent(Object), " {")
