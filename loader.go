@@ -43,16 +43,16 @@ func exposeMapBuilders(g *protogen.GeneratedFile, _ *protogen.File, messages ...
 }
 
 func fetchOneof(g *protogen.GeneratedFile, field *protogen.Oneof, recipient, assign string, identifier ...interface{}) {
-	g.P(join("if _opt, ok := ", identifier, ".(map[string]interface{}); ok {")...)
+	g.P(join("if opt, ok := ", identifier, ".(map[string]interface{}); ok {")...)
 	for _, oneofField := range field.Fields {
 		if oneofField.Message != nil {
-			g.P("if val , ok := _opt[\"", oneofField.GoName, "\"].(map[string]interface{}); ok {")
+			g.P("if val , ok := opt[\"", oneofField.GoName, "\"].(map[string]interface{}); ok {")
 			g.P("field := new(", g.QualifiedGoIdent(oneofField.Message.GoIdent), ")")
 			g.P("field.UnmarshalMap(val)")
 			g.P(recipient, assign, "&", oneofField.GoIdent, "{", oneofField.GoName, ":field}")
 			g.P("}")
 		} else {
-			g.P("if val, ok := _opt[\"", oneofField.GoName, "\"].(interface{}); ok {")
+			g.P("if val, ok := opt[\"", oneofField.GoName, "\"].(interface{}); ok {")
 			fetchAndExportField(g, oneofField, "outVal", "=", "val")
 			g.P(recipient, assign, "&", g.QualifiedGoIdent(oneofField.GoIdent), "{", oneofField.GoName, ": outVal}")
 			g.P("}")
