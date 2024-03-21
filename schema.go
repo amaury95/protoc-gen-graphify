@@ -20,11 +20,10 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 		g.P("\n/* Schema ... */")
 		g.P("func (*", message.GoIdent, ") Schema() map[string]interface{} {")
 		g.P("return map[string]interface{} {")
-		g.P("\"name\": \"", message.GoIdent, "\"")
+		g.P("\"name\": \"", message.GoIdent, "\",")
 		g.P("\"fields\": map[string] interface{} {")
 
 		// fields
-		// g.P(bufferWrite(quote("fields"), ": {")...)
 		for _, field := range message.Fields {
 			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 				continue
@@ -73,7 +72,6 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 			g.P("\"", field.GoName, "\": map[string]interface{}{")
 			for _, option := range field.Fields {
 				if option.Message != nil {
-
 					g.P("\"", option.GoName, "\": new(", g.QualifiedGoIdent(option.Message.GoIdent), ").Schema(),")
 				} else {
 					g.P("\"", option.GoName, "\": map[string]interface{} {")
