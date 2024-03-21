@@ -98,7 +98,7 @@ func generateObjects(g *protogen.GeneratedFile, _ *protogen.File, messages ...*p
 		g.P("Name: \"", field.GoName, "\",")
 		g.P("Values: ", g.QualifiedGoIdent(EnumValueConfigMap), "{")
 		for index, option := range field.Enum.Values {
-			g.P("\"", option.Desc.Name(), "\": &", g.QualifiedGoIdent(EnumValueConfig), "{ Value: ", index, " },")
+			g.P("\"", option.Desc.Name(), "\": &", g.QualifiedGoIdent(EnumValueConfig), "{ Value: \"", index, "\" },")
 		}
 		g.P("},")
 		g.P("})")
