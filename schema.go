@@ -69,9 +69,9 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 				continue
 			}
 
-			g.P("\"", field.GoName, "\": map[string]interface{}{")
+			g.P("\"", field.GoName, "\": []interface{}{")
 			for _, option := range field.Fields {
-				g.P("\"", option.GoName, "\": map[string]interface{} {")
+				g.P("map[string]interface{} {")
 				writeField(g, option)
 				g.P("},")
 			}
@@ -86,6 +86,7 @@ func generateSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*pr
 
 func writeField(g *protogen.GeneratedFile, field *protogen.Field) {
 	g.P("\"type\": \"", field.Desc.Kind().String(), "\",")
+	g.P("\"name\": \"", field.GoName, "\",")
 	if field.Desc.Kind() == protoreflect.EnumKind {
 		g.P("\"options\": map[string]interface{}{")
 		for index, option := range field.Enum.Values {
