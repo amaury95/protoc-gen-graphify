@@ -153,7 +153,7 @@ func getFieldType(g *protogen.GeneratedFile, field *protogen.Field) string {
 	case protoreflect.MessageKind:
 		return g.QualifiedGoIdent(field.Message.GoIdent) + "_Object"
 	case protoreflect.EnumKind:
-		return g.QualifiedGoIdent(field.GoIdent) + "_Enum"
+		return g.QualifiedGoIdent(field.Enum.GoIdent) + "_Enum"
 	case protoreflect.BoolKind:
 		return g.QualifiedGoIdent(Boolean)
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
