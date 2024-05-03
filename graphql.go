@@ -80,56 +80,31 @@ func generateObjects(g *protogen.GeneratedFile, file *protogen.File, messages ..
 				g.P("})")
 			}
 		}
+
+		for _, enum := range message.Enums {
+			generateEnum(g, enum)
+		}
 	}
-
-	// usedEnums := map[string]bool{}
-	// for _, field := range walkEnums(messages) {
-	// 	// avoid repeated enums
-	// 	if usedEnums[field.GoName] {
-	// 		continue
-	// 	}
-	// 	usedEnums[field.GoName] = true
-
-	// 	// generate enum field
-	// 	g.P(`
-
-	// 	`)
-	// 	g.P("var ", field.GoName, "_Enum = ", g.QualifiedGoIdent(NewEnum), "(", g.QualifiedGoIdent(EnumConfig), "{")
-	// 	g.P("Name: \"", field.GoName, "\",")
-	// 	g.P("Values: ", g.QualifiedGoIdent(EnumValueConfigMap), "{")
-	// 	for _, option := range field.Enum.Values {
-	// 		g.P("\"", option.Desc.Name(), "\": &", g.QualifiedGoIdent(EnumValueConfig), "{ Value: ", g.QualifiedGoIdent(option.GoIdent), " },")
-	// 	}
-	// 	g.P("},")
-	// 	g.P("})")
-	// }
 
 	for _, enum := range file.Enums {
-		// generate enum field
-		g.P(`
-		
-		`)
-		g.P("var ", enum.Desc.Name(), "_Enum = ", g.QualifiedGoIdent(NewEnum), "(", g.QualifiedGoIdent(EnumConfig), "{")
-		g.P("Name: \"", enum.Desc.Name(), "\",")
-		g.P("Values: ", g.QualifiedGoIdent(EnumValueConfigMap), "{")
-		for _, option := range enum.Values {
-			g.P("\"", option.Desc.Name(), "\": &", g.QualifiedGoIdent(EnumValueConfig), "{ Value: ", g.QualifiedGoIdent(option.GoIdent), " },")
-		}
-		g.P("},")
-		g.P("})")
+		generateEnum(g, enum)
 	}
+
 }
 
-func walkEnums(messages []*protogen.Message) (result []*protogen.Field) {
-	for _, message := range messages {
-		for _, field := range message.Fields {
-			if field.Desc.Kind() == protoreflect.EnumKind {
-				result = append(result, field)
-			}
-		}
-		result = append(result, walkEnums(message.Messages)...)
+func generateEnum(g *protogen.GeneratedFile, enum *protogen.Enum) {
+	// generate enum field
+	g.P(`
+		
+		`)
+	g.P("var ", enum.Desc.Name(), "_Enum = ", g.QualifiedGoIdent(NewEnum), "(", g.QualifiedGoIdent(EnumConfig), "{")
+	g.P("Name: \"", enum.Desc.Name(), "\",")
+	g.P("Values: ", g.QualifiedGoIdent(EnumValueConfigMap), "{")
+	for _, option := range enum.Values {
+		g.P("\"", option.Desc.Name(), "\": &", g.QualifiedGoIdent(EnumValueConfig), "{ Value: ", g.QualifiedGoIdent(option.GoIdent), " },")
 	}
-	return
+	g.P("},")
+	g.P("})")
 }
 
 func fieldType(g *protogen.GeneratedFile, field *protogen.Field) {
