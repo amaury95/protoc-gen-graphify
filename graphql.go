@@ -5,7 +5,7 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-func generateObjects(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
+func generateObjects(g *protogen.GeneratedFile, file *protogen.File, messages ...*protogen.Message) {
 	g.P(`
 	/*
 		Graphql object
@@ -82,22 +82,37 @@ func generateObjects(g *protogen.GeneratedFile, _ *protogen.File, messages ...*p
 		}
 	}
 
-	usedEnums := map[string]bool{}
-	for _, field := range walkEnums(messages) {
-		// avoid repeated enums
-		if usedEnums[field.GoName] {
-			continue
-		}
-		usedEnums[field.GoName] = true
+	// usedEnums := map[string]bool{}
+	// for _, field := range walkEnums(messages) {
+	// 	// avoid repeated enums
+	// 	if usedEnums[field.GoName] {
+	// 		continue
+	// 	}
+	// 	usedEnums[field.GoName] = true
 
+	// 	// generate enum field
+	// 	g.P(`
+
+	// 	`)
+	// 	g.P("var ", field.GoName, "_Enum = ", g.QualifiedGoIdent(NewEnum), "(", g.QualifiedGoIdent(EnumConfig), "{")
+	// 	g.P("Name: \"", field.GoName, "\",")
+	// 	g.P("Values: ", g.QualifiedGoIdent(EnumValueConfigMap), "{")
+	// 	for _, option := range field.Enum.Values {
+	// 		g.P("\"", option.Desc.Name(), "\": &", g.QualifiedGoIdent(EnumValueConfig), "{ Value: ", g.QualifiedGoIdent(option.GoIdent), " },")
+	// 	}
+	// 	g.P("},")
+	// 	g.P("})")
+	// }
+
+	for _, enum := range file.Enums {
 		// generate enum field
 		g.P(`
 		
 		`)
-		g.P("var ", field.GoName, "_Enum = ", g.QualifiedGoIdent(NewEnum), "(", g.QualifiedGoIdent(EnumConfig), "{")
-		g.P("Name: \"", field.GoName, "\",")
+		g.P("var ", enum.Desc.Name(), "_Enum = ", g.QualifiedGoIdent(NewEnum), "(", g.QualifiedGoIdent(EnumConfig), "{")
+		g.P("Name: \"", enum.Desc.Name(), "\",")
 		g.P("Values: ", g.QualifiedGoIdent(EnumValueConfigMap), "{")
-		for _, option := range field.Enum.Values {
+		for _, option := range enum.Values {
 			g.P("\"", option.Desc.Name(), "\": &", g.QualifiedGoIdent(EnumValueConfig), "{ Value: ", g.QualifiedGoIdent(option.GoIdent), " },")
 		}
 		g.P("},")
