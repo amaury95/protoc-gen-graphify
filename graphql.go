@@ -96,7 +96,7 @@ func generateEnum(g *protogen.GeneratedFile, enum *protogen.Enum) {
 	// generate enum field
 	g.P(`
 		
-		`)
+	`)
 	g.P("var ", enum.GoIdent.GoName, "_Enum = ", g.QualifiedGoIdent(NewEnum), "(", g.QualifiedGoIdent(EnumConfig), "{")
 	g.P("Name: \"", enum.Desc.Name(), "\",")
 	g.P("Values: ", g.QualifiedGoIdent(EnumValueConfigMap), "{")
