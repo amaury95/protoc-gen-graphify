@@ -95,11 +95,11 @@ func generateInterfaces(g *protogen.GeneratedFile, message *protogen.Message) {
 	g.P("return ", message.GoIdent, "_Object")
 	g.P("}")
 
-	g.P("\n/* ", message.GoIdent, "_List ... */")
-	g.P("type ", message.GoIdent, "_List []", message.GoIdent, "")
+	g.P("\n/* ", message.GoIdent, "List ... */")
+	g.P("type ", message.GoIdent, "List []", message.GoIdent, "")
 
 	g.P("\n/* Output ... */")
-	g.P("func (", message.GoIdent, "_List) Output() ", g.QualifiedGoIdent(Output), " {")
+	g.P("func (", message.GoIdent, "List) Output() ", g.QualifiedGoIdent(Output), " {")
 	g.P("return ", NewList, "(", message.GoIdent, "_Object)")
 	g.P("}")
 
