@@ -78,6 +78,12 @@ func generateObjects(g *protogen.GeneratedFile, file *protogen.File, messages ..
 			}
 		}
 
+		// Argument
+
+		// graphql.FieldConfigArgument{
+		// 	"key": &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.ID), Description: "Key of the element to retrieve"},
+		// }
+
 		for _, enum := range message.Enums {
 			generateEnum(g, enum)
 		}
@@ -95,8 +101,8 @@ func generateInterfaces(g *protogen.GeneratedFile, message *protogen.Message) {
 	g.P("return ", message.GoIdent, "_Object")
 	g.P("}")
 
-	g.P("\n/* QueryObject ... */")
-	g.P("func (*", message.GoIdent, ") QueryObject() *", g.QualifiedGoIdent(Object), " {")
+	g.P("\n/* Object ... */")
+	g.P("func (*", message.GoIdent, ") Object() *", g.QualifiedGoIdent(Object), " {")
 	g.P("return ", message.GoIdent, "_Object")
 	g.P("}")
 }
@@ -276,5 +282,20 @@ var NewList protogen.GoIdent = protogen.GoIdent{
 
 var ResolveTypeParams protogen.GoIdent = protogen.GoIdent{
 	GoName:       "ResolveTypeParams",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var FieldConfigArgument protogen.GoIdent = protogen.GoIdent{
+	GoName:       "FieldConfigArgument",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var ArgumentConfig protogen.GoIdent = protogen.GoIdent{
+	GoName:       "ArgumentConfig",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var NewNonNull protogen.GoIdent = protogen.GoIdent{
+	GoName:       "NewNonNull",
 	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
 }
