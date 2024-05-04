@@ -120,7 +120,7 @@ func generateArgument(g *protogen.GeneratedFile, message *protogen.Message) {
 			continue
 		}
 		g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(ArgumentConfig), "{")
-		
+		 
 		g.P("},")
 	}
 	g.P("}")
