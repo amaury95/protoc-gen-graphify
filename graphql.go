@@ -18,71 +18,9 @@ func generateGraphql(g *protogen.GeneratedFile, file *protogen.File, messages ..
 
 		generateInterfaces(g, message)
 
-		g.P("var ", message.GoIdent, "_Object = ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
-		g.P("Name: \"", message.GoIdent, "\",")
-		g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
-		for _, field := range message.Fields {
-			if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
-				continue
-			}
-			g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(Field), "{")
-			fieldType(g, field)
-			g.P()
-			g.P("},")
-		}
-		for _, field := range message.Oneofs {
-			if field.Desc.IsSynthetic() {
-				continue
-			}
+		generateObject(g, message)
 
-			g.P("\"", field.GoName, "\":&", g.QualifiedGoIdent(Field), "{")
-			g.P("Type: ", g.QualifiedGoIdent(NewUnion), "(", g.QualifiedGoIdent(UnionConfig), "{")
-			g.P("Name: \"", g.QualifiedGoIdent(field.GoIdent), "\",")
-			g.P("Types: []*", g.QualifiedGoIdent(Object), "{")
-			for _, option := range field.Fields {
-				g.P("option_", g.QualifiedGoIdent(option.GoIdent), ",")
-			}
-			g.P("},")
-			g.P("ResolveType: func(p ", g.QualifiedGoIdent(ResolveTypeParams), ") *", g.QualifiedGoIdent(Object), " {")
-			g.P("switch   p.Value.(type) {")
-			for _, option := range field.Fields {
-				g.P("case *", g.QualifiedGoIdent(option.GoIdent), ":")
-				g.P("return option_", g.QualifiedGoIdent(option.GoIdent))
-			}
-			g.P("default:")
-			g.P("return nil")
-			g.P("}")
-			g.P("},")
-			g.P("}),")
-			g.P("},")
-		}
-		g.P("},")
-		g.P("Description: \"\",")
-		g.P("})")
-
-		for _, oneof := range message.Oneofs {
-			for _, option := range oneof.Fields {
-				g.P()
-				g.P("var option_", g.QualifiedGoIdent(option.GoIdent), " = ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
-				g.P("Name: \"", g.QualifiedGoIdent(option.GoIdent), "\",")
-				g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
-				g.P("\"", option.GoName, "\": &", g.QualifiedGoIdent(Field), "{")
-				if option.Message != nil {
-					g.P("Type: ", g.QualifiedGoIdent(option.Message.GoIdent), "_Object,")
-				} else {
-					fieldType(g, option)
-				}
-				g.P("},")
-				g.P("},")
-				g.P("})")
-			}
-		}
-
-		// Argument
-
-		// graphql.FieldConfigArgument{
-		// 	"key": &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.ID), Description: "Key of the element to retrieve"},
-		// }
+		generateArgument(g, message)
 
 		for _, enum := range message.Enums {
 			generateEnum(g, enum)
@@ -96,7 +34,6 @@ func generateGraphql(g *protogen.GeneratedFile, file *protogen.File, messages ..
 }
 
 func generateInterfaces(g *protogen.GeneratedFile, message *protogen.Message) {
-
 	g.P("\n/* Object ... */")
 	g.P("func (*", message.GoIdent, ") Object() *", g.QualifiedGoIdent(Object), " {")
 	g.P("return ", message.GoIdent, "_Object")
@@ -111,6 +48,72 @@ func generateInterfaces(g *protogen.GeneratedFile, message *protogen.Message) {
 	g.P("func (*", message.GoIdent, ") Output() ", g.QualifiedGoIdent(Output), " {")
 	g.P("return ", message.GoIdent, "_Object")
 	g.P("}")
+}
+
+func generateObject(g *protogen.GeneratedFile, message *protogen.Message) {
+	g.P("var ", message.GoIdent, "_Object = ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
+	g.P("Name: \"", message.GoIdent, "\",")
+	g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
+	for _, field := range message.Fields {
+		if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
+			continue
+		}
+		g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(Field), "{")
+		fieldType(g, field)
+		g.P()
+		g.P("},")
+	}
+	for _, field := range message.Oneofs {
+		if field.Desc.IsSynthetic() {
+			continue
+		}
+
+		g.P("\"", field.GoName, "\":&", g.QualifiedGoIdent(Field), "{")
+		g.P("Type: ", g.QualifiedGoIdent(NewUnion), "(", g.QualifiedGoIdent(UnionConfig), "{")
+		g.P("Name: \"", g.QualifiedGoIdent(field.GoIdent), "\",")
+		g.P("Types: []*", g.QualifiedGoIdent(Object), "{")
+		for _, option := range field.Fields {
+			g.P("option_", g.QualifiedGoIdent(option.GoIdent), ",")
+		}
+		g.P("},")
+		g.P("ResolveType: func(p ", g.QualifiedGoIdent(ResolveTypeParams), ") *", g.QualifiedGoIdent(Object), " {")
+		g.P("switch   p.Value.(type) {")
+		for _, option := range field.Fields {
+			g.P("case *", g.QualifiedGoIdent(option.GoIdent), ":")
+			g.P("return option_", g.QualifiedGoIdent(option.GoIdent))
+		}
+		g.P("default:")
+		g.P("return nil")
+		g.P("}")
+		g.P("},")
+		g.P("}),")
+		g.P("},")
+	}
+	g.P("},")
+	g.P("Description: \"\",")
+	g.P("})")
+
+	for _, oneof := range message.Oneofs {
+		for _, option := range oneof.Fields {
+			g.P()
+			g.P("var option_", g.QualifiedGoIdent(option.GoIdent), " = ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
+			g.P("Name: \"", g.QualifiedGoIdent(option.GoIdent), "\",")
+			g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
+			g.P("\"", option.GoName, "\": &", g.QualifiedGoIdent(Field), "{")
+			if option.Message != nil {
+				g.P("Type: ", g.QualifiedGoIdent(option.Message.GoIdent), "_Object,")
+			} else {
+				fieldType(g, option)
+			}
+			g.P("},")
+			g.P("},")
+			g.P("})")
+		}
+	}
+}
+
+func generateArgument(g *protogen.GeneratedFile, message *protogen.Message) {
+	g.P("var ", message.GoIdent, "_Arg = ", g.QualifiedGoIdent(FieldConfigArgument), "{}")
 }
 
 func generateEnum(g *protogen.GeneratedFile, enum *protogen.Enum) {
