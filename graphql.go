@@ -16,10 +16,7 @@ func generateObjects(g *protogen.GeneratedFile, file *protogen.File, messages ..
 			continue
 		}
 
-		g.P("\n/* QueryObject ... */")
-		g.P("func (*", message.GoIdent, ") QueryObject() *", g.QualifiedGoIdent(Object), " {")
-		g.P("return ", message.GoIdent, "_Object")
-		g.P("}")
+		generateInterfaces(g, message)
 
 		g.P("var ", message.GoIdent, "_Object = ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
 		g.P("Name: \"", message.GoIdent, "\",")
@@ -90,6 +87,25 @@ func generateObjects(g *protogen.GeneratedFile, file *protogen.File, messages ..
 		generateEnum(g, enum)
 	}
 
+}
+
+func generateInterfaces(g *protogen.GeneratedFile, message *protogen.Message) {
+	g.P("\n/* QueryObject ... */")
+	g.P("func (*", message.GoIdent, ") QueryObject() *", g.QualifiedGoIdent(Object), " {")
+	g.P("return ", message.GoIdent, "_Object")
+	g.P("}")
+
+	g.P("\n/* Output ... */")
+	g.P("func (*", message.GoIdent, ") Output() *", g.QualifiedGoIdent(Object), " {")
+	g.P("return ", message.GoIdent, "_Object")
+	g.P("}")
+
+	g.P("type ", message.GoIdent, "List []", message.GoIdent, "")
+
+	g.P("\n/* Output ... */")
+	g.P("func (", message.GoIdent, "List) Output() *", g.QualifiedGoIdent(Object), " {")
+	g.P("return ", NewList, "(", message.GoIdent, "_Object)")
+	g.P("}")
 }
 
 func generateEnum(g *protogen.GeneratedFile, enum *protogen.Enum) {
@@ -202,6 +218,11 @@ var Bytes protogen.GoIdent = protogen.GoIdent{
 
 var Object protogen.GoIdent = protogen.GoIdent{
 	GoName:       "Object",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var Output protogen.GoIdent = protogen.GoIdent{
+	GoName:       "Output",
 	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
 }
 
