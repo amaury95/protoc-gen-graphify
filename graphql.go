@@ -96,13 +96,19 @@ func generateGraphql(g *protogen.GeneratedFile, file *protogen.File, messages ..
 }
 
 func generateInterfaces(g *protogen.GeneratedFile, message *protogen.Message) {
-	g.P("\n/* Output ... */")
-	g.P("func (*", message.GoIdent, ") Output() ", g.QualifiedGoIdent(Output), " {")
-	g.P("return ", message.GoIdent, "_Object")
-	g.P("}")
 
 	g.P("\n/* Object ... */")
 	g.P("func (*", message.GoIdent, ") Object() *", g.QualifiedGoIdent(Object), " {")
+	g.P("return ", message.GoIdent, "_Object")
+	g.P("}")
+
+	g.P("\n/* Argument ... */")
+	g.P("func (*", message.GoIdent, ") Argument() ", g.QualifiedGoIdent(FieldConfigArgument), " {")
+	g.P("return ", message.GoIdent, "_Arg")
+	g.P("}")
+
+	g.P("\n/* Output ... */")
+	g.P("func (*", message.GoIdent, ") Output() ", g.QualifiedGoIdent(Output), " {")
 	g.P("return ", message.GoIdent, "_Object")
 	g.P("}")
 }
