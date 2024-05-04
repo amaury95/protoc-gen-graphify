@@ -114,7 +114,15 @@ func generateObject(g *protogen.GeneratedFile, message *protogen.Message) {
 
 func generateArgument(g *protogen.GeneratedFile, message *protogen.Message) {
 	g.P("var ", message.GoIdent, "_Arg = ", g.QualifiedGoIdent(FieldConfigArgument), "{")
-	g.P("// TODO Add arguments...")
+	
+	for _, field := range message.Fields {
+		if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
+			continue
+		}
+		g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(ArgumentConfig), "{")
+		
+		g.P("},")
+	}
 	g.P("}")
 }
 
