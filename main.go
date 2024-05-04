@@ -42,7 +42,7 @@ func main() {
 		ParamFunc: flags.Set,
 	}.Run(func(gen *protogen.Plugin) error {
 		if *plugins != "" {
-			return errors.New("protoc-gen-go: plugins are not supported; use 'protoc --go-grpc_out=...' to generate gRPC\n\n" +
+			return errors.New("protoc-gen-graphify: plugins are not supported; use 'protoc --go-grpc_out=...' to generate gRPC\n\n" +
 				"See " + grpcDocURL + " for more information")
 		}
 		for _, f := range gen.Files {
@@ -52,9 +52,9 @@ func main() {
 
 				g := gengo.GenerateFile(gen, f)
 
-				generateObjects(g, f, messages...)
-				generateSchema(g, f, messages...)
-				exposeMapBuilders(g, f, messages...)
+				generateUnmarshaler(g, f, messages...)
+				generateAdminSchema(g, f, messages...)
+				generateGraphql(g, f, messages...)
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures

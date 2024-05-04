@@ -7,7 +7,7 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-func exposeMapBuilders(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
+func generateUnmarshaler(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
 	g.P(`
 	/*
 		Graphify unmarshaler

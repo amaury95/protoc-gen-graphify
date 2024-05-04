@@ -5,7 +5,7 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-func generateObjects(g *protogen.GeneratedFile, file *protogen.File, messages ...*protogen.Message) {
+func generateGraphql(g *protogen.GeneratedFile, file *protogen.File, messages ...*protogen.Message) {
 	g.P(`
 	/*
 		Graphql object
