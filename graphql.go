@@ -113,7 +113,9 @@ func generateObject(g *protogen.GeneratedFile, message *protogen.Message) {
 }
 
 func generateArgument(g *protogen.GeneratedFile, message *protogen.Message) {
-	g.P("var ", message.GoIdent, "_Arg = ", g.QualifiedGoIdent(FieldConfigArgument), "{}")
+	g.P("var ", message.GoIdent, "_Arg = ", g.QualifiedGoIdent(FieldConfigArgument), "{")
+	g.P("// TODO Add arguments...")
+	g.P("}")
 }
 
 func generateEnum(g *protogen.GeneratedFile, enum *protogen.Enum) {
