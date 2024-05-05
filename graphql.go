@@ -120,6 +120,15 @@ func generateArgument(g *protogen.GeneratedFile, message *protogen.Message) {
 		fieldType(g, field, MessageInput)
 		g.P("},")
 	}
+	for _, field := range message.Oneofs {
+		if field.Desc.IsSynthetic() {
+			continue
+		}
+
+		g.P("\"", field.GoName, "\":&", g.QualifiedGoIdent(ArgumentConfig), "{")
+		g.P("Type: utils.JSON,") // temporary solution
+		g.P("},")
+	}
 	g.P("}")
 }
 
@@ -138,19 +147,17 @@ func generateInputObject(g *protogen.GeneratedFile, message *protogen.Message) {
 		fieldType(g, field, MessageInput)
 		g.P("},")
 	}
+	for _, field := range message.Oneofs {
+		if field.Desc.IsSynthetic() {
+			continue
+		}
+
+		g.P("\"", field.GoName, "\":&", g.QualifiedGoIdent(InputObjectFieldConfig), "{")
+		g.P("Type: utils.JSON,") // temporary solution
+		g.P("},")
+	}
 	g.P("},")
 	g.P("})")
-
-	/*
-		graphql.NewInputObject(graphql.InputObjectConfig{
-				Name: "MainReviewInput",
-				Fields: graphql.InputObjectConfigFieldMap {
-					"field1":&graphql.InputObjectFieldConfig{
-						Type: graphql.String,
-					},
-				},
-			})
-	*/
 }
 
 func generateEnum(g *protogen.GeneratedFile, enum *protogen.Enum) {
