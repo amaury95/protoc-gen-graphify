@@ -114,16 +114,42 @@ func generateObject(g *protogen.GeneratedFile, message *protogen.Message) {
 
 func generateArgument(g *protogen.GeneratedFile, message *protogen.Message) {
 	g.P("var ", message.GoIdent, "_Arg = ", g.QualifiedGoIdent(FieldConfigArgument), "{")
-	
+
 	for _, field := range message.Fields {
 		if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
 			continue
 		}
 		g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(ArgumentConfig), "{")
-		 
+
 		g.P("},")
 	}
 	g.P("}")
+}
+
+func generateInputObject(g *protogen.GeneratedFile, message *protogen.Message) {
+	g.P("var ", message.GoIdent, "_InputObject = ", g.QualifiedGoIdent(NewInputObject), "(", g.QualifiedGoIdent(InputObjectConfig), "{")
+	g.P("Name: \"", message.GoIdent, "Input\",")
+
+	// for _, field := range message.Fields {
+	// 	if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
+	// 		continue
+	// 	}
+	// 	g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(ArgumentConfig), "{")
+
+	// 	g.P("},")
+	// }
+	g.P("})")
+
+	/*
+		graphql.NewInputObject(graphql.InputObjectConfig{
+				Name: "MainReviewInput",
+				Fields: graphql.InputObjectConfigFieldMap {
+					"field1":&graphql.InputObjectFieldConfig{
+						Type: graphql.String,
+					},
+				},
+			})
+	*/
 }
 
 func generateEnum(g *protogen.GeneratedFile, enum *protogen.Enum) {
@@ -311,6 +337,26 @@ var FieldConfigArgument protogen.GoIdent = protogen.GoIdent{
 
 var ArgumentConfig protogen.GoIdent = protogen.GoIdent{
 	GoName:       "ArgumentConfig",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var NewInputObject protogen.GoIdent = protogen.GoIdent{
+	GoName:       "NewInputObject",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var InputObjectConfig protogen.GoIdent = protogen.GoIdent{
+	GoName:       "InputObjectConfig",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var InputObjectConfigFieldMap protogen.GoIdent = protogen.GoIdent{
+	GoName:       "InputObjectConfigFieldMap",
+	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
+}
+
+var InputObjectFieldConfig protogen.GoIdent = protogen.GoIdent{
+	GoName:       "InputObjectFieldConfig",
 	GoImportPath: protogen.GoImportPath("github.com/graphql-go/graphql"),
 }
 
