@@ -16,13 +16,11 @@ func generateGraphql(g *protogen.GeneratedFile, file *protogen.File, messages ..
 			continue
 		}
 
-		generateInterfaces(g, message)
-
 		generateObject(g, message)
 
-		generateInputObject(g,message)
-
 		generateArgument(g, message)
+
+		generateInputObject(g, message)
 
 		for _, enum := range message.Enums {
 			generateEnum(g, enum)
@@ -35,24 +33,12 @@ func generateGraphql(g *protogen.GeneratedFile, file *protogen.File, messages ..
 
 }
 
-func generateInterfaces(g *protogen.GeneratedFile, message *protogen.Message) {
+func generateObject(g *protogen.GeneratedFile, message *protogen.Message) {
 	g.P("\n/* Object ... */")
 	g.P("func (*", message.GoIdent, ") Object() *", g.QualifiedGoIdent(Object), " {")
 	g.P("return ", message.GoIdent, "_Object")
 	g.P("}")
 
-	g.P("\n/* Argument ... */")
-	g.P("func (*", message.GoIdent, ") Argument() ", g.QualifiedGoIdent(FieldConfigArgument), " {")
-	g.P("return ", message.GoIdent, "_Arg")
-	g.P("}")
-
-	g.P("\n/* Output ... */")
-	g.P("func (*", message.GoIdent, ") Output() ", g.QualifiedGoIdent(Output), " {")
-	g.P("return ", message.GoIdent, "_Object")
-	g.P("}")
-}
-
-func generateObject(g *protogen.GeneratedFile, message *protogen.Message) {
 	g.P("var ", message.GoIdent, "_Object = ", g.QualifiedGoIdent(NewObject), "(", g.QualifiedGoIdent(ObjectConfig), "{")
 	g.P("Name: \"", message.GoIdent, "\",")
 	g.P("Fields: ", g.QualifiedGoIdent(Fields), "{")
@@ -115,21 +101,31 @@ func generateObject(g *protogen.GeneratedFile, message *protogen.Message) {
 }
 
 func generateArgument(g *protogen.GeneratedFile, message *protogen.Message) {
-	g.P("var ", message.GoIdent, "_Arg = ", g.QualifiedGoIdent(FieldConfigArgument), "{")
+	// g.P("\n/* Argument ... */")
+	// g.P("func (*", message.GoIdent, ") Argument() ", g.QualifiedGoIdent(FieldConfigArgument), " {")
+	// g.P("return ", message.GoIdent, "_Arg")
+	// g.P("}")
 
-	for _, field := range message.Fields {
-		if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
-			continue
-		}
-		g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(ArgumentConfig), "{")
+	// g.P("\n/* Output ... */")
+	// g.P("func (*", message.GoIdent, ") Output() ", g.QualifiedGoIdent(Output), " {")
+	// g.P("return ", message.GoIdent, "_Object")
+	// g.P("}")
 
-		g.P("},")
-	}
-	g.P("}")
+	// g.P("var ", message.GoIdent, "_Arg = ", g.QualifiedGoIdent(FieldConfigArgument), "{")
+
+	// for _, field := range message.Fields {
+	// 	if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
+	// 		continue
+	// 	}
+	// 	g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(ArgumentConfig), "{")
+
+	// 	g.P("},")
+	// }
+	// g.P("}")
 }
 
 func generateInputObject(g *protogen.GeneratedFile, message *protogen.Message) {
-	g.P("var ", message.GoIdent, "_InputObject = ", g.QualifiedGoIdent(NewInputObject), "(", g.QualifiedGoIdent(InputObjectConfig), "{")
+	g.P("var ", message.GoIdent, "_Input = ", g.QualifiedGoIdent(NewInputObject), "(", g.QualifiedGoIdent(InputObjectConfig), "{")
 	g.P("Name: \"", message.GoIdent, "Input\",")
 
 	// for _, field := range message.Fields {
