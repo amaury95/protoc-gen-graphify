@@ -125,8 +125,7 @@ func generateArgument(g *protogen.GeneratedFile, message *protogen.Message) {
 }
 
 func generateInputObject(g *protogen.GeneratedFile, message *protogen.Message) {
-	g.P("")
-	g.P("var ", message.GoIdent, "_Input = ", g.QualifiedGoIdent(NewInputObject), "(", g.QualifiedGoIdent(InputObjectConfig), "{")
+	g.P("\nvar ", message.GoIdent, "_Input = ", g.QualifiedGoIdent(NewInputObject), "(", g.QualifiedGoIdent(InputObjectConfig), "{")
 	g.P("Name: \"", message.GoIdent, "Input\",")
 
 	// for _, field := range message.Fields {
