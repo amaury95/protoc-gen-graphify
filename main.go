@@ -52,9 +52,9 @@ func main() {
 
 				g := gengo.GenerateFile(gen, f)
 
-				generateUnmarshaler(g, f, messages...)
-				generateAdminSchema(g, f, messages...)
 				generateGraphql(g, f, messages...)
+				generateAdminSchema(g, f, messages...)
+				generateUnmarshaler(g, f, messages...)
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures

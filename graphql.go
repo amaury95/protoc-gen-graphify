@@ -16,9 +16,10 @@ func generateGraphql(g *protogen.GeneratedFile, file *protogen.File, messages ..
 			continue
 		}
 
-		generateInputObject(g, message)
 		
 		generateObject(g, message)
+		
+		generateInputObject(g, message)
 
 		generateArgument(g, message)
 
