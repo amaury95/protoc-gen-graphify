@@ -128,7 +128,7 @@ func generateInputObject(g *protogen.GeneratedFile, message *protogen.Message) {
 		
 	`)
 	g.P("var ", message.GoIdent, "_Input = ", g.QualifiedGoIdent(NewInputObject), "(", g.QualifiedGoIdent(InputObjectConfig), "{")
-	g.P("Name: \"", message.GoIdent, "Input\",")
+	g.P("Name: \"", message.GoIdent, "_Input\",")
 	g.P("Fields: ", g.QualifiedGoIdent(InputObjectConfigFieldMap), " {")
 	for _, field := range message.Fields {
 		if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
