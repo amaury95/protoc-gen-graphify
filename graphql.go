@@ -47,8 +47,7 @@ func generateObject(g *protogen.GeneratedFile, message *protogen.Message) {
 			continue
 		}
 		g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(Field), "{")
-		fieldType(g, field)
-		g.P()
+		fieldType(g, field, MessageObject)
 		g.P("},")
 	}
 	for _, field := range message.Oneofs {
@@ -91,7 +90,7 @@ func generateObject(g *protogen.GeneratedFile, message *protogen.Message) {
 			if option.Message != nil {
 				g.P("Type: ", g.QualifiedGoIdent(option.Message.GoIdent), "_Object,")
 			} else {
-				fieldType(g, option)
+				fieldType(g, option, MessageObject)
 			}
 			g.P("},")
 			g.P("},")
@@ -125,7 +124,10 @@ func generateArgument(g *protogen.GeneratedFile, message *protogen.Message) {
 }
 
 func generateInputObject(g *protogen.GeneratedFile, message *protogen.Message) {
-	g.P("\nvar ", message.GoIdent, "_Input = ", g.QualifiedGoIdent(NewInputObject), "(", g.QualifiedGoIdent(InputObjectConfig), "{")
+	g.P(`
+		
+	`)
+	g.P("var ", message.GoIdent, "_Input = ", g.QualifiedGoIdent(NewInputObject), "(", g.QualifiedGoIdent(InputObjectConfig), "{")
 	g.P("Name: \"", message.GoIdent, "Input\",")
 	g.P("Fields: ", g.QualifiedGoIdent(InputObjectConfigFieldMap), " {")
 	for _, field := range message.Fields {
@@ -133,7 +135,7 @@ func generateInputObject(g *protogen.GeneratedFile, message *protogen.Message) {
 			continue
 		}
 		g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(InputObjectFieldConfig), "{")
-		fieldType(g, field)
+		fieldType(g, field, MessageInput)
 		g.P("},")
 	}
 	g.P("},")
@@ -166,8 +168,15 @@ func generateEnum(g *protogen.GeneratedFile, enum *protogen.Enum) {
 	g.P("})")
 }
 
-func fieldType(g *protogen.GeneratedFile, field *protogen.Field) {
-	fT := getFieldType(g, field)
+type MessageType string
+
+const (
+	MessageObject MessageType = "_Object"
+	MessageInput  MessageType = "_Input"
+)
+
+func fieldType(g *protogen.GeneratedFile, field *protogen.Field, messageType MessageType) {
+	fT := getFieldType(g, field, messageType)
 	if fT != "" {
 		if field.Desc.IsMap() {
 			g.P("Type: ", g.QualifiedGoIdent(JSON), ",")
@@ -179,13 +188,13 @@ func fieldType(g *protogen.GeneratedFile, field *protogen.Field) {
 	}
 }
 
-func getFieldType(g *protogen.GeneratedFile, field *protogen.Field) string {
+func getFieldType(g *protogen.GeneratedFile, field *protogen.Field, messageType MessageType) string {
 	if field.Desc.Name() == "_key" {
 		return g.QualifiedGoIdent(ID)
 	}
 	switch field.Desc.Kind() {
 	case protoreflect.MessageKind:
-		return g.QualifiedGoIdent(field.Message.GoIdent) + "_Object"
+		return g.QualifiedGoIdent(field.Message.GoIdent) + string(messageType)
 	case protoreflect.EnumKind:
 		return g.QualifiedGoIdent(field.Enum.GoIdent) + "_Enum"
 	case protoreflect.BoolKind:
