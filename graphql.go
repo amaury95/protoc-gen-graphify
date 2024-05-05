@@ -20,6 +20,8 @@ func generateGraphql(g *protogen.GeneratedFile, file *protogen.File, messages ..
 
 		generateObject(g, message)
 
+		generateInputObject(g,message)
+
 		generateArgument(g, message)
 
 		for _, enum := range message.Enums {
