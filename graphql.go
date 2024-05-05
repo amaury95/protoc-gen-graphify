@@ -176,15 +176,12 @@ const (
 )
 
 func fieldType(g *protogen.GeneratedFile, field *protogen.Field, messageType MessageType) {
-	fT := getFieldType(g, field, messageType)
-	if fT != "" {
-		if field.Desc.IsMap() {
-			g.P("Type: ", g.QualifiedGoIdent(JSON), ",")
-		} else if field.Desc.IsList() {
-			g.P("Type: ", g.QualifiedGoIdent(NewList), "(", fT, "),")
-		} else {
-			g.P("Type: ", fT, ",")
-		}
+	if field.Desc.IsMap() {
+		g.P("Type: ", g.QualifiedGoIdent(JSON), ",")
+	} else if field.Desc.IsList() {
+		g.P("Type: ", g.QualifiedGoIdent(NewList), "(", getFieldType(g, field, messageType), "),")
+	} else {
+		g.P("Type: ", getFieldType(g, field, messageType), ",")
 	}
 }
 
