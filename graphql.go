@@ -16,11 +16,12 @@ func generateGraphql(g *protogen.GeneratedFile, file *protogen.File, messages ..
 			continue
 		}
 
+		generateInputObject(g, message)
+		
 		generateObject(g, message)
 
 		generateArgument(g, message)
 
-		generateInputObject(g, message)
 
 		for _, enum := range message.Enums {
 			generateEnum(g, enum)
