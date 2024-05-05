@@ -16,13 +16,11 @@ func generateGraphql(g *protogen.GeneratedFile, file *protogen.File, messages ..
 			continue
 		}
 
-		
 		generateObject(g, message)
-		
+
 		generateInputObject(g, message)
 
 		generateArgument(g, message)
-
 
 		for _, enum := range message.Enums {
 			generateEnum(g, enum)
@@ -102,27 +100,27 @@ func generateObject(g *protogen.GeneratedFile, message *protogen.Message) {
 }
 
 func generateArgument(g *protogen.GeneratedFile, message *protogen.Message) {
-	// g.P("\n/* Argument ... */")
-	// g.P("func (*", message.GoIdent, ") Argument() ", g.QualifiedGoIdent(FieldConfigArgument), " {")
-	// g.P("return ", message.GoIdent, "_Arg")
-	// g.P("}")
+	g.P("\n/* Argument ... */")
+	g.P("func (*", message.GoIdent, ") Argument() ", g.QualifiedGoIdent(FieldConfigArgument), " {")
+	g.P("return ", message.GoIdent, "_Arg")
+	g.P("}")
 
-	// g.P("\n/* Output ... */")
-	// g.P("func (*", message.GoIdent, ") Output() ", g.QualifiedGoIdent(Output), " {")
-	// g.P("return ", message.GoIdent, "_Object")
-	// g.P("}")
+	g.P("\n/* Output ... */")
+	g.P("func (*", message.GoIdent, ") Output() ", g.QualifiedGoIdent(Output), " {")
+	g.P("return ", message.GoIdent, "_Object")
+	g.P("}")
 
-	// g.P("var ", message.GoIdent, "_Arg = ", g.QualifiedGoIdent(FieldConfigArgument), "{")
+	g.P("var ", message.GoIdent, "_Arg = ", g.QualifiedGoIdent(FieldConfigArgument), "{")
 
-	// for _, field := range message.Fields {
-	// 	if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
-	// 		continue
-	// 	}
-	// 	g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(ArgumentConfig), "{")
-
-	// 	g.P("},")
-	// }
-	// g.P("}")
+	for _, field := range message.Fields {
+		if field.Oneof != nil && !field.Oneof.Desc.IsSynthetic() {
+			continue
+		}
+		g.P("\"", field.Desc.Name(), "\":&", g.QualifiedGoIdent(ArgumentConfig), "{")
+		fieldType(g, field, MessageInput)
+		g.P("},")
+	}
+	g.P("}")
 }
 
 func generateInputObject(g *protogen.GeneratedFile, message *protogen.Message) {
