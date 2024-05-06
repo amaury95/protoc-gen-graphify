@@ -102,6 +102,8 @@ var Bytes = graphql.NewScalar(graphql.ScalarConfig{
 		switch value := value.(type) {
 		case []byte:
 			return base64.StdEncoding.EncodeToString(value)
+		case string:
+			return value
 		default:
 			return nil
 		}
@@ -110,6 +112,8 @@ var Bytes = graphql.NewScalar(graphql.ScalarConfig{
 		switch value := value.(type) {
 		case string:
 			return DecodeBytes(value)
+		case []byte:
+			return value
 		default:
 			return nil
 		}
