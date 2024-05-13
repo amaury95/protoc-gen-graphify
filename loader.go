@@ -133,9 +133,9 @@ func assignMessage(_ bool, g *protogen.GeneratedFile, field *protogen.Field, rec
 
 func assignEnum(_ bool, g *protogen.GeneratedFile, field *protogen.Field, recipient, assign string, identifier ...interface{}) {
 	// try to parse float
-	parseField(true, g, field, "float64", "int32", field.Desc.JSONName(), " = ", identifier...)
-	g.P(recipient, assign, g.QualifiedGoIdent(field.Enum.GoIdent), "(", field.Desc.JSONName(), ")")
-	
+	fetchAndExportField(g, field, "outVal", "=", identifier...)
+	g.P(recipient, assign, g.QualifiedGoIdent(field.Enum.GoIdent), "(outVal)")
+
 	// try to get directly
 	assignField(false, g, field, g.QualifiedGoIdent(field.Enum.GoIdent), recipient, assign, identifier...)
 }
