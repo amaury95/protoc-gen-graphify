@@ -19,8 +19,8 @@ func generateUnmarshaler(g *protogen.GeneratedFile, _ *protogen.File, messages .
 		}
 
 		g.P("\n/* UnmarshalJSON ...*/")
-		g.P("func (o *", message.GoIdent, ") UnmarshalJSON(data []byte) error {")
-		g.P("if values, err := ", g.QualifiedGoIdent(toMap), "(data);err != nil {return err}  o.UnmarshalMap(values)}")
+		g.P("func (o *", message.GoIdent, ") UnmarshalJSON(b []byte) error {")
+		g.P("if values, err := ", g.QualifiedGoIdent(toMap), "(b);err != nil {return err} else {o.UnmarshalMap(values)}")
 		g.P("return nil")
 		g.P("}")
 
