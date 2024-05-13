@@ -135,7 +135,7 @@ func assignEnum(_ bool, g *protogen.GeneratedFile, field *protogen.Field, recipi
 	// try to parse float
 	parseField(true, g, field, "float64", "int32", field.Desc.JSONName()+"Tmp", " = ", identifier...)
 	g.P(recipient, assign, g.QualifiedGoIdent(field.Enum.GoIdent), "(", field.Desc.JSONName()+"Tmp", ")")
-	
+
 	// try to get directly
 	assignField(false, g, field, g.QualifiedGoIdent(field.Enum.GoIdent), recipient, assign, identifier...)
 }
