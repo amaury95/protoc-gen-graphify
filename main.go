@@ -53,7 +53,7 @@ func main() {
 
 				g := gengo.GenerateFile(gen, f)
 
-				g.Write([]byte("// " + strings.Join(os.Args, " ") + "\n"))
+				g.Write([]byte("// Flags: " + strings.Join(os.Args, " ") + "\n"))
 
 				// if flags.Lookup("generate_graphql_schema").Value.String() != "false" {
 				generateGraphql(g, f, messages...)
