@@ -15,7 +15,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/amaury95/protoc-gen-graphify/internal/version"
 	gengo "google.golang.org/protobuf/cmd/protoc-gen-go/internal_gengo"
@@ -36,11 +35,12 @@ func main() {
 	}
 
 	var (
-		flags   flag.FlagSet
-		plugins = flags.String("plugins", "", "deprecated option")
-		genGraphqlSchema = flags.Bool("generate_graphql_schema", true, "generate GraphQL schema")
-		genObjectSchema = flags.Bool("generate_object_schema", true, "generate Object schema")
-		genUnmarshaler = flags.Bool("generate_unmarshaler", true, "generate Unmarshaler")
+		flags            flag.FlagSet
+		plugins          = flags.String("plugins", "", "deprecated option")
+		
+		genGraphqlSchema = flags.Bool("graphql_schema", true, "generate GraphQL schema")
+		genObjectSchema  = flags.Bool("object_schema", true, "generate Object schema")
+		genUnmarshaler   = flags.Bool("unmarshaler", true, "generate Unmarshaler")
 	)
 	protogen.Options{
 		ParamFunc: flags.Set,
@@ -55,8 +55,6 @@ func main() {
 				updateMessageNames(messages...)
 
 				g := gengo.GenerateFile(gen, f)
-
-				g.Write([]byte("// Flags: " + strings.Join(os.Args, " ") + "\n"))
 
 				if *genGraphqlSchema {
 					generateGraphql(g, f, messages...)
