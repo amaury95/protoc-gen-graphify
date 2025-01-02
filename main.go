@@ -38,6 +38,9 @@ func main() {
 	var (
 		flags   flag.FlagSet
 		plugins = flags.String("plugins", "", "deprecated option")
+		genGraphqlSchema = flags.Bool("generate_graphql_schema", true, "generate GraphQL schema")
+		genObjectSchema = flags.Bool("generate_object_schema", true, "generate Object schema")
+		genUnmarshaler = flags.Bool("generate_unmarshaler", true, "generate Unmarshaler")
 	)
 	protogen.Options{
 		ParamFunc: flags.Set,
@@ -55,15 +58,15 @@ func main() {
 
 				g.Write([]byte("// Flags: " + strings.Join(os.Args, " ") + "\n"))
 
-				// if flags.Lookup("generate_graphql_schema").Value.String() != "false" {
-				generateGraphql(g, f, messages...)
-				// }
-				// if flags.Lookup("generate_object_schema").Value.String() != "false" {
-				generateObjectSchema(g, f, messages...)
-				// }
-				// if flags.Lookup("generate_unmarshaler").Value.String() != "false" {
-				generateUnmarshaler(g, f, messages...)
-				// }
+				if *genGraphqlSchema {
+					generateGraphql(g, f, messages...)
+				}
+				if *genObjectSchema {
+					generateObjectSchema(g, f, messages...)
+				}
+				if *genUnmarshaler {
+					generateUnmarshaler(g, f, messages...)
+				}
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures
