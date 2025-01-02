@@ -37,10 +37,13 @@ func main() {
 	var (
 		flags            flag.FlagSet
 		plugins          = flags.String("plugins", "", "deprecated option")
-		
+
 		genGraphqlSchema = flags.Bool("graphql_schema", true, "generate GraphQL schema")
 		genObjectSchema  = flags.Bool("object_schema", true, "generate Object schema")
 		genUnmarshaler   = flags.Bool("unmarshaler", true, "generate Unmarshaler")
+
+		genUnmarshalRequest = flags.Bool("unmarshal_request", true, "generate Unmarshaler for request")
+		genUnmarshalResponse = flags.Bool("unmarshal_response", true, "generate Unmarshaler for response")
 	)
 	protogen.Options{
 		ParamFunc: flags.Set,
@@ -63,7 +66,7 @@ func main() {
 					generateObjectSchema(g, f, messages...)
 				}
 				if *genUnmarshaler {
-					generateUnmarshaler(g, f, messages...)
+					generateUnmarshaler(g, f, *genUnmarshalRequest, *genUnmarshalResponse, messages...)
 				}
 			}
 		}

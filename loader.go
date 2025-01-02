@@ -2,12 +2,13 @@ package main
 
 import (
 	"reflect"
+	"strings"
 
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-func generateUnmarshaler(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
+func generateUnmarshaler(g *protogen.GeneratedFile, _ *protogen.File, unmarshalRequest, unmarshalResponse bool, messages ...*protogen.Message) {
 	g.P(`
 	/*
 		Graphify unmarshaler
@@ -15,6 +16,14 @@ func generateUnmarshaler(g *protogen.GeneratedFile, _ *protogen.File, messages .
 	`)
 	for _, message := range messages {
 		if message.Desc.IsMapEntry() {
+			continue
+		}
+
+		if strings.Contains(message.GoIdent.GoName, "Request") && !unmarshalRequest {
+			continue
+		}
+		
+		if strings.Contains(message.GoIdent.GoName, "Response") && !unmarshalResponse {
 			continue
 		}
 
