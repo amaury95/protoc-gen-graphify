@@ -53,16 +53,16 @@ func main() {
 
 				g := gengo.GenerateFile(gen, f)
 
-				g.Write([]byte(strings.Join(os.Args, " ")))
+				g.Write([]byte("// " + strings.Join(os.Args, " ") + "\n"))
 
 				// if flags.Lookup("generate_graphql_schema").Value.String() != "false" {
-					generateGraphql(g, f, messages...)
+				generateGraphql(g, f, messages...)
 				// }
 				// if flags.Lookup("generate_object_schema").Value.String() != "false" {
-					generateObjectSchema(g, f, messages...)
+				generateObjectSchema(g, f, messages...)
 				// }
 				// if flags.Lookup("generate_unmarshaler").Value.String() != "false" {
-					generateUnmarshaler(g, f, messages...)
+				generateUnmarshaler(g, f, messages...)
 				// }
 			}
 		}
