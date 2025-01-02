@@ -15,6 +15,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/amaury95/protoc-gen-graphify/internal/version"
 	gengo "google.golang.org/protobuf/cmd/protoc-gen-go/internal_gengo"
@@ -34,9 +35,6 @@ func main() {
 		os.Exit(0)
 	}
 
-	fmt.Fprintf(os.Stdout, "Generating GraphQL schema %v\n", os.Args)
-	os.Exit(0)
-
 	var (
 		flags   flag.FlagSet
 		plugins = flags.String("plugins", "", "deprecated option")
@@ -55,15 +53,17 @@ func main() {
 
 				g := gengo.GenerateFile(gen, f)
 
-				if flags.Lookup("generate_graphql_schema").Value.String() != "false" {
+				g.Write([]byte(strings.Join(os.Args, " ")))
+
+				// if flags.Lookup("generate_graphql_schema").Value.String() != "false" {
 					generateGraphql(g, f, messages...)
-				}
-				if flags.Lookup("generate_object_schema").Value.String() != "false" {
+				// }
+				// if flags.Lookup("generate_object_schema").Value.String() != "false" {
 					generateObjectSchema(g, f, messages...)
-				}
-				if flags.Lookup("generate_unmarshaler").Value.String() != "false" {
+				// }
+				// if flags.Lookup("generate_unmarshaler").Value.String() != "false" {
 					generateUnmarshaler(g, f, messages...)
-				}
+				// }
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures
