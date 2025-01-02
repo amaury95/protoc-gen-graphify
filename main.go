@@ -52,9 +52,15 @@ func main() {
 
 				g := gengo.GenerateFile(gen, f)
 
-				generateGraphql(g, f, messages...)
-				generateAdminSchema(g, f, messages...)
-				generateUnmarshaler(g, f, messages...)
+				if flags.Lookup("generate_graphql_schema").Value.String() != "false" {
+					generateGraphql(g, f, messages...)
+				}
+				if flags.Lookup("generate_object_schema").Value.String() != "false" {
+					generateObjectSchema(g, f, messages...)
+				}
+				if flags.Lookup("generate_unmarshaler").Value.String() != "false" {
+					generateUnmarshaler(g, f, messages...)
+				}
 			}
 		}
 		gen.SupportedFeatures = gengo.SupportedFeatures

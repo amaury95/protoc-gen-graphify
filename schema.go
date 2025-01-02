@@ -7,7 +7,7 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-func generateAdminSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
+func generateObjectSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
 	g.P(`
 	/*
 		Graphify schema module
