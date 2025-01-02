@@ -34,7 +34,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	fmt.Fprintf(os.Stdout, "Generating GraphQL schema\n", os.Args)
+	fmt.Fprintf(os.Stdout, "Generating GraphQL schema %v\n", os.Args)
 	os.Exit(0)
 
 	var (
