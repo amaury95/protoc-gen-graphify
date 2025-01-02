@@ -34,6 +34,9 @@ func main() {
 		os.Exit(0)
 	}
 
+	fmt.Fprintf(os.Stdout, "Generating GraphQL schema\n", os.Args)
+	os.Exit(0)
+
 	var (
 		flags   flag.FlagSet
 		plugins = flags.String("plugins", "", "deprecated option")
