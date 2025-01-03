@@ -35,16 +35,23 @@ func main() {
 	}
 
 	var (
-		flags            flag.FlagSet
-		plugins          = flags.String("plugins", "", "deprecated option")
+		flags   flag.FlagSet
+		plugins = flags.String("plugins", "", "deprecated option")
 
-		genGraphqlSchema = flags.Bool("graphql_schema", true, "generate GraphQL schema")
-		genObjectSchema  = flags.Bool("object_schema", true, "generate Object schema")
-		genUnmarshaler   = flags.Bool("unmarshaler", true, "generate Unmarshaler")
+		genGraphqlSchema         = flags.Bool("graphql_schema", true, "generate GraphQL schema")
+		genGraphqlSchemaRequest  = flags.Bool("graphql_schema_request", false, "generate GraphQL schema for request")
+		genGraphqlSchemaResponse = flags.Bool("graphql_schema_response", false, "generate GraphQL schema for response")
+		genGraphqlSchemaPayload  = flags.Bool("graphql_schema_payload", false, "generate GraphQL schema for payload")
 
-		genUnmarshalRequest = flags.Bool("unmarshal_request", true, "generate Unmarshaler for request")
-		genUnmarshalResponse = flags.Bool("unmarshal_response", true, "generate Unmarshaler for response")
-		genUnmarshalPayload = flags.Bool("unmarshal_payload", true, "generate Unmarshaler for payload")
+		genObjectSchema         = flags.Bool("object_schema", true, "generate Object schema")
+		genObjectSchemaRequest  = flags.Bool("object_schema_request", false, "generate Object schema for request")
+		genObjectSchemaResponse = flags.Bool("object_schema_response", false, "generate Object schema for response")
+		genObjectSchemaPayload  = flags.Bool("object_schema_payload", false, "generate Object schema for payload")
+
+		genUnmarshaler       = flags.Bool("unmarshaler", true, "generate Unmarshaler")
+		genUnmarshalRequest  = flags.Bool("unmarshal_request", false, "generate Unmarshaler for request")
+		genUnmarshalResponse = flags.Bool("unmarshal_response", false, "generate Unmarshaler for response")
+		genUnmarshalPayload  = flags.Bool("unmarshal_payload", false, "generate Unmarshaler for payload")
 	)
 	protogen.Options{
 		ParamFunc: flags.Set,
@@ -61,10 +68,10 @@ func main() {
 				g := gengo.GenerateFile(gen, f)
 
 				if *genGraphqlSchema {
-					generateGraphql(g, f, messages...)
+					generateGraphql(g, f, *genGraphqlSchemaRequest, *genGraphqlSchemaResponse, *genGraphqlSchemaPayload, messages...)
 				}
 				if *genObjectSchema {
-					generateObjectSchema(g, f, messages...)
+					generateObjectSchema(g, f, *genObjectSchemaRequest, *genObjectSchemaResponse, *genObjectSchemaPayload, messages...)
 				}
 				if *genUnmarshaler {
 					generateUnmarshaler(g, f, *genUnmarshalRequest, *genUnmarshalResponse, *genUnmarshalPayload, messages...)

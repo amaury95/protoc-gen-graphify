@@ -1,11 +1,13 @@
 package main
 
 import (
+	"strings"
+
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-func generateGraphql(g *protogen.GeneratedFile, file *protogen.File, messages ...*protogen.Message) {
+func generateGraphql(g *protogen.GeneratedFile, file *protogen.File, graphqlSchemaRequest, graphqlSchemaResponse, graphqlSchemaPayload bool, messages ...*protogen.Message) {
 	g.P(`
 	/*
 		Graphql object
@@ -13,6 +15,18 @@ func generateGraphql(g *protogen.GeneratedFile, file *protogen.File, messages ..
 	`)
 	for _, message := range messages {
 		if message.Desc.IsMapEntry() {
+			continue
+		}
+
+		if strings.Contains(message.GoIdent.GoName, "Request") && !graphqlSchemaRequest {
+			continue
+		}
+
+		if strings.Contains(message.GoIdent.GoName, "Response") && !graphqlSchemaResponse {
+			continue
+		}
+		
+		if strings.Contains(message.GoIdent.GoName, "Payload") && !graphqlSchemaPayload {
 			continue
 		}
 

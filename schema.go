@@ -2,12 +2,13 @@ package main
 
 import (
 	"strconv"
+	"strings"
 
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-func generateObjectSchema(g *protogen.GeneratedFile, _ *protogen.File, messages ...*protogen.Message) {
+func generateObjectSchema(g *protogen.GeneratedFile, _ *protogen.File, objectSchemaRequest, objectSchemaResponse, objectSchemaPayload bool, messages ...*protogen.Message) {
 	g.P(`
 	/*
 		Graphify schema module
@@ -17,6 +18,19 @@ func generateObjectSchema(g *protogen.GeneratedFile, _ *protogen.File, messages 
 		if message.Desc.IsMapEntry() {
 			continue
 		}
+
+		if strings.Contains(message.GoIdent.GoName, "Request") && !objectSchemaRequest {
+			continue
+		}
+
+		if strings.Contains(message.GoIdent.GoName, "Response") && !objectSchemaResponse {
+			continue
+		}
+
+		if strings.Contains(message.GoIdent.GoName, "Payload") && !objectSchemaPayload {
+			continue
+		}
+
 		g.P("\n/* Schema ... */")
 		g.P("func (*", message.GoIdent, ") Schema() map[string]interface{} {")
 		g.P("return map[string]interface{} {")
