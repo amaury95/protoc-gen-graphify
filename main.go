@@ -44,6 +44,7 @@ func main() {
 
 		genUnmarshalRequest = flags.Bool("unmarshal_request", true, "generate Unmarshaler for request")
 		genUnmarshalResponse = flags.Bool("unmarshal_response", true, "generate Unmarshaler for response")
+		genUnmarshalPayload = flags.Bool("unmarshal_payload", true, "generate Unmarshaler for payload")
 	)
 	protogen.Options{
 		ParamFunc: flags.Set,
@@ -66,7 +67,7 @@ func main() {
 					generateObjectSchema(g, f, messages...)
 				}
 				if *genUnmarshaler {
-					generateUnmarshaler(g, f, *genUnmarshalRequest, *genUnmarshalResponse, messages...)
+					generateUnmarshaler(g, f, *genUnmarshalRequest, *genUnmarshalResponse, *genUnmarshalPayload, messages...)
 				}
 			}
 		}

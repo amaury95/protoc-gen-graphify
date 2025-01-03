@@ -8,7 +8,7 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-func generateUnmarshaler(g *protogen.GeneratedFile, _ *protogen.File, unmarshalRequest, unmarshalResponse bool, messages ...*protogen.Message) {
+func generateUnmarshaler(g *protogen.GeneratedFile, _ *protogen.File, unmarshalRequest, unmarshalResponse, unmarshalPayload bool, messages ...*protogen.Message) {
 	g.P(`
 	/*
 		Graphify unmarshaler
@@ -22,8 +22,11 @@ func generateUnmarshaler(g *protogen.GeneratedFile, _ *protogen.File, unmarshalR
 		if strings.Contains(message.GoIdent.GoName, "Request") && !unmarshalRequest {
 			continue
 		}
-		
+
 		if strings.Contains(message.GoIdent.GoName, "Response") && !unmarshalResponse {
+			continue
+		}
+		if strings.Contains(message.GoIdent.GoName, "Payload") && !unmarshalPayload {
 			continue
 		}
 
