@@ -39,8 +39,8 @@ func main() {
 		plugins = flags.String("plugins", "", "deprecated option")
 
 		genGraphqlSchema         = flags.Bool("graphql_schema", true, "generate GraphQL schema")
-		genGraphqlSchemaRequest  = flags.Bool("graphql_schema_request", false, "generate GraphQL schema for request")
-		genGraphqlSchemaResponse = flags.Bool("graphql_schema_response", false, "generate GraphQL schema for response")
+		genGraphqlSchemaRequest  = flags.Bool("graphql_schema_request", true, "generate GraphQL schema for request")
+		genGraphqlSchemaResponse = flags.Bool("graphql_schema_response", true, "generate GraphQL schema for response")
 		genGraphqlSchemaPayload  = flags.Bool("graphql_schema_payload", false, "generate GraphQL schema for payload")
 
 		genObjectSchema         = flags.Bool("object_schema", true, "generate Object schema")
