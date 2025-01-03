@@ -21,7 +21,7 @@ func generateObjectSchema(g *protogen.GeneratedFile, _ *protogen.File, messages 
 		g.P("func (*", message.GoIdent, ") Schema() map[string]interface{} {")
 		g.P("return map[string]interface{} {")
 		g.P("\"name\": \"", message.GoIdent, "\",")
-		g.P("\"@type\": \"", message.Desc.FullName(), "\",")
+		g.P("\"@type\": \"type.googleapis.com/", message.Desc.FullName(), "\",")
 		g.P("\"fields\": []interface{} {")
 
 		// fields
